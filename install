@@ -2,5 +2,14 @@
 
 echo "Hello world";
 
+results_array=()
+results_array+=(one)
+results_array[2]=three
+echo "count: ${#results_array[@]}"
+
+for i in "${!results_array[@]}"; do
+    printf 'elem %d: %s\n' "$i" "${results_array[$i]}"
+done
+
 exit 0;
 
