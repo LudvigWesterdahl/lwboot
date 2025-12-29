@@ -1,0 +1,17 @@
+#!/bin/bash
+sudo pacman --noconfirm -S archlinux-wallpaper
+
+echo "install_wallpaper: installed wallpapers list below"
+ls -1 /usr/share/backgrounds/archlinux
+
+
+
+readonly WP="/usr/share/backgrounds/archlinux/conference.png"
+readonly LS="/usr/share/backgrounds/archlinux/simple.png"
+
+# Sets wallpaper
+plasma-apply-wallpaperimage "${WP}"
+
+# Sets lock screen
+kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://${LS}"
+
