@@ -100,18 +100,25 @@ main() {
       fi
 
       if [[ -z $(command -v git) ]]; then
-          error "git could not be found"
+          error "git could not be found, install by running 'sudo pacman -S git'"
+          return 1
+      fi
+
+      if [[ -z $(command -v less) ]]; then
+          error "less could not be found, install by running 'sudo pacman -S less'"
           return 1
       fi
 
       notify "moving ${KEY_FILE} to ${S_FLAG}"
-      mv "${KEY_FILE}" "${S_FLAG}"
+      chmod 400 "${KEY_FILE}"
+      cp "${KEY_FILE}" "${S_FLAG}"
 
       notify "moving ${KEY_FILE_PUB} to ${S_FLAG}"
-      mv "${KEY_FILE_PUB}" "${S_FLAG}"
+      chmod 444 "${KEY_FILE_PUB}"
+      cp "${KEY_FILE_PUB}" "${S_FLAG}"
 
-      notify "cloning lwboot repository into ${D_FOLDER}"
-      git clone git@github.com:LudvigWesterdahl/lwboot.git "${D_FOLDER}/lwboot"
+      notify "cloning lwboot repository into ${D_FLAG}"
+      git clone git@github.com:LudvigWesterdahl/lwboot.git "${D_FLAG}/lwboot"
 
       return 0
     fi
