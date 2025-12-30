@@ -100,13 +100,8 @@ main() {
       fi
 
       if [[ -z $(command -v git) ]]; then
-          error "git could not be found, install by running 'sudo pacman -S git'"
-          return 1
-      fi
-
-      if [[ -z $(command -v less) ]]; then
-          error "less could not be found, install by running 'sudo pacman -S less'"
-          return 1
+          error "git could not be found, installing..."
+          sudo pacman --noconfirm -Syu extra/git
       fi
 
       notify "moving ${KEY_FILE} to ${S_FLAG}"
