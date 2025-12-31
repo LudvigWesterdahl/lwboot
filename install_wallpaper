@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo pacman --noconfirm -Syu extra/archlinux-wallpaper
+sudo pacman --noconfirm -S extra/archlinux-wallpaper
 
 echo "install_wallpaper: installed wallpapers list below"
 ls -1 /usr/share/backgrounds/archlinux

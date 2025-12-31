@@ -1,0 +1,9 @@
+#!/bin/bash
+# https://aur.archlinux.org/packages/brave-bin
+
+mkdir ~/aur-builds
+cd ~/aur-builds
+git clone https://aur.archlinux.org/brave-bin.git
+cd brave-bin
+
+makepkg --noconfirm -si

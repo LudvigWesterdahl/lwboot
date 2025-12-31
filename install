@@ -11,5 +11,10 @@ for i in "${!results_array[@]}"; do
     printf 'elem %d: %s\n' "$i" "${results_array[$i]}"
 done
 
-exit 0;
+# install_less
+# install_vim
+# install_wallpaper
+# install_base_devel
+# install_brave_bin
 
+exit 0;

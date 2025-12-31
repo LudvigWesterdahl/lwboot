@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # https://archlinux.org/packages/extra/x86_64/vim/
-sudo pacman --noconfirm -Syu extra/vim
+sudo pacman --noconfirm -S extra/vim

@@ -17,7 +17,7 @@ if [[ "${3}" != "" ]]; then
     EDITOR="${3}"
 fi
 
-sudo pacman --noconfirm -Syu extra/git
+sudo pacman --noconfirm -S extra/git
 
 git config --global user.email "${MAIL}"
 git config --global user.name "${NAME}"

@@ -99,9 +99,11 @@ main() {
           return 1
       fi
 
+      sudo pacman --noconfirm -Syu
+
       if [[ -z $(command -v git) ]]; then
           error "git could not be found, installing..."
-          sudo pacman --noconfirm -Syu extra/git
+          sudo pacman --noconfirm -S extra/git
       fi
 
       notify "moving ${KEY_FILE} to ${S_FLAG}"
