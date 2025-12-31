@@ -7,3 +7,8 @@ git clone https://aur.archlinux.org/brave-bin.git
 cd brave-bin
 
 makepkg --noconfirm -si
+
+declare BRAVE_BROWSER="brave-browser.desktop"
+kwriteconfig6 --file kdeglobals --group General --key BrowserApplication "${BRAVE_BROWSER}"
+kwriteconfig6 --file kdeglobals --group General --key Http "${BRAVE_BROWSER}"
+kwriteconfig6 --file kdeglobals --group General --key Https "${BRAVE_BROWSER}"
