@@ -17,4 +17,9 @@ done
 # install_base_devel
 # install_brave_bin
 
+
+# sensitive information:
+# install_git: personal data
+# install_brave_bin: sync code
+
 exit 0;

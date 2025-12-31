@@ -99,6 +99,12 @@ main() {
           return 1
       fi
 
+      declare BRAVE_SYNC_CODE="brave-sync-code.txt"
+      if [[ ! -f "${KEY_FILE_PUB}" ]]; then
+          error "file ${BRAVE_SYNC_CODE} does not exist, put it beside this script"
+          return 1
+      fi
+
       sudo pacman --noconfirm -Syu
 
       if [[ -z $(command -v git) ]]; then
