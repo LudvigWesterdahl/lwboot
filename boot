@@ -1,132 +1,64 @@
 #!/bin/bash
 
-readonly PROG_PATH=${0}
-readonly PROG_DIR=${0%/*}
-readonly PROG_NAME=$(basename $0)
+readonly KEY_FILE="id_rsa"
+readonly KEY_FILE_PUB="${KEY_FILE}.pub"
+readonly BRAVE_SYNC_CODE="brave-sync-code.txt"
+readonly INSTALLER="installer"
+readonly INSTALL_GIT="install_git"
 
-notify() {
-    echo "${PROG_NAME}: $1"
-    return 0
-}
+readonly REQ_FILES=(
+  "${KEY_FILE}"
+  "${KEY_FILE_PUB}"
+  "${BRAVE_SYNC_CODE}"
+  "${INSTALLER}"
+  "${INSTALL_GIT}"
+)
 
-error() {
-    echo 1>&2 "${PROG_NAME}: $1"
-    return 0
-}
+readonly LWBOOT_DIR="${1}"
+readonly SSH_DIR="${2}"
 
-print_usage() {
+if [[ ! -d "${LWBOOT_DIR}" ]]; then
+    echo "folder to clone lwboot repository into ${LWBOOT_DIR} does not exist"
+    exit 1
+fi
 
-    echo "Usage: ${PROG_NAME} <arg1> <arg2> [options...]"
-    echo
-    echo "Arguments:"
-    echo " <install>          Runs the boot install"
-    echo
-    echo "Options:"
-    echo " -d, <var>          The folder to pull lwboot repository in"
-    echo " -s, <val>          The .ssh folder"
+if [[ ! -d "${SSH_DIR}" ]]; then
+    echo "the ssh folder ${SSH_DIR} does  not exist"
+    exit 1
+fi
 
-    return 0
-}
-
-main() {
-    declare -ri NUM_ARGS=1
-
-    if [ "${1}" == "-h" ] || [ "${1}" == "--help" ]; then
-	      print_usage
-	      return 0
+declare req_files_exist=0
+for REQ_FILE in "${REQ_FILES[@]}"; do
+    if [[ ! -f "${REQ_FILE}" ]]; then
+        echo "file ${REQ_FILE} does not exist, put it beside this script"
+        req_files_exist=1
     fi
+done
 
-    if [[ $# -lt ${NUM_ARGS} ]]; then
-        notify "try '${PROG_NAME} -h' or '${PROG_NAME} --help' for more information"
-        return 1
-    fi
+if [[ req_files_exist != 0 ]]; then
+  exit 1
+fi
 
-    declare ARG=${1}
+source ${INSTALLER}
+echo "upgrading pacman..."
+pacman_upgrade
 
-    declare D_FLAG=""
-    declare S_FLAG=""
+source ${INSTALL_GIT}
+echo "installing and configuring git..."
+inst_install
 
-    declare -i I=$NUM_ARGS
-    I=I+1
-    while [ $I -le $# ]; do
-        case ${!I} in
-            "-d")
-                I=I+1
-                D_FLAG=${!I}
-                ;;
-            "-s")
-                I=I+1
-                S_FLAG=${!I}
-                ;;
-            *)
-                notify "${!I} does not match any supported option"
-                ;;
-        esac
-        I=I+1
-    done
+echo "copying ${KEY_FILE} to ${SSH_DIR}"
+chmod 400 "${KEY_FILE}"
+cp "${KEY_FILE}" "${SSH_DIR}"
 
-    if [[ "${ARG}" == "install" ]]; then
-      if [[ "${D_FLAG}" == "" ]]; then
-          error "missing -d flag for ${ARG}"
-          return 1
-      fi
+echo "copying ${KEY_FILE_PUB} to ${SSH_DIR}"
+chmod 444 "${KEY_FILE_PUB}"
+cp "${KEY_FILE_PUB}" "${SSH_DIR}"
 
-      if [[ "${S_FLAG}" == "" ]]; then
-          error "missing -s flag for ${ARG}"
-          return 1
-      fi
+echo "cloning lwboot repository into ${LWBOOT_DIR}"
+declare LWBOOT_DIR_ABS="${LWBOOT_DIR}/lwboot"
+git clone git@github.com:LudvigWesterdahl/lwboot.git "${LWBOOT_DIR_ABS}"
 
-      if [[ ! -d "${D_FLAG}" ]]; then
-          error "folder ${D_FLAG} does not exist"
-          return 1
-      fi
-
-      if [[ ! -d "${S_FLAG}" ]]; then
-          error "folder ${S_FLAG} does not exist"
-          return 1
-      fi
-
-      declare KEY_FILE="id_rsa"
-      declare KEY_FILE_PUB="${KEY_FILE}.pub"
-
-      if [[ ! -f "${KEY_FILE}" ]]; then
-          error "file ${KEY_FILE} does not exist, put it beside this script"
-          return 1
-      fi
-
-      if [[ ! -f "${KEY_FILE_PUB}" ]]; then
-          error "file ${KEY_FILE_PUB} does not exist, put it beside this script"
-          return 1
-      fi
-
-      declare BRAVE_SYNC_CODE="brave-sync-code.txt"
-      if [[ ! -f "${KEY_FILE_PUB}" ]]; then
-          error "file ${BRAVE_SYNC_CODE} does not exist, put it beside this script"
-          return 1
-      fi
-
-      sudo pacman --noconfirm -Syu
-
-      if [[ -z $(command -v git) ]]; then
-          error "git could not be found, installing..."
-          sudo pacman --noconfirm -S extra/git
-      fi
-
-      notify "moving ${KEY_FILE} to ${S_FLAG}"
-      chmod 400 "${KEY_FILE}"
-      cp "${KEY_FILE}" "${S_FLAG}"
-
-      notify "moving ${KEY_FILE_PUB} to ${S_FLAG}"
-      chmod 444 "${KEY_FILE_PUB}"
-      cp "${KEY_FILE_PUB}" "${S_FLAG}"
-
-      notify "cloning lwboot repository into ${D_FLAG}"
-      git clone git@github.com:LudvigWesterdahl/lwboot.git "${D_FLAG}/lwboot"
-
-      return 0
-    fi
-
-    return 0
-}
-
-main "${@}"
+echo "copying ${BRAVE_SYNC_CODE} to ${LWBOOT_DIR_ABS}"
+chmod 400 "${BRAVE_SYNC_CODE}"
+cp "${BRAVE_SYNC_CODE}" "${LWBOOT_DIR_ABS}"

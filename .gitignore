@@ -1,6 +1,11 @@
+#
+# boot files
+#
+brave-sync-code.txt
+id_rsa
+id_rsa.pub
 
 /.idea/
-### agi ###
 .DS_Store
 *~
 \#*\#

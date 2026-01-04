@@ -1,0 +1,159 @@
+#!/bin/bash
+
+readonly PROG_PATH=${0}
+readonly PROG_DIR=${0%/*}
+readonly FULL_PATH=$(realpath ${PROG_PATH})
+readonly FULL_DIR=$(dirname ${FULL_PATH})
+readonly PROG_NAME=$(basename $0)
+
+readonly INSTALLERS=(
+  "install_git"
+)
+readonly ARG=${1}
+
+declare prog_name=""
+
+source_installer() {
+    prog_name="${1}"
+    source ${prog_name}
+
+}
+
+describe_installer() {
+    echo -e "\033[1m${installer_name}\033[0m - ${installer_description}"
+    echo "| link: ${installer_link}"
+}
+
+pacman_upgrade() {
+    if ! is_command pacman; then
+        echo "pacman does not exist"
+        exit 1
+    fi
+
+    sudo pacman --noconfirm -Syu
+    sudo pacman --noconfirm -Fy
+}
+
+pacman_install() {
+    if ! is_command pacman; then
+        echo "pacman does not exist"
+        exit 1
+    fi
+
+    sudo pacman --noconfirm -S ${1}
+}
+
+pacman_uninstall() {
+    if ! is_command pacman; then
+        echo "pacman does not exist"
+        exit 1
+    fi
+
+    sudo pacman --noconfirm -R ${1}
+}
+
+is_command() {
+    if command -v "${1}" >/dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+
+if [[ "${ARG}" == "install" ]]; then
+    pacman_upgrade
+
+    for i in "${!INSTALLERS[@]}"; do
+        source_installer "${INSTALLERS[$i]}"
+        describe_installer
+
+        if inst_is_installed; then
+            echo "skipping already installed"
+        elif inst_can_install; then
+            inst_install
+
+            if [[ $? -ne 0 ]]; then
+                echo "failed"
+                exit 1
+            fi
+        else
+            echo "skipping cant install"
+        fi
+    done
+
+    for i in "${!INSTALLERS[@]}"; do
+        source_installer "${INSTALLERS[$i]}"
+
+        if inst_can_install_manual; then
+            echo -e "\033[1m${installer_name}\033[0m - manual installation steps"
+            inst_install_manual
+        fi
+    done
+
+    exit 0
+fi
+
+if [[ "${ARG}" == "upgrade" ]]; then
+    pacman_upgrade
+
+    for i in "${!INSTALLERS[@]}"; do
+        source_installer "${INSTALLERS[$i]}"
+
+        if inst_is_installed; then
+            if ! inst_can_upgrade; then
+                continue
+            fi
+
+            describe_installer
+
+            inst_upgrade
+
+            if [[ $? -ne 0 ]]; then
+                echo "failed ${prog_name}"
+                exit 1
+            else
+                echo "success ${prog_name}"
+            fi
+        else
+            echo "skipping not installed ${prog_name}"
+        fi
+    done
+fi
+
+if [[ "${ARG}" == "uninstall" ]]; then
+    pacman_upgrade
+
+    for i in "${!INSTALLERS[@]}"; do
+        source_installer "${INSTALLERS[$i]}"
+
+        if inst_is_installed; then
+            describe_installer
+
+            inst_uninstall
+
+            if [[ $? -ne 0 ]]; then
+                echo "failed ${prog_name}"
+                exit 1
+            else
+                echo "success ${prog_name}"
+            fi
+        else
+            echo "skipping not installed ${prog_name}"
+        fi
+    done
+fi
+
+echo "unknown argument ${ARG}"
+exit 1
+
+
+# install_less
+# install_vim
+# install_wallpaper
+# install_base_devel
+# install_brave_binOLD
+
+
+# sensitive information:
+# install_gitold: personal data

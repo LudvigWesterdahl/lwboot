@@ -1,24 +1,66 @@
 #!/bin/bash
 
-# https://archlinux.org/packages/extra/x86_64/git/
+installer_name="git"
+installer_description="installs and configures git (contains personal info) - needs less and vim to work properly"
+installer_link="https://archlinux.org/packages/extra/x86_64/git/"
 
-declare MAIL="ludvig.westerdahl.tech.v1@protonmail.com"
-if [[ "${1}" != "" ]]; then
-    MAIL="${1}"
-fi
+declare GIT_PKG="extra/git"
+declare GIT_MAIL="ludvig.westerdahl.tech.v1@protonmail.com"
+declare GIT_NAME="ludvig"
+declare GIT_EDITOR="vim"
 
-declare NAME="ludvig"
-if [[ "${2}" != "" ]]; then
-    NAME="${2}"
-fi
+inst_is_installed() {
+    if ! is_command "git"; then
+        return 1
+    fi
 
-declare EDITOR="vim"
-if [[ "${3}" != "" ]]; then
-    EDITOR="${3}"
-fi
+    declare mail=$(git config --global user.email)
+    declare name=$(git config --global user.name)
+    declare editor=$(git config --global core.editor)
 
-sudo pacman --noconfirm -S extra/git
+    if [[ "${mail}" != "${GIT_MAIL}" ]]; then
+        return 1
+    fi
 
-git config --global user.email "${MAIL}"
-git config --global user.name "${NAME}"
-git config --global core.editor "${EDITOR}"
+    if [[ "${name}" != "${GIT_NAME}" ]]; then
+        return 1
+    fi
+
+    if [[ "${editor}" != "${GIT_EDITOR}" ]]; then
+        return 1
+    fi
+
+    return 0
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${GIT_PKG}
+
+    git config --global user.email "${GIT_MAIL}"
+    git config --global user.name "${GIT_NAME}"
+    git config --global core.editor "${GIT_EDITOR}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_can_upgrade() {
+    return 1
+}
+
+inst_upgrade() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall ${GIT_PKG}
+}
