@@ -1,3 +1,39 @@
 #!/bin/bash
-# https://archlinux.org/packages/core/x86_64/less/
-sudo pacman --noconfirm -S core/less
+
+installer_name="less"
+installer_description="installs less"
+installer_link="https://archlinux.org/packages/core/x86_64/less/"
+
+declare LESS_PKG="core/less"
+
+inst_is_installed() {
+    is_command "less"
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${LESS_PKG}
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_can_upgrade() {
+    return 1
+}
+
+inst_upgrade() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall ${LESS_PKG}
+}

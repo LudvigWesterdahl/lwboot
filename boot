@@ -2,16 +2,13 @@
 
 readonly KEY_FILE="id_rsa"
 readonly KEY_FILE_PUB="${KEY_FILE}.pub"
-readonly BRAVE_SYNC_CODE="brave-sync-code.txt"
 readonly INSTALLER="installer"
 readonly INSTALL_GIT="install_git"
 
 readonly REQ_FILES=(
   "${KEY_FILE}"
   "${KEY_FILE_PUB}"
-  "${BRAVE_SYNC_CODE}"
   "${INSTALLER}"
-  "${INSTALL_GIT}"
 )
 
 readonly LWBOOT_DIR="${1}"
@@ -30,7 +27,7 @@ fi
 declare req_files_exist=0
 for REQ_FILE in "${REQ_FILES[@]}"; do
     if [[ ! -f "${REQ_FILE}" ]]; then
-        echo "file ${REQ_FILE} does not exist, put it beside this script"
+        echo "file ${REQ_FILE} does not exist"
         req_files_exist=1
     fi
 done
@@ -44,8 +41,8 @@ echo "upgrading pacman..."
 pacman_upgrade
 
 source ${INSTALL_GIT}
-echo "installing and configuring git..."
-inst_install
+echo "installing git..."
+pacman_install "extra/git"
 
 echo "copying ${KEY_FILE} to ${SSH_DIR}"
 chmod 400 "${KEY_FILE}"

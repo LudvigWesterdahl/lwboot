@@ -34,6 +34,14 @@ inst_is_installed() {
 }
 
 inst_can_install() {
+    if ! is_command "vim"; then
+        return 1
+    fi
+
+    if ! is_command "less"; then
+        return 1
+    fi
+
     return 0
 }
 

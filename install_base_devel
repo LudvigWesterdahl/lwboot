@@ -1,4 +1,0 @@
-#!/bin/bash
-# https://archlinux.org/packages/core/any/base-devel/
-
-sudo pacman --noconfirm -S core/base-devel

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Docs
-# https://www.youtube.com/watch?v=ttZKwrR6xKQ
+# 1. https://www.youtube.com/watch?v=ttZKwrR6xKQ
 
 installer_name="brave"
 installer_description="installs brave and configures kde defaults"
@@ -9,7 +9,7 @@ installer_link="https://aur.archlinux.org/packages/brave-bin"
 
 declare BRAVE_PKG="brave-bin"
 declare BRAVE_DESKTOP="brave-browser.desktop"
-declare BRAVE_SYNC_CODE="brave-sync-code.txt"
+declare BRAVE_SYNC_CODE="config/brave-sync-code.txt"
 
 inst_is_installed() {
     is_command brave
@@ -58,11 +58,11 @@ inst_install_manual() {
 }
 
 inst_can_upgrade() {
-    inst_can_install
+    return 0
 }
 
 inst_upgrade() {
-    inst_install
+    return 0
 }
 
 inst_uninstall() {

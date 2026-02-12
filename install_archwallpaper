@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Docs
+# 1. https://bbs.archlinux.org/viewtopic.php?id=259604
+# 2. List installed wallpapers: ls -1 /usr/share/backgrounds/archlinux
+
+installer_name="archwallpaper"
+installer_description="installs archlinux-wallpaper and configures it"
+installer_link="https://archlinux.org/packages/extra/any/archlinux-wallpaper/"
+
+declare ARCHWALLPAPER_PKG="extra/archlinux-wallpaper"
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${ARCHWALLPAPER_PKG}
+
+    readonly WP="/usr/share/backgrounds/archlinux/conference.png"
+    readonly LS="/usr/share/backgrounds/archlinux/simple.png"
+
+    # Sets wallpaper
+    plasma-apply-wallpaperimage "${WP}"
+
+    # Sets lock screen
+    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://${LS}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_can_upgrade() {
+    return 1
+}
+
+inst_upgrade() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall ${ARCHWALLPAPER_PKG}
+}

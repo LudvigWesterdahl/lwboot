@@ -1,4 +1,39 @@
 #!/bin/bash
 
-# https://archlinux.org/packages/extra/x86_64/vim/
-sudo pacman --noconfirm -S extra/vim
+installer_name="vim"
+installer_description="installs vim"
+installer_link="https://archlinux.org/packages/extra/x86_64/vim/"
+
+declare VIM_PKG="extra/vim"
+
+inst_is_installed() {
+    is_command "vim"
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${VIM_PKG}
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_can_upgrade() {
+    return 1
+}
+
+inst_upgrade() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall ${VIM_PKG}
+}
