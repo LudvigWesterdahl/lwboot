@@ -4,10 +4,11 @@ installer_name="less"
 installer_description="installs less"
 installer_link="https://archlinux.org/packages/core/x86_64/less/"
 
-declare LESS_PKG="core/less"
+SHORT_PKG="less"
+LONG_PKG="core/${SHORT_PKG}"
 
 inst_is_installed() {
-    is_command "less"
+    is_command less
 }
 
 inst_can_install() {
@@ -15,7 +16,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${LESS_PKG}
+    pacman_install ${LONG_PKG}
 }
 
 inst_can_install_manual() {
@@ -35,5 +36,5 @@ inst_upgrade() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${LESS_PKG}
+    pacman_uninstall ${SHORT_PKG}
 }

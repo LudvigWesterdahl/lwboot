@@ -7,9 +7,9 @@ installer_name="brave"
 installer_description="installs brave and configures kde defaults"
 installer_link="https://aur.archlinux.org/packages/brave-bin"
 
-declare BRAVE_PKG="brave-bin"
-declare BRAVE_DESKTOP="brave-browser.desktop"
-declare BRAVE_SYNC_CODE="config/brave-sync-code.txt"
+SHORT_PKG="brave-bin"
+BRAVE_DESKTOP="brave-browser.desktop"
+BRAVE_SYNC_CODE="config/brave-sync-code.txt"
 
 inst_is_installed() {
     is_command brave
@@ -52,7 +52,7 @@ inst_can_install_manual() {
 
 inst_install_manual() {
     echo "1. sync setup: settings > sync > I have a Sync Code (code printed next)"
-    cat ${BRAVE_SYNC_CODE}
+    cat "${BRAVE_SYNC_CODE}"
 
     return 0
 }
@@ -66,5 +66,6 @@ inst_upgrade() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${BRAVE_PKG}
+    pacman_uninstall ${SHORT_PKG}
 }
+

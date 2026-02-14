@@ -4,10 +4,11 @@ installer_name="vim"
 installer_description="installs vim"
 installer_link="https://archlinux.org/packages/extra/x86_64/vim/"
 
-declare VIM_PKG="extra/vim"
+SHORT_PKG="vim"
+LONG_PKG="extra/${SHORT_PKG}"
 
 inst_is_installed() {
-    is_command "vim"
+    is_command vim
 }
 
 inst_can_install() {
@@ -15,7 +16,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${VIM_PKG}
+    pacman_install ${LONG_PKG}
 }
 
 inst_can_install_manual() {
@@ -35,5 +36,5 @@ inst_upgrade() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${VIM_PKG}
+    pacman_uninstall ${SHORT_PKG}
 }

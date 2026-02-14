@@ -46,6 +46,8 @@ pacman_install() {
         exit 1
     fi
 
+    echo "pacman_install ${1}"
+
     sudo pacman --noconfirm -S ${1}
 }
 
@@ -67,7 +69,7 @@ describe_installer() {
     echo "| link: ${installer_link}"
 }
 
-declare prog_inst_name=""
+prog_inst_name=""
 
 source_installer() {
     prog_inst_name="${1}"

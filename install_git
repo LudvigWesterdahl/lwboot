@@ -4,10 +4,11 @@ installer_name="git"
 installer_description="installs and configures git (contains personal info) - needs less and vim to work properly"
 installer_link="https://archlinux.org/packages/extra/x86_64/git/"
 
-declare GIT_PKG="extra/git"
-declare GIT_MAIL="ludvig.westerdahl.tech.v1@protonmail.com"
-declare GIT_NAME="ludvig"
-declare GIT_EDITOR="vim"
+SHORT_PKG="git"
+LONG_PKG="extra/${SHORT_PKG}"
+GIT_MAIL="ludvig.westerdahl.tech.v1@protonmail.com"
+GIT_NAME="ludvig"
+GIT_EDITOR="vim"
 
 inst_is_installed() {
     if ! is_command "git"; then
@@ -46,7 +47,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${GIT_PKG}
+    pacman_install ${LONG_PKG}
 
     git config --global user.email "${GIT_MAIL}"
     git config --global user.name "${GIT_NAME}"
@@ -70,5 +71,5 @@ inst_upgrade() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${GIT_PKG}
+    pacman_uninstall ${SHORT_PKG}
 }
