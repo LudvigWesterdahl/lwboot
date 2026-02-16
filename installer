@@ -16,6 +16,8 @@ readonly INSTALLERS=(
   "install_basedevel"
   "install_brave"
   "install_archwallpaper"
+  "install_xorgxev"
+  "install_evtest"
 )
 
 readonly ARG=${1}
