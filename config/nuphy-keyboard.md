@@ -23,3 +23,15 @@ sudo udevadm trigger
 ´
 
 
+Regarding changing the layout. Run the following commands to get the expected output:
+[ludvig@archlinux ~]$ localectl --no-convert set-x11-keymap us,se pc105 "" "grp:alt_shift_toggle,compose:ralt"
+[ludvig@archlinux ~]$ localectl --no-convert set-keymap us
+[ludvig@archlinux ~]$ localectl status
+System Locale: LANG=en_US.UTF-8
+    VC Keymap: us
+   X11 Layout: us,se
+    X11 Model: pc105
+  X11 Options: grp:alt_shift_toggle,compose:ralt
+
+Also see the backup of the vconsole file here
+

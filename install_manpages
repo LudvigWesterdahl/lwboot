@@ -1,0 +1,40 @@
+#!/bin/bash
+
+installer_name="manpages"
+installer_description="installs man-pages"
+installer_link="https://archlinux.org/packages/core/any/man-pages/"
+
+SHORT_PKG="man-pages"
+LONG_PKG="core/${SHORT_PKG}"
+
+inst_is_installed() {
+    is_pacman_installed ${SHORT_PKG}
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${LONG_PKG}
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_can_upgrade() {
+    return 1
+}
+
+inst_upgrade() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall ${SHORT_PKG}
+}

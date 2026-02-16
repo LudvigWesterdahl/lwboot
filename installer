@@ -18,6 +18,8 @@ readonly INSTALLERS=(
   "install_archwallpaper"
   "install_xorgxev"
   "install_evtest"
+  "install_mandb"
+  "install_manpages"
 )
 
 readonly ARG=${1}
