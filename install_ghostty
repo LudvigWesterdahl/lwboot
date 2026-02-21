@@ -8,7 +8,7 @@ SHORT_PKG="ghostty"
 LONG_PKG="extra/${SHORT_PKG}"
 
 inst_is_installed() {
-    is_pacman_installed ${SHORT_PKG}
+    return 1
 }
 
 inst_can_install() {
@@ -16,7 +16,14 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${LONG_PKG}
+    if ! is_pacman_installed ${SHORT_PKG}; then
+        pacman_install ${LONG_PKG}
+    fi
+    
+    echo "copying ghostty config file" 
+    cp config/ghostty.config ~/.config/ghostty/config
+
+    return 0
 }
 
 inst_can_install_manual() {
