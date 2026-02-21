@@ -20,6 +20,7 @@ readonly INSTALLERS=(
   "install_evtest"
   "install_mandb"
   "install_manpages"
+  "install_ghostty"
 )
 
 readonly ARG=${1}
