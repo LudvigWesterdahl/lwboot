@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Docs
+# 1. You can figure out the bindings by going to "System Settings > Keyboard > Shortcuts > Export".
+# The resulting kksrc file can be inspected.
+# For example "Window Maximize" is in file kglobalshortcutsrc and group kwin, see [kwin][Global Shortcuts].
+
+
+installer_name="kdeshortcuts"
+installer_description="configures shortcuts for KDE Plasma 6"
+installer_link="-"
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    echo "set Window Maximize = Meta + Shift + Up"
+    prev_maximize=$(kreadconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize")
+    kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize" "Meta+Shift+Up,Meta+PgUp,Maximize Window"
+    after_maximize=$(kreadconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize")
+    echo "prev: ${prev_maximize}"
+    echo "after: ${after_maximize}"
+
+    echo "log out and back in for changes to take effect!"
+    echo "run: qdbus6 org.kde.Shutdown /Shutdown logout"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 0
+}
+
+inst_can_upgrade() {
+    return 1
+}
+
+inst_upgrade() {
+    return 0
+}
+
+inst_uninstall() {
+    return 0
+}
+
