@@ -6,32 +6,34 @@ installer_link="https://archlinux.org/packages/extra/x86_64/git/"
 
 SHORT_PKG="git"
 LONG_PKG="extra/${SHORT_PKG}"
+
 GIT_MAIL="ludvig.westerdahl.tech.v1@protonmail.com"
 GIT_NAME="ludvig"
 GIT_EDITOR="vim"
+REPOSITORIES=(
+    "lwdoc"
+)
+REPOSITORY_PATH="${HOME}/Documents"
+
+handle_repository() {
+    repo="${1}"
+    repo_path="${REPOSITORY_PATH}/${repo}"
+    echo "handling ${repo_path}"
+    if [[ ! -d "${repo_path}" ]]; then
+        echo "cloning ${repo}..."
+	git clone "git@github.com:LudvigWesterdahl/${repo}.git" "${repo_path}"
+    fi
+
+    if [[ $(git -C "${repo_path}" branch --show-current) == "master" ]]; then
+        echo "pulling ${repo}..."
+        git -C "${repo_path}" pull
+    else
+        echo "skipping pull ${repo} not on master branch!"
+    fi
+}
 
 inst_is_installed() {
-    if ! is_command "git"; then
-        return 1
-    fi
-
-    declare mail=$(git config --global user.email)
-    declare name=$(git config --global user.name)
-    declare editor=$(git config --global core.editor)
-
-    if [[ "${mail}" != "${GIT_MAIL}" ]]; then
-        return 1
-    fi
-
-    if [[ "${name}" != "${GIT_NAME}" ]]; then
-        return 1
-    fi
-
-    if [[ "${editor}" != "${GIT_EDITOR}" ]]; then
-        return 1
-    fi
-
-    return 0
+    return 1
 }
 
 inst_can_install() {
@@ -47,11 +49,17 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${LONG_PKG}
+    if ! is_command "git"; then
+        pacman_install ${LONG_PKG}
+    fi
 
     git config --global user.email "${GIT_MAIL}"
     git config --global user.name "${GIT_NAME}"
     git config --global core.editor "${GIT_EDITOR}"
+
+    for i in "${REPOSITORIES[@]}"; do
+        handle_repository "${REPOSITORIES[$i]}"
+    done
 }
 
 inst_can_install_manual() {

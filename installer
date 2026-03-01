@@ -24,6 +24,7 @@ readonly INSTALLERS=(
 )
 
 readonly ARG=${1}
+readonly OPT1=${2}
 
 # =====================================================================================
 # ============================== program installer utils ==============================
@@ -96,7 +97,9 @@ pacman_upgrade() {
 # =======================================================================
 
 if [[ "${ARG}" == "install" ]]; then
-    pacman_upgrade
+    if [[ "${OPT1}" != "false" ]]; then
+        pacman_upgrade
+    fi
 
     for i in "${!INSTALLERS[@]}"; do
         source_installer "${INSTALLERS[$i]}"
