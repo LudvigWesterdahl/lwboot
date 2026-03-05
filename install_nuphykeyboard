@@ -1,36 +1,37 @@
 #!/bin/bash
 
-installer_name="NAME"
-installer_description="THIS_IS_THE_DESCRIPTION"
-installer_link="httpsomething"
+# Docs
+# 1. link to nuphy
+# 2. other...
+
+
+# TODO:
+# remove the nuphy keyboard md -> move into here
+
+installer_name="nuphykeyboard"
+installer_description="explains how to configure the nuphy halo v2 keyboard"
+installer_link="INSERT_LINK"
 
 
 inst_is_installed() {
-
     return 0
 }
 
 inst_can_install() {
-
-    return 0
+    return 1
 }
 
 inst_install() {
-    echo "installing..."
-
     return 0
 }
 
 inst_can_install_manual() {
-
-    return 1
+    return 0
 }
 
 inst_install_manual() {
     echo "1. copy file to somewhere"
     echo "2. then do this"
-    echo "3. also open application and do this"
-
     return 0
 }
 
