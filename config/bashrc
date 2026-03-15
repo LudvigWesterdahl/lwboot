@@ -5,9 +5,27 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias lock="loginctl lock-session"
-alias top="top -e m -E m -o RES" 
+# =============================
+# ===   alias definitions   ===
+# =============================
+alias ls="ls --color=tty"
+alias grep='grep --color=tty'
+alias slock="loginctl lock-session"
+alias top="top -e m -E m -o RES"
 
-PS1='[\u@\h \W]\$ '
+# ============================
+# ===   environment vars   ===
+# ============================
+# skips history if same command
+export HISTCONTROL=ignoredups
+# increase history size
+export HISTSIZE=5000
+# command prompt
+PS1='[\u:\w]$ '
+
+# ================
+# ===   misc   ===
+# ================
+# modify the umask from the 0022 default
+umask 0002
+
