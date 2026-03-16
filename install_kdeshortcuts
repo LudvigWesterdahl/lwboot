@@ -4,7 +4,23 @@
 # 1. You can figure out the bindings by going to "System Settings > Keyboard > Shortcuts > Export".
 # The resulting kksrc file can be inspected.
 # For example "Window Maximize" is in file kglobalshortcutsrc and group kwin, see [kwin][Global Shortcuts].
-
+# 2. Another way to find the configureations is by inspecting /home/ludvig/.config/kglobalshortcutsrc.
+# Issue with this approach is that it's not always in this file. For example the krunner
+# shortcut was like this in the kksrc export file:
+# [org.kde.krunner.desktop][Global Shortcuts]
+# RunClipboard=Alt+Shift+F2
+# _launch=Search; Alt+Space; Alt+F2
+#
+# This cannot be found in the kglobalshortcutsrc file, it seems like it is not written
+# unless overridden. The desktop file was then found by running the following from /:
+# find . -name org.kde.krunner.desktop 2>/dev/null
+# /usr/share/kglobalaccel/org.kde.krunner.desktop
+#
+# Then inspecting this file was this line:
+# X-KDE-Shortcuts=Alt+Space,Alt+F2,Search
+# However, that did not really help as it turned out the actual value needed to have tabs in them.
+# The way I found that out was by saving it in system settings, then inspecting the config value in the kglobalshortcutsrc file.
+# The end result being the printf solution below.
 
 installer_name="kdeshortcuts"
 installer_description="configures shortcuts for KDE Plasma 6"
@@ -19,12 +35,20 @@ inst_can_install() {
 }
 
 inst_install() {
-    echo "set Window Maximize = Meta + Shift + Up"
+    echo "set Window Maximize = Meta+Shift+Up"
     prev_maximize=$(kreadconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize")
     kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize" "Meta+Shift+Up,Meta+PgUp,Maximize Window"
     after_maximize=$(kreadconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize")
     echo "prev: ${prev_maximize}"
     echo "after: ${after_maximize}"
+
+    echo "set org.kde.krunner.desktop _launch = Search; Alt+F2"
+    prev_krunner=$(kreadconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch)
+    kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch "$(printf "Alt+F2\tSearch\t")"
+    after_krunner=$(kreadconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch)
+
+    echo "prev: ${prev_krunner}"
+    echo "after: ${after_krunner}"
 
     echo "log out and back in for changes to take effect!"
     echo "run: qdbus6 org.kde.Shutdown /Shutdown logout"
@@ -49,4 +73,27 @@ inst_upgrade() {
 inst_uninstall() {
     return 0
 }
+
+create_desktop_file() {
+
+}
+
+
+# TODO:
+
+# Create this desktop entry
+[Desktop Entry]
+Exec=/home/ludvig/Downloads/newwindow
+Name=MYCUST
+NoDisplay=true
+StartupNotify=false
+Type=Application
+X-KDE-GlobalAccel-CommandShortcut=true
+
+# Called net.local.newwindow.desktop here:
+/home/ludvig/.local/share/applications
+
+# Then register this in kglobalshortcutsrc:
+[services][net.local.newwindow.desktop]
+_launch=Alt+Space
 
