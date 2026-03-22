@@ -10,18 +10,24 @@ LONG_PKG="extra/${SHORT_PKG}"
 GIT_MAIL="ludvig.westerdahl.tech.v1@protonmail.com"
 GIT_NAME="ludvig"
 GIT_EDITOR="vim"
+
 REPOSITORIES=(
     "lwdoc"
+    "Scripts"
 )
-REPOSITORY_PATH="${HOME}/Documents"
+REPOSITORY_PATHS=(
+    "${HOME}/Documents/lwdoc"
+    "${HOME}/bin/scripts"
+)
+
 
 handle_repository() {
     repo="${1}"
-    repo_path="${REPOSITORY_PATH}/${repo}"
+    repo_path="${2}"
     echo "handling ${repo_path}"
     if [[ ! -d "${repo_path}" ]]; then
         echo "cloning ${repo}..."
-	git clone "git@github.com:LudvigWesterdahl/${repo}.git" "${repo_path}"
+	      git clone "git@github.com:LudvigWesterdahl/${repo}.git" "${repo_path}"
     fi
 
     if [[ $(git -C "${repo_path}" branch --show-current) == "master" ]]; then
@@ -58,7 +64,7 @@ inst_install() {
     git config --global core.editor "${GIT_EDITOR}"
 
     for i in "${REPOSITORIES[@]}"; do
-        handle_repository "${REPOSITORIES[$i]}"
+        handle_repository "${REPOSITORIES[$i]}" "${REPOSITORY_PATHS[$i]}"
     done
 }
 
