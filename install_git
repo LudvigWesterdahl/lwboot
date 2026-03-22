@@ -63,7 +63,7 @@ inst_install() {
     git config --global user.name "${GIT_NAME}"
     git config --global core.editor "${GIT_EDITOR}"
 
-    for i in "${REPOSITORIES[@]}"; do
+    for i in "${!REPOSITORIES[@]}"; do
         handle_repository "${REPOSITORIES[$i]}" "${REPOSITORY_PATHS[$i]}"
     done
 }
