@@ -1,36 +1,36 @@
 #!/bin/bash
 
-installer_name="NAME"
-installer_description="THIS_IS_THE_DESCRIPTION"
-installer_link="httpsomething"
+installer_name="bashrc"
+installer_description="installs bashrc and bash_profile"
+installer_link="n/a"
 
 
 inst_is_installed() {
-
-    return 0
+    return 1
 }
 
 inst_can_install() {
-
     return 0
 }
 
 inst_install() {
-    echo "installing..."
+    bashrc_dest="${HOME}/.bashrc"
+    bashprofile_dest="${HOME}/.bash_profile"
+
+    echo "copying bashrc into ${bashrc_dest}"
+    cp config/bashrc ${bashrc_dest}
+
+    echo "copying bashprofile into ${bashprofile_dest}"
+    cp config/bash_profile ${bashprofile_dest}
 
     return 0
 }
 
 inst_can_install_manual() {
-
     return 1
 }
 
 inst_install_manual() {
-    echo "1. copy file to somewhere"
-    echo "2. then do this"
-    echo "3. also open application and do this"
-
     return 0
 }
 
@@ -43,7 +43,5 @@ inst_upgrade() {
 }
 
 inst_uninstall() {
-    echo "uninstalling..."
-
     return 0
 }

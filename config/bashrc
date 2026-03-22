@@ -8,9 +8,10 @@
 # =============================
 # ===   alias definitions   ===
 # =============================
+alias slock="loginctl lock-session"
+alias slogout="qdbus6 org.kde.Shutdown /Shutdown logout"
 alias ls="ls --color=tty"
 alias grep='grep --color=tty'
-alias slock="loginctl lock-session"
 alias top="top -e m -E m -o RES"
 
 # ============================

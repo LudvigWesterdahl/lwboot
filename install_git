@@ -27,12 +27,16 @@ handle_repository() {
     echo "handling ${repo_path}"
     if [[ ! -d "${repo_path}" ]]; then
         echo "cloning ${repo}..."
-	      git clone "git@github.com:LudvigWesterdahl/${repo}.git" "${repo_path}"
+	if ! git clone "git@github.com:LudvigWesterdahl/${repo}.git" "${repo_path}" 1>/dev/null 2>&1; then
+            echo "clone failed"
+        fi
     fi
 
     if [[ $(git -C "${repo_path}" branch --show-current) == "master" ]]; then
         echo "pulling ${repo}..."
-        git -C "${repo_path}" pull
+        if ! git -C "${repo_path}" pull 1>/dev/null 2>&1; then
+            echo "pull failed"
+	fi
     else
         echo "skipping pull ${repo} not on master branch!"
     fi

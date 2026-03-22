@@ -21,7 +21,7 @@ inst_install() {
     fi
     
     echo "copying ghostty config file" 
-    cp config/ghostty.config ~/.config/ghostty/config
+    cp config/ghostty.config ${HOME}/.config/ghostty/config
 
     return 0
 }

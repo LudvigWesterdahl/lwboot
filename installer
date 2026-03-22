@@ -21,6 +21,8 @@ readonly INSTALLERS=(
   "install_mandb"
   "install_manpages"
   "install_ghostty"
+  "install_bashrc"
+  "install_kdeshortcuts"
 )
 
 readonly ARG=${1}
