@@ -38,22 +38,8 @@ inst_can_install() {
 }
 
 inst_install() {
-    echo "set Window Maximize = Meta+Shift+Up"
-    prev_maximize=$(kreadconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize")
-    kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize" "Meta+Shift+Up,Meta+PgUp,Maximize Window"
-    after_maximize=$(kreadconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize")
-    echo "prev: ${prev_maximize}"
-    echo "after: ${after_maximize}"
-
-    echo "set org.kde.krunner.desktop _launch = Search; Alt+F2"
-    prev_krunner=$(kreadconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch)
-    kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch "$(printf "Alt+F2\tSearch\t")"
-    after_krunner=$(kreadconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch)
-
-    echo "prev: ${prev_krunner}"
-    echo "after: ${after_krunner}"
-    
-    echo "set ghostty +new-window = Alt+Space"
+    wconfig1 kwin "Window Maximize" "Meta+Shift+Up,Meta+PgUp,Maximize Window"
+    wconfig2 services org.kde.krunner.desktop _launch "$(printf "Alt+F2\tSearch\t")"
     create_desktop_file_shortcut "ghosttynewwindow" "ghostty +new-window" "Alt+Space"
 
     echo "log out and back in for changes to take effect (run slogout)!"
@@ -100,14 +86,55 @@ create_desktop_file_shortcut() {
     echo "StartupNotify=false" >> ${outfile}
     echo "Type=Application" >> ${outfile}
     echo "X-KDE-GlobalAccel-CommandShortcut=true" >> ${outfile}
-    before_write=$(kreadconfig6 --file kglobalshortcutsrc --group services --group ${desktopfile} --key _launch)
-    kwriteconfig6 --file kglobalshortcutsrc --group services --group ${desktopfile} --key _launch "${argshortcut}"
-    after_write=$(kreadconfig6 --file kglobalshortcutsrc --group services --group ${desktopfile} --key _launch)
 
-    echo "wrote to kglobalshortcutsrc services ${desktopfile}"
-    echo "before: ${before_write}"
-    echo "after: ${after_write}"
+    wconfig2 services ${desktopfile} _launch "${argshortcut}"
 
     return 0
 }
+
+
+# writes to file kglobalshortcutsrc using 1 group
+wconfig1() {
+    arggroup1="${1}"
+    argkey="${2}"
+    argval="${3}"
+
+    before_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}")
+    kwriteconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}" "${argval}"
+    after_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}")
+
+    echo "wrote to config"
+    echo "file      : kglobalshortcutsrc"
+    echo "group     : ${arggroup1}"
+    echo "key       : ${argkey}"
+    echo "value     : ${argval}"
+    echo "before    : ${before_write}"
+    echo "after     : ${after_write}"
+    
+    return 0
+}
+
+# writes to file kglobalshortcutsrc using 2 groups
+wconfig2() {
+    arggroup1="${1}"
+    arggroup2="${2}"
+    argkey="${3}"
+    argval="${4}"
+
+    before_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}")
+    kwriteconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}" "${argval}"
+    after_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}")
+
+    echo "wrote to config"
+    echo "file      : kglobalshortcutsrc"
+    echo "group     : ${arggroup1}"
+    echo "group     : ${arggroup2}"
+    echo "key       : ${argkey}"
+    echo "value     : ${argval}"
+    echo "before    : ${before_write}"
+    echo "after     : ${after_write}"
+    
+    return 0
+}
+
 
