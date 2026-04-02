@@ -23,6 +23,7 @@ readonly INSTALLERS=(
   "install_ghostty"
   "install_bashrc"
   "install_kdeshortcuts"
+  "install_libinputtools"
 )
 
 readonly ARG=${1}
