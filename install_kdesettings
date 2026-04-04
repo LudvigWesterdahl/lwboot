@@ -1,36 +1,92 @@
 #!/bin/bash
 
-installer_name="NAME"
-installer_description="THIS_IS_THE_DESCRIPTION"
-installer_link="httpsomething"
+# Docs
+# 1. links to sources
+# https://discuss.kde.org/t/ambidextrous-how-to-write-a-script-to-switch-mouse-buttons/38494 
+# https://discuss.kde.org/t/changing-mouse-buttonrebinds-for-extrabuttons-programmatically-kcminputrc/42174 
+# https://www.reddit.com/r/kde/comments/1odxxhg/any_documentation_for_editing_kcminputrc/ 
+# https://discuss.kde.org/t/how-to-change-settings-through-command-line/41361
+#
+# 2. kciminputrc file
+# After modifying settings, which can be opened by running systemsettings, .config/kcminputrc file is created. 
+# You can also check available modules with --list and then opening a specific one using systemsettings kcm_touchpad for example.
+#
+# 3. view input device properties command
+# busctl --user introspect org.kde.KWin /org/kde/KWin/InputDevice/event11 org.kde.KWin.InputDevice
 
+installer_name="kdesettings"
+installer_description="configures settings such as natural scrolling"
+installer_link="N/A"
 
 inst_is_installed() {
-
-    return 0
+  return 1
 }
 
 inst_can_install() {
+  if ! is_command "libinput"; then
+    echo "missing libinput"
+    return 1
+  fi
+  
+  if ! is_command "udevadm"; then
+    echo "missing udevadm"
+    return 1
+  fi
+   
+  return 0
+}
 
+
+set_inputdevice_prop() {
+  arg_dev_path="${1}"
+  arg_prop="${2}"
+  arg_type="${3}"
+  arg_val="${4}"
+
+  dev_name=$(udevadm info ${arg_dev_path} | grep "M:" | tr -d "M: ")
+  if [ "/dev/input/${dev_name}" != "${arg_dev_path}" ]; then
+    echo "failed to find device name from ${arg_dev_path} got: ${dev_name}"
+    return 1
+  fi
+
+
+  val_before=$(busctl --user get-property org.kde.KWin /org/kde/KWin/InputDevice/${dev_name} org.kde.KWin.InputDevice ${arg_prop})
+  busctl --user set-property org.kde.KWin /org/kde/KWin/InputDevice/${dev_name} org.kde.KWin.InputDevice ${arg_prop} ${arg_type} ${arg_val}
+  val_after=$(busctl --user get-property org.kde.KWin /org/kde/KWin/InputDevice/${dev_name} org.kde.KWin.InputDevice ${arg_prop})
+  
+  echo "set input device property"
+  echo "dev path:    ${arg_dev_path}"
+  echo "dev name:    ${dev_name}"
+  echo "property:    ${arg_prop}"
+  echo "before:      ${val_before}"
+  echo "after:       ${val_after}"
+}
+
+config_touchpad() {
+  echo "configuring touchpad: libinput list-devices will be called with sudo"
+  dev_substring="Touchpad"
+  num_substring_lines=$(sudo libinput list-devices | grep "${dev_substring}" | wc -l)
+  if [ "${num_substring_lines}" -ne "1" ]; then
+    echo "too many ${dev_substring} results expected 1 got ${num_substring_lines}"
     return 0
+  fi
+  
+  dev_path=$(sudo libinput list-devices | grep "${dev_substring}" -A 1 | tail -n 1 | tr -s " " "\n" | tail -n 1)
+
+  set_inputdevice_prop ${dev_path} naturalScroll b true
 }
 
 inst_install() {
-    echo "installing..."
+  config_touchpad
 
-    return 0
+  return 0
 }
 
 inst_can_install_manual() {
-
     return 1
 }
 
 inst_install_manual() {
-    echo "1. copy file to somewhere"
-    echo "2. then do this"
-    echo "3. also open application and do this"
-
     return 0
 }
 
@@ -39,25 +95,10 @@ inst_can_upgrade() {
 }
 
 inst_upgrade() {
-    return 1
+    return 0
 }
 
 inst_uninstall() {
-    echo "uninstalling..."
-
     return 0
 }
-busctl --user get-property org.kde.KWin /org/kde/KWin/InputDevice/event11 org.kde.KWin.InputDevice naturalScroll
-busctl --user set-property org.kde.KWin /org/kde/KWin/InputDevice/event11 org.kde.KWin.InputDevice naturalScroll b true
-.config/kcminputrc file created after changes to settings
-libinput list-devices
-systemsettings --list
-systemsettings kcm_touchpad
-https://discuss.kde.org/t/ambidextrous-how-to-write-a-script-to-switch-mouse-buttons/38494 
-https://discuss.kde.org/t/changing-mouse-buttonrebinds-for-extrabuttons-programmatically-kcminputrc/42174 
-https://www.reddit.com/r/kde/comments/1odxxhg/any_documentation_for_editing_kcminputrc/ 
-https://discuss.kde.org/t/how-to-change-settings-through-command-line/41361
 
-busctl --user introspect org.kde.KWin /org/kde/KWin/InputDevice/event11 org.kde.KWin.InputDevice
-sudo libinput list-devices | grep Touchpad -A 1 | wc -l EQUAL to 2
-sudo libinput list-devices | grep Touchpad -A 1 | tail -n 1 | tr -s ' ' '\n' | tail -n 1
