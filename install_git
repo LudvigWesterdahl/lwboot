@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Docs
+# N/A
+
 installer_name="git"
 installer_description="installs and configures git (contains personal info) - needs less and vim to work properly"
 installer_link="https://archlinux.org/packages/extra/x86_64/git/"

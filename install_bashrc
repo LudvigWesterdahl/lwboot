@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Docs
+# N/A
+
 installer_name="bashrc"
 installer_description="installs bashrc and bash_profile"
 installer_link="n/a"

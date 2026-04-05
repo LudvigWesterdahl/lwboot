@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Docs
+# N/A
+
 installer_name="maven"
 installer_description="installs maven"
 installer_link="https://archlinux.org/packages/extra/any/maven/"

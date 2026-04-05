@@ -192,5 +192,11 @@ if [[ "${ARG}" == "uninstall" ]]; then
     done
 fi
 
-echo "unknown argument ${ARG}"
-exit 1
+if [[ "${ARG}" == "docs" ]]; then
+    grep "#" install_* \
+    | grep -v "bin/bash" \
+    | tr -d "#" \
+    | column --table -s ":" -C "name=INSTALL FILE,width=25,strictwidth" -C "name=DOCUMENTATION" -l 2 \
+    | less
+fi
+

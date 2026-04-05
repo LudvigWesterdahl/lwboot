@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Docs
+# N/A
+
 installer_name="vim"
 installer_description="installs vim"
 installer_link="https://archlinux.org/packages/extra/x86_64/vim/"
