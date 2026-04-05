@@ -30,18 +30,16 @@ inst_can_install() {
 }
 
 inst_install() {
-    mkdir ~/aur-builds
-    cd ~/aur-builds
-    git clone https://aur.archlinux.org/brave-bin.git
-    cd brave-bin
+    aurbuilddir=$HOME/aur-builds/brave-bin
+    git clone https://aur.archlinux.org/brave-bin.git ${aurbuilddir}
 
-    makepkg --noconfirm -si
+    makepkg --noconfirm -si --dir ${aurbuilddir}
 
     kwriteconfig6 --file kdeglobals --group General --key BrowserApplication "${BRAVE_DESKTOP}"
     kwriteconfig6 --file kdeglobals --group General --key Http "${BRAVE_DESKTOP}"
     kwriteconfig6 --file kdeglobals --group General --key Https "${BRAVE_DESKTOP}"
-
-    rm -rf ~/aur-builds/brave-bin
+    
+    rm -rf ${aurbuilddir}
 
     return 0
 }
