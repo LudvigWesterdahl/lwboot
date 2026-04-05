@@ -25,6 +25,7 @@ readonly INSTALLERS=(
   "install_kdeshortcuts"
   "install_libinputtools"
   "install_kdesettings"
+  "install_shellcheck"
 )
 
 readonly ARG=${1}

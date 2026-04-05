@@ -1,17 +1,16 @@
 #!/bin/bash
 
 # Docs
-# 1. Purpose to replace usage of xev which didn't give the MSC_SCAN values.
-# 2. Usage:
-# sudo evtest # list all input devices
-# sudo evtest /dev/input/eventX # replace X with result from above
+# 1. Usage:
+# shellcheck <file>
 
-installer_name="evtest"
-installer_description="installs evtest"
-installer_link="https://archlinux.org/packages/extra/x86_64/evtest/"
+installer_name="shellcheck"
+installer_description="installs shellcheck"
+installer_link="https://archlinux.org/packages/extra/x86_64/shellcheck/"
 
-SHORT_PKG="evtest"
+SHORT_PKG="shellcheck"
 LONG_PKG="extra/${SHORT_PKG}"
+
 
 inst_is_installed() {
     is_pacman_installed ${SHORT_PKG} 
