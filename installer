@@ -26,6 +26,8 @@ readonly INSTALLERS=(
   "install_libinputtools"
   "install_kdesettings"
   "install_shellcheck"
+  "install_jq"
+  "install_tokei"
 )
 
 readonly ARG=${1}
