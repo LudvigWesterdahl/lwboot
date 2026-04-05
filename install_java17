@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Docs
+# 1. main java doc for arch
+# https://wiki.archlinux.org/title/Java
+# 2. switching versions
+# archlinux-java --help
+
+installer_name="java17"
+installer_description="installs java 17"
+installer_link="https://archlinux.org/packages/extra/x86_64/jdk17-openjdk/"
+
+SHORT_PKG="jdk17-openjdk"
+LONG_PKG="extra/${SHORT_PKG}"
+
+inst_is_installed() {
+    is_pacman_installed ${SHORT_PKG} 
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${LONG_PKG}
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 0
+}
+
+inst_can_upgrade() {
+    return 1
+}
+
+inst_upgrade() {
+    return 0
+}
+
+inst_uninstall() {
+    pacman_uninstall ${SHORT_PKG}
+}
+

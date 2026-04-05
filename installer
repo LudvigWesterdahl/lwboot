@@ -29,6 +29,8 @@ readonly INSTALLERS=(
   "install_jq"
   "install_tokei"
   "install_slack"
+  "install_java17"
+  "install_maven"
 )
 
 readonly ARG=${1}
