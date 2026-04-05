@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Docs
+# 1. doc page
+# https://qpdf.readthedocs.io
+# 2. usage
+# concat pdfs (the dot references doc1.pdf, same result)
+# qpdf doc1.pdf --pages . doc2.pdf doc3.pdf -- out.pdf
+
+installer_name="qpdf"
+installer_description="installs qpdf"
+installer_link="https://archlinux.org/packages/extra/x86_64/qpdf/"
+
+SHORT_PKG="qpdf"
+LONG_PKG="extra/${SHORT_PKG}"
+
+inst_is_installed() {
+    is_pacman_installed ${SHORT_PKG} 
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${LONG_PKG}
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 0
+}
+
+inst_can_upgrade() {
+    return 1
+}
+
+inst_upgrade() {
+    return 0
+}
+
+inst_uninstall() {
+    pacman_uninstall ${SHORT_PKG}
+}
+

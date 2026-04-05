@@ -31,6 +31,7 @@ readonly INSTALLERS=(
   "install_slack"
   "install_java17"
   "install_maven"
+  "install_qpdf"
 )
 
 readonly ARG=${1}
