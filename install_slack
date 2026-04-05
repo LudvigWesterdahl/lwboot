@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Docs
+# n/a
+
+installer_name="slack"
+installer_description="installs slack"
+installer_link="https://aur.archlinux.org/packages/slack-desktop"
+
+SHORT_PKG="slack-desktop"
+
+inst_is_installed() {
+    is_command slack
+}
+
+inst_can_install() {
+    if ! is_command git; then
+        echo "requires git"
+        return 1
+    fi
+
+    return 0
+}
+
+inst_install() {
+    aurbuilddir=$HOME/aur-builds/slack-desktop
+    git clone https://aur.archlinux.org/slack-desktop.git ${aurbuilddir}
+
+    makepkg --noconfirm -si --dir ${aurbuilddir}
+
+    rm -rf ${aurbuilddir}
+
+    return 0
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 0
+}
+
+inst_can_upgrade() {
+    return 0
+}
+
+inst_upgrade() {
+    return 0
+}
+
+inst_uninstall() {
+    pacman_uninstall ${SHORT_PKG}
+}
+

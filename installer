@@ -28,6 +28,7 @@ readonly INSTALLERS=(
   "install_shellcheck"
   "install_jq"
   "install_tokei"
+  "install_slack"
 )
 
 readonly ARG=${1}
