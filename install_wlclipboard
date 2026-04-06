@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Docs
+# usage:
+#   wl-copy [-p | --primary] [-t <mime> | --type <mime>] [text...]
+#   wl-paste [-p | --primary] [-t <mime> | --type <mime>]
+#
+# man:
+#   man wl-clipboard
+#   man wl-copy
+#   man wl-paste
+#
+
+
+installer_name="wlclipboard"
+installer_description="installs wl-clipboard"
+installer_link="https://archlinux.org/packages/extra/x86_64/wl-clipboard/"
+
+SHORT_PKG="wl-clipboard"
+LONG_PKG="extra/${SHORT_PKG}"
+
+inst_is_installed() {
+    is_pacman_installed ${SHORT_PKG} 
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${LONG_PKG}
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 0
+}
+
+inst_can_upgrade() {
+    return 1
+}
+
+inst_upgrade() {
+    return 0
+}
+
+inst_uninstall() {
+    pacman_uninstall ${SHORT_PKG}
+}
+
