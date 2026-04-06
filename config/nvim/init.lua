@@ -271,6 +271,20 @@ require('lazy').setup({
   --        end,
   --    }
   --
+
+  -- Using Lazy
+  -- https://github.com/navarasu/onedark.nvim
+  {
+    'navarasu/onedark.nvim',
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      require('onedark').setup {
+        style = 'dark',
+      }
+      require('onedark').load()
+    end,
+  },
+
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`.
   --
