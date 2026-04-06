@@ -2,6 +2,14 @@
 
 # Docs
 # 1. https://www.youtube.com/watch?v=ttZKwrR6xKQ
+# 2. manpages
+# https://linuxcommandlibrary.com/man/brave
+# https://man.linuxreviews.org/man1/brave-browser-stable.1.html
+# 3. usage
+#   brave PATH
+#   brave --incognito PATH
+#   brave --new-window PATH
+#   brave --app=PATH
 
 installer_name="brave"
 installer_description="installs brave and configures kde defaults"
