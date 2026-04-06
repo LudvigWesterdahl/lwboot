@@ -14,28 +14,18 @@ GIT_MAIL="ludvig.westerdahl.tech.v1@protonmail.com"
 GIT_NAME="ludvig"
 GIT_EDITOR="vim"
 
-REPOSITORIES=(
-    "lwdoc"
-    "Scripts"
-)
-REPOSITORY_PATHS=(
-    "${HOME}/Documents/lwdoc"
-    "${HOME}/bin/scripts"
-)
-
-
 handle_repository() {
     repo="${1}"
     repo_path="${2}"
     echo "handling ${repo_path}"
-    if [[ ! -d "${repo_path}" ]]; then
+    if [ ! -d "${repo_path}" ]; then
         echo "cloning ${repo}..."
 	if ! git clone "git@github.com:LudvigWesterdahl/${repo}.git" "${repo_path}" 1>/dev/null 2>&1; then
             echo "clone failed"
         fi
     fi
 
-    if [[ $(git -C "${repo_path}" branch --show-current) == "master" ]]; then
+    if [ "$(git -C "${repo_path}" branch --show-current)" = "master" ]; then
         echo "pulling ${repo}..."
         if ! git -C "${repo_path}" pull 1>/dev/null 2>&1; then
             echo "pull failed"
@@ -70,9 +60,10 @@ inst_install() {
     git config --global user.name "${GIT_NAME}"
     git config --global core.editor "${GIT_EDITOR}"
 
-    for i in "${!REPOSITORIES[@]}"; do
-        handle_repository "${REPOSITORIES[$i]}" "${REPOSITORY_PATHS[$i]}"
-    done
+
+    handle_repository "lwdoc" "${HOME}/Documents/lwdoc"
+    handle_repository "Scripts" "${HOME}/bin/scripts"
+    handle_repository "lwgitjournal" "${HOME}/Documents/lwgitjournal"
 }
 
 inst_can_install_manual() {
@@ -80,7 +71,7 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 1
+    return 0
 }
 
 inst_can_upgrade() {
@@ -88,7 +79,7 @@ inst_can_upgrade() {
 }
 
 inst_upgrade() {
-    return 1
+    return 0
 }
 
 inst_uninstall() {
