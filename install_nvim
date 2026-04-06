@@ -11,15 +11,26 @@ SHORT_PKG="neovim"
 LONG_PKG="extra/${SHORT_PKG}"
 
 inst_is_installed() {
-    is_pacman_installed ${SHORT_PKG} 
+    return 1
 }
 
 inst_can_install() {
+    if ! is_command "unzip"; then
+        return 1
+    fi
+    
     return 0
 }
 
 inst_install() {
-    pacman_install ${LONG_PKG}
+    if ! is_pacman_installed ${SHORT_PKG}; then
+        pacman_install ${LONG_PKG}
+    fi
+    
+    mkdir $HOME/.config/nvim 2>/dev/null
+    
+    cp config/nvim/init.lua $HOME/.config/nvim/init.lua
+    cp config/nvim/stylua.toml $HOME/.config/nvim/.stylua.toml
 }
 
 inst_can_install_manual() {

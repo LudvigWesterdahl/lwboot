@@ -58,7 +58,12 @@ inst_can_install_manual() {
 
 inst_install_manual() {
     echo "1. sync setup: settings > sync > I have a Sync Code (code printed next)"
-    cat "${BRAVE_SYNC_CODE}"
+
+    if [ ! -f ${BRAVE_SYNC_CODE} ]; then
+        echo "missing ${BRAVE_SYNC_CODE}"
+    else
+        cat "${BRAVE_SYNC_CODE}"
+    fi
 
     return 0
 }
