@@ -4,6 +4,30 @@
 # ============================== program installer utils ==============================
 # =====================================================================================
 
+htitle() {
+    printf "%25s%s\n" "" "${1}"
+}
+
+hdesc() {
+    printf "\nDESCRIPTION\n"
+}
+
+husage() {
+    printf "\nUSAGE\n"
+}
+
+hexamples() {
+    printf "\nEXAMPLES\n"
+}
+
+hseealso() {
+    printf "\nSEE ALSO\n"
+}
+
+htext() {
+    printf "%4s%s\n" "" "${1}"
+}
+
 is_command() {
     if command -v "${1}" >/dev/null 2>&1; then
         return 0
@@ -12,8 +36,21 @@ is_command() {
     fi
 }
 
+mv_bak() {
+    arg_file="${1}"
+    if [ ! -f "${arg_file}" ]; then
+        echo "${arg_file} does not exist, no bak will be created"
+        return 0
+    fi
+    
+    bak_file="${arg_file}.$(date +%Y%m%d_%H%M%S).bak"
+    echo "mv ${arg_file} ${bak_file}"
+    mv ${arg_file} ${bak_file}
+    return 0
+}
+
 is_pacman_installed() {
-    if pacman -Q "${1}" >/dev/null 2>&1; then
+    if pacman -Qe "${1}" >/dev/null 2>&1; then
         return 0
     else
         return 1
@@ -32,7 +69,7 @@ pacman_install() {
 
     if pacman -Qd "${short_pkg}" 1>/dev/null 2>&1; then
         echo "marking dependency as explicitly installed: ${arg_pkg} - ${short_pkg}"
-        pacman -D --asexplicit "${short_pkg}"
+        sudo pacman -D --asexplicit "${short_pkg}"
         return 0
     fi
 
@@ -43,7 +80,7 @@ pacman_install() {
 
     echo "installing: ${arg_pkg} - ${short_pkg}"
 
-    pacman --noconfirm -S "${1}"
+    sudo pacman --noconfirm -S "${1}"
 }
 
 pacman_uninstall() {
@@ -56,7 +93,7 @@ pacman_uninstall() {
 
     short_pkg=$(long_to_short_pkg "${arg_pkg}")
 
-    pacman --noconfirm -R ${short_pkg}
+    sudo pacman --noconfirm -R ${short_pkg}
 }
 
 # =============================================================================
@@ -87,6 +124,6 @@ pacman_upgrade() {
         exit 1
     fi
 
-    pacman --noconfirm -Syu
-    pacman --noconfirm -Fy
+    sudo pacman --noconfirm -Syu
+    sudo pacman --noconfirm -Fy
 }

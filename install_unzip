@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Docs
-# N/A
+# usage:
+#   1. uncompress a file
+#   unzip file.tar.zip file.tar
 
 installer_name="unzip"
 installer_description="installs unzip"

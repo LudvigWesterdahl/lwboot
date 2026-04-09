@@ -11,6 +11,11 @@ readonly PROG_NAME=$(basename $0)
 
 readonly INSTALLERS=(
   "install_less"
+  "install_gzip"
+  "install_xz"
+  "install_tar"
+  "install_zip"
+  "install_unzip"
   "install_vim"
 #  "install_git"
   "install_basedevel"
@@ -34,9 +39,7 @@ readonly INSTALLERS=(
   "install_qpdf"
   "install_wlclipboard"
   "install_fd"
-  "install_zip"
-  "install_unzip"
-  "install_nvim"
+#  "install_nvim"
 )
 
 readonly ARG=${1}
@@ -136,3 +139,11 @@ if [[ "${ARG}" == "docs" ]]; then
     | column --table -s ":" -C "name=INSTALL FILE,width=25,strictwidth" -C "name=DOCUMENTATION" -l 2 \
     | less
 fi
+
+if [[ "${ARG}" == "docss" ]]; then
+    for i in "${!INSTALLERS[@]}"; do
+        source_installer "${INSTALLERS[$i]}"
+        inst_help
+    done
+fi
+

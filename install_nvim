@@ -10,14 +10,14 @@ installer_link="https://archlinux.org/packages/extra/x86_64/neovim/"
 SHORT_PKG="neovim"
 LONG_PKG="extra/${SHORT_PKG}"
 
-### Clone treesitter repo
-### make -C <dir>
-### if [ ! -f libtree-sitter-java.so ]
-###   quit, make failed!
-### mv --backup=numbered HOME/.config/nvim/parser/java.so ....parser/bak
-### mv <dir>/libtree-sitter-java.so HOME/.config/nvim/parser
+# Clone treesitter repo
+# make -C <dir>
+# if [ ! -f libtree-sitter-java.so ]
+#   quit, make failed!
+# mv --backup=numbered HOME/.config/nvim/parser/java.so ....parser/bak
+# mv <dir>/libtree-sitter-java.so HOME/.config/nvim/parser
 
-### Copy highlights.scm
+# Copy highlights.scm
 
 inst_is_installed() {
     return 1

@@ -3,17 +3,20 @@
 # Docs
 # usage:
 #   1. compress a file
-#   zip file.tar.zip file.tar
+#   xz --keep file.tar
+#
+#   2. uncompress a file
+#   xz --keep -d file.tar.xz
 
-installer_name="zip"
-installer_description="installs zip"
-installer_link="https://archlinux.org/packages/extra/x86_64/zip/"
+installer_name="xz"
+installer_description="installs xz"
+installer_link="https://archlinux.org/packages/core/x86_64/xz/"
 
-SHORT_PKG="zip"
-LONG_PKG="extra/${SHORT_PKG}"
+SHORT_PKG="xz"
+LONG_PKG="core/${SHORT_PKG}"
 
 inst_is_installed() {
-    is_pacman_installed ${SHORT_PKG} 
+    is_pacman_installed ${SHORT_PKG}
 }
 
 inst_can_install() {
@@ -29,7 +32,7 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 0
+    return 1
 }
 
 inst_can_upgrade() {
@@ -37,7 +40,7 @@ inst_can_upgrade() {
 }
 
 inst_upgrade() {
-    return 0
+    return 1
 }
 
 inst_uninstall() {

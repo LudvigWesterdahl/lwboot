@@ -1,8 +1,15 @@
 #!/bin/bash
 
-# Docs
-# 1. https://bbs.archlinux.org/viewtopic.php?id=259604
-# 2. List installed wallpapers: ls -1 /usr/share/backgrounds/archlinux
+##
+##                         archwallpaper
+##
+##EXAMPLES
+##    List installed wallpapers:
+##    ls -1 /usr/share/backgrounds/archlinux
+##
+##HELP
+##    https://bbs.archlinux.org/viewtopic.php?id=259604
+##
 
 installer_name="archwallpaper"
 installer_description="installs archlinux-wallpaper and configures it"

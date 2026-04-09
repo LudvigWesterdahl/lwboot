@@ -1,29 +1,29 @@
 #!/bin/bash
 
-# Docs
-# 1. You can figure out the bindings by going to "System Settings > Keyboard > Shortcuts > Export".
-# The resulting kksrc file can be inspected.
-# For example "Window Maximize" is in file kglobalshortcutsrc and group kwin, see [kwin][Global Shortcuts].
+# HELP
+#     You can figure out the bindings by going to "System Settings > Keyboard > Shortcuts > Export".
+#     The resulting kksrc file can be inspected.
+#     For example "Window Maximize" is in file kglobalshortcutsrc and group kwin, see [kwin][Global Shortcuts].
 #
-# 2. Another way to find the configureations is by inspecting /home/ludvig/.config/kglobalshortcutsrc.
-# Issue with this approach is that it's not always in this file. For example the krunner
-# shortcut was like this in the kksrc export file:
-# [org.kde.krunner.desktop][Global Shortcuts]
-# RunClipboard=Alt+Shift+F2
-# _launch=Search; Alt+Space; Alt+F2
+#     Another way to find the configureations is by inspecting /home/ludvig/.config/kglobalshortcutsrc.
+#     Issue with this approach is that it's not always in this file. For example the krunner
+#     shortcut was like this in the kksrc export file:
+#     [org.kde.krunner.desktop][Global Shortcuts]
+#     RunClipboard=Alt+Shift+F2
+#     _launch=Search; Alt+Space; Alt+F2
 #
-# This cannot be found in the kglobalshortcutsrc file, it seems like it is not written
-# unless overridden. The desktop file was then found by running the following from /:
-# find . -name org.kde.krunner.desktop 2>/dev/null
-# /usr/share/kglobalaccel/org.kde.krunner.desktop
+#     This cannot be found in the kglobalshortcutsrc file, it seems like it is not written
+#     unless overridden. The desktop file was then found by running the following from /:
+#     find . -name org.kde.krunner.desktop 2>/dev/null
+#     /usr/share/kglobalaccel/org.kde.krunner.desktop
 #
-# Then inspecting this file was this line:
-# X-KDE-Shortcuts=Alt+Space,Alt+F2,Search
-# However, that did not really help as it turned out the actual value needed to have tabs in them.
-# The way I found that out was by saving it in system settings, then inspecting the config value in the kglobalshortcutsrc file.
-# The end result being the printf solution below.
+#     Then inspecting this file was this line:
+#     X-KDE-Shortcuts=Alt+Space,Alt+F2,Search
+#     However, that did not really help as it turned out the actual value needed to have tabs in them.
+#     The way I found that out was by saving it in system settings, then inspecting the config value in the kglobalshortcutsrc file.
+#     The end result being the printf solution below.
 #
-# 3. Regarding ghostty +new-window is recommended in docs, see https://ghostty.org/docs/linux/systemd
+#     Regarding ghostty +new-window is recommended in docs, see https://ghostty.org/docs/linux/systemd
 
 installer_name="kdeshortcuts"
 installer_description="configures shortcuts for KDE Plasma 6"
@@ -73,12 +73,8 @@ create_desktop_file_shortcut() {
     desktopfile="net.local.${argname}.desktop"
     outfile="${HOME}/.local/share/applications/${desktopfile}"
 
-    if [ -f "${outfile}" ]; then
-	outfile_bak="${outfile}.$(date +%Y%m%d_%H%M%S).bak"
-        echo "already exist ${outfile}"
-        echo "moving to ${outfile_bak}"
-	mv ${outfile} ${outfile_bak}
-    fi
+    mv_bak ${outfile}
+
     echo "[Desktop Entry]" >> ${outfile}
     echo "Exec=${argexec}" >> ${outfile}
     echo "Name=${argname}" >> ${outfile}
@@ -93,7 +89,6 @@ create_desktop_file_shortcut() {
 }
 
 
-# writes to file kglobalshortcutsrc using 1 group
 wconfig1() {
     arggroup1="${1}"
     argkey="${2}"
@@ -114,7 +109,6 @@ wconfig1() {
     return 0
 }
 
-# writes to file kglobalshortcutsrc using 2 groups
 wconfig2() {
     arggroup1="${1}"
     arggroup2="${2}"
