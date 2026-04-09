@@ -42,75 +42,7 @@ readonly INSTALLERS=(
 readonly ARG=${1}
 readonly OPT1=${2}
 
-# =====================================================================================
-# ============================== program installer utils ==============================
-# =====================================================================================
-
-is_command() {
-    if command -v "${1}" >/dev/null 2>&1; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-is_pacman_installed() {
-    if pacman -Q "${1}" >/dev/null 2>&1; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-pacman_install() {
-    if ! is_command pacman; then
-        echo "pacman does not exist"
-        exit 1
-    fi
-
-    echo "pacman_install ${1}"
-
-    sudo pacman --noconfirm -S ${1}
-}
-
-pacman_uninstall() {
-    if ! is_command pacman; then
-        echo "pacman does not exist"
-        exit 1
-    fi
-
-    sudo pacman --noconfirm -R ${1}
-}
-
-# =============================================================================
-# ============================== installer utils ==============================
-# =============================================================================
-
-describe_installer() {
-    echo -e "\033[1m${installer_name}\033[0m - ${installer_description}"
-    echo "| link: ${installer_link}"
-}
-
-prog_inst_name=""
-
-source_installer() {
-    prog_inst_name="${1}"
-    source ${prog_inst_name}
-}
-
-pacman_upgrade() {
-    if ! is_command pacman; then
-        echo "pacman does not exist"
-        exit 1
-    fi
-
-    sudo pacman --noconfirm -Syu
-    sudo pacman --noconfirm -Fy
-}
-
-# =======================================================================
-# ============================== installer ==============================
-# =======================================================================
+source installer_lib
 
 if [[ "${ARG}" == "install" ]]; then
     if [[ "${OPT1}" != "false" ]]; then
@@ -204,4 +136,3 @@ if [[ "${ARG}" == "docs" ]]; then
     | column --table -s ":" -C "name=INSTALL FILE,width=25,strictwidth" -C "name=DOCUMENTATION" -l 2 \
     | less
 fi
-

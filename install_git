@@ -52,7 +52,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_command "git"; then
+    if ! is_pacman_installed ${SHORT_PKG}; then
         pacman_install ${LONG_PKG}
     fi
 

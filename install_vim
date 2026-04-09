@@ -11,7 +11,7 @@ SHORT_PKG="vim"
 LONG_PKG="extra/${SHORT_PKG}"
 
 inst_is_installed() {
-    is_command vim
+    is_pacman_installed ${SHORT_PKG}
 }
 
 inst_can_install() {

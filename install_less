@@ -11,7 +11,7 @@ SHORT_PKG="less"
 LONG_PKG="core/${SHORT_PKG}"
 
 inst_is_installed() {
-    is_command less
+    is_pacman_installed ${SHORT_PKG}
 }
 
 inst_can_install() {

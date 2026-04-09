@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# =====================================================================================
+# ============================== program installer utils ==============================
+# =====================================================================================
+
+is_command() {
+    if command -v "${1}" >/dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+is_pacman_installed() {
+    if pacman -Q "${1}" >/dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+pacman_install() {
+    arg_pkg="${1}"
+
+    if ! is_command pacman; then
+        echo "pacman does not exist"
+        exit 1
+    fi
+
+    short_pkg=$(long_to_short_pkg "${arg_pkg}")
+
+    if pacman -Qd "${short_pkg}" 1>/dev/null 2>&1; then
+        echo "marking dependency as explicitly installed: ${arg_pkg} - ${short_pkg}"
+        pacman -D --asexplicit "${short_pkg}"
+        return 0
+    fi
+
+    if pacman -Qe "${short_pkg}" 1>/dev/null 2>&1; then
+        echo "already installed: ${arg_pkg} - ${short_pkg}"
+        return 0
+    fi
+
+    echo "installing: ${arg_pkg} - ${short_pkg}"
+
+    pacman --noconfirm -S "${1}"
+}
+
+pacman_uninstall() {
+    arg_pkg="${1}"
+
+    if ! is_command pacman; then
+        echo "pacman does not exist"
+        exit 1
+    fi
+
+    short_pkg=$(long_to_short_pkg "${arg_pkg}")
+
+    pacman --noconfirm -R ${short_pkg}
+}
+
+# =============================================================================
+# ============================== installer utils ==============================
+# =============================================================================
+
+long_to_short_pkg() {
+    arg_string="${1}"
+    split_last=$(echo "${arg_string}" | tr "/" "\n" | tail -n 1)
+    echo "${split_last}"
+}
+
+describe_installer() {
+    echo -e "\033[1m${installer_name}\033[0m - ${installer_description}"
+    echo "| link: ${installer_link}"
+}
+
+prog_inst_name=""
+
+source_installer() {
+    prog_inst_name="${1}"
+    source ${prog_inst_name}
+}
+
+pacman_upgrade() {
+    if ! is_command pacman; then
+        echo "pacman does not exist"
+        exit 1
+    fi
+
+    pacman --noconfirm -Syu
+    pacman --noconfirm -Fy
+}
