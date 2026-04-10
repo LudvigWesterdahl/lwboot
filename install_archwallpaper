@@ -1,22 +1,24 @@
 #!/bin/bash
 
-##
-##                         archwallpaper
-##
-##EXAMPLES
-##    List installed wallpapers:
-##    ls -1 /usr/share/backgrounds/archlinux
-##
-##HELP
-##    https://bbs.archlinux.org/viewtopic.php?id=259604
-##
-
 installer_name="archwallpaper"
-installer_description="installs archlinux-wallpaper and configures it"
+installer_description="Installs archlinux-wallpaper and configures it."
 installer_link="https://archlinux.org/packages/extra/any/archlinux-wallpaper/"
 
-SHORT_PKG="archlinux-wallpaper"
-LONG_PKG="extra/${SHORT_PKG}"
+pacman_pkg="extra/archlinux-wallpaper"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "List installed and available wallpapers"
+    htext "ls -1 /usr/share/backgrounds/archlinux"
+    hseealso
+    htext "${installer_link}"
+    htext "https://bbs.archlinux.org/viewtopic.php?id=259604"
+}
 
 inst_is_installed() {
     return 1
@@ -27,18 +29,17 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_pacman_installed ${SHORT_PKG}; then
-        pacman_install ${LONG_PKG}
+    if ! is_pacman_installed ${pacman_pkg}; then
+        pacman_install ${pacman_pkg}
     fi
 
-    readonly WP="/usr/share/backgrounds/archlinux/conference.png"
-    readonly LS="/usr/share/backgrounds/archlinux/simple.png"
+    wallpaper_img="/usr/share/backgrounds/archlinux/conference.png"
+    lockscreen_img="/usr/share/backgrounds/archlinux/simple.png"
 
-    # Sets wallpaper
-    plasma-apply-wallpaperimage "${WP}"
 
-    # Sets lock screen
-    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://${LS}"
+    plasma-apply-wallpaperimage ${wallpaper_img}
+
+    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://${lockscreen_img}"
 }
 
 inst_can_install_manual() {
@@ -46,17 +47,9 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 1
-}
-
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 1
+    return 0
 }
 
 inst_uninstall() {
-    pacman_uninstall ${SHORT_PKG}
+    pacman_uninstall ${pacman_pkg}
 }

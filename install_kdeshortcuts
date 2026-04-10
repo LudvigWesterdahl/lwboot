@@ -1,33 +1,109 @@
 #!/bin/bash
 
-# HELP
-#     You can figure out the bindings by going to "System Settings > Keyboard > Shortcuts > Export".
-#     The resulting kksrc file can be inspected.
-#     For example "Window Maximize" is in file kglobalshortcutsrc and group kwin, see [kwin][Global Shortcuts].
-#
-#     Another way to find the configureations is by inspecting /home/ludvig/.config/kglobalshortcutsrc.
-#     Issue with this approach is that it's not always in this file. For example the krunner
-#     shortcut was like this in the kksrc export file:
-#     [org.kde.krunner.desktop][Global Shortcuts]
-#     RunClipboard=Alt+Shift+F2
-#     _launch=Search; Alt+Space; Alt+F2
-#
-#     This cannot be found in the kglobalshortcutsrc file, it seems like it is not written
-#     unless overridden. The desktop file was then found by running the following from /:
-#     find . -name org.kde.krunner.desktop 2>/dev/null
-#     /usr/share/kglobalaccel/org.kde.krunner.desktop
-#
-#     Then inspecting this file was this line:
-#     X-KDE-Shortcuts=Alt+Space,Alt+F2,Search
-#     However, that did not really help as it turned out the actual value needed to have tabs in them.
-#     The way I found that out was by saving it in system settings, then inspecting the config value in the kglobalshortcutsrc file.
-#     The end result being the printf solution below.
-#
-#     Regarding ghostty +new-window is recommended in docs, see https://ghostty.org/docs/linux/systemd
-
 installer_name="kdeshortcuts"
-installer_description="configures shortcuts for KDE Plasma 6"
+installer_description="Configures shortcuts for KDE Plasma 6"
 installer_link="-"
+
+wconfig1() {
+    arggroup1="${1}"
+    argkey="${2}"
+    argval="${3}"
+
+    before_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}")
+    kwriteconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}" "${argval}"
+    after_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}")
+
+    echo "wrote to config"
+    echo "file      : kglobalshortcutsrc"
+    echo "group     : ${arggroup1}"
+    echo "key       : ${argkey}"
+    echo "value     : ${argval}"
+    echo "before    : ${before_write}"
+    echo "after     : ${after_write}"
+
+    return 0
+}
+
+wconfig2() {
+    arggroup1="${1}"
+    arggroup2="${2}"
+    argkey="${3}"
+    argval="${4}"
+
+    before_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}")
+    kwriteconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}" "${argval}"
+    after_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}")
+
+    echo "wrote to config"
+    echo "file      : kglobalshortcutsrc"
+    echo "group     : ${arggroup1}"
+    echo "group     : ${arggroup2}"
+    echo "key       : ${argkey}"
+    echo "value     : ${argval}"
+    echo "before    : ${before_write}"
+    echo "after     : ${after_write}"
+
+    return 0
+}
+
+create_desktop_file_shortcut() {
+    argname="${1}"
+    argexec="${2}"
+    argshortcut="${3}"
+
+    desktopfile="net.local.${argname}.desktop"
+    outfile="${HOME}/.local/share/applications/${desktopfile}"
+
+    mv_bak ${outfile}
+
+    echo "[Desktop Entry]" >> ${outfile}
+    echo "Exec=${argexec}" >> ${outfile}
+    echo "Name=${argname}" >> ${outfile}
+    echo "NoDisplay=true" >> ${outfile}
+    echo "StartupNotify=false" >> ${outfile}
+    echo "Type=Application" >> ${outfile}
+    echo "X-KDE-GlobalAccel-CommandShortcut=true" >> ${outfile}
+
+    wconfig2 services ${desktopfile} _launch "${argshortcut}"
+
+    return 0
+}
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+    htext "ANOTHER_LINK_ANOTHER_LINK"
+    htext "You can figure out the bindings by going to System Settings > Keyboard > Shortcuts > Export."
+    htext "The resulting kksrc file can be inspected."
+    htext "For example Window Maximize is in file kglobalshortcutsrc and group kwin, see [kwin][Global Shortcuts]."
+    htext
+    htext "Another way to find the configureations is by inspecting /home/ludvig/.config/kglobalshortcutsrc."
+    htext "Issue with this approach is that it's not always in this file. For example the krunner"
+    htext "shortcut was like this in the kksrc export file:"
+    htext "[org.kde.krunner.desktop][Global Shortcuts]"
+    htext "RunClipboard=Alt+Shift+F2"
+    htext "_launch=Search; Alt+Space; Alt+F2"
+    htext
+    htext "This cannot be found in the kglobalshortcutsrc file, it seems like it is not written"
+    htext "unless overridden. The desktop file was then found by running the following from /:"
+    htext "find . -name org.kde.krunner.desktop 2>/dev/null"
+    htext "/usr/share/kglobalaccel/org.kde.krunner.desktop"
+    htext
+    htext "Then inspecting this file was this line:"
+    htext "X-KDE-Shortcuts=Alt+Space,Alt+F2,Search"
+    htext "However, that did not really help as it turned out the actual value needed to have tabs in them."
+    htext "The way I found that out was by saving it in system settings, then inspecting the config value in the kglobalshortcutsrc file."
+    htext "The end result being the printf solution below."
+    htext
+    htext "Regarding ghostty +new-window is recommended in docs, see https://ghostty.org/docs/linux/systemd"
+}
 
 inst_is_installed() {
     return 1
@@ -53,82 +129,6 @@ inst_install_manual() {
     return 0
 }
 
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 0
-}
-
 inst_uninstall() {
     return 0
 }
-
-create_desktop_file_shortcut() {
-    argname="${1}"
-    argexec="${2}"
-    argshortcut="${3}"
-    
-    desktopfile="net.local.${argname}.desktop"
-    outfile="${HOME}/.local/share/applications/${desktopfile}"
-
-    mv_bak ${outfile}
-
-    echo "[Desktop Entry]" >> ${outfile}
-    echo "Exec=${argexec}" >> ${outfile}
-    echo "Name=${argname}" >> ${outfile}
-    echo "NoDisplay=true" >> ${outfile}
-    echo "StartupNotify=false" >> ${outfile}
-    echo "Type=Application" >> ${outfile}
-    echo "X-KDE-GlobalAccel-CommandShortcut=true" >> ${outfile}
-
-    wconfig2 services ${desktopfile} _launch "${argshortcut}"
-
-    return 0
-}
-
-
-wconfig1() {
-    arggroup1="${1}"
-    argkey="${2}"
-    argval="${3}"
-
-    before_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}")
-    kwriteconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}" "${argval}"
-    after_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}")
-
-    echo "wrote to config"
-    echo "file      : kglobalshortcutsrc"
-    echo "group     : ${arggroup1}"
-    echo "key       : ${argkey}"
-    echo "value     : ${argval}"
-    echo "before    : ${before_write}"
-    echo "after     : ${after_write}"
-    
-    return 0
-}
-
-wconfig2() {
-    arggroup1="${1}"
-    arggroup2="${2}"
-    argkey="${3}"
-    argval="${4}"
-
-    before_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}")
-    kwriteconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}" "${argval}"
-    after_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}")
-
-    echo "wrote to config"
-    echo "file      : kglobalshortcutsrc"
-    echo "group     : ${arggroup1}"
-    echo "group     : ${arggroup2}"
-    echo "key       : ${argkey}"
-    echo "value     : ${argval}"
-    echo "before    : ${before_write}"
-    echo "after     : ${after_write}"
-    
-    return 0
-}
-
-

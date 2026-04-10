@@ -1,7 +1,7 @@
 #!/bin/bash
 
-installer_name="bashrc"
-installer_description="Copies bashrc and bash_profile into ${HOME}."
+installer_name="docs"
+installer_description="Just documentation."
 installer_link="-"
 
 inst_help() {
@@ -11,7 +11,11 @@ inst_help() {
     husage
     htext "-"
     hexamples
-    htext "-"
+    htext "Delete # characters"
+    htext 'echo "H#e##ll#o W###orld#" | tr -d "#"'
+    htext
+    htext "Create two columns using colon as separtor"
+    htext 'echo "v1:v2" | column --table -s ":" -C "name=INSTALL FILE,width=25,strictwidth" -C "name=DOCUMENTATION" -l 2'
     hseealso
     htext "${installer_link}"
 }
@@ -25,9 +29,6 @@ inst_can_install() {
 }
 
 inst_install() {
-    cp_bak config/bashrc "${HOME}/.bashrc"
-    cp_bak config/bash_profile "${HOME}/.bash_profile"
-
     return 0
 }
 
@@ -36,7 +37,7 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 0
+    return 1
 }
 
 inst_uninstall() {

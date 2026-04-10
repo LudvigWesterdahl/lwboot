@@ -1,38 +1,49 @@
 #!/bin/bash
 
-# Docs
-# N/A
-
 installer_name="git"
-installer_description="installs and configures git (contains personal info) - needs less and vim to work properly"
+installer_description="Installs and configures git. Also clones repositories."
 installer_link="https://archlinux.org/packages/extra/x86_64/git/"
 
-SHORT_PKG="git"
-LONG_PKG="extra/${SHORT_PKG}"
+pacman_pkg="extra/git"
 
-GIT_MAIL="ludvig.westerdahl.tech.v1@protonmail.com"
-GIT_NAME="ludvig"
-GIT_EDITOR="vim"
+git_mail="ludvig.westerdahl.tech.v1@protonmail.com"
+git_name="ludvig"
+git_editor="vim"
 
 handle_repository() {
-    repo="${1}"
-    repo_path="${2}"
-    echo "handling ${repo_path}"
-    if [ ! -d "${repo_path}" ]; then
-        echo "cloning ${repo}..."
-	if ! git clone "git@github.com:LudvigWesterdahl/${repo}.git" "${repo_path}" 1>/dev/null 2>&1; then
+    arg_repo="${1}"
+    arg_repo_path="${2}"
+
+    echo "handling ${arg_repo_path}"
+
+    if [ ! -d "${arg_repo_path}" ]; then
+        echo "cloning ${arg_repo}..."
+        if ! git clone "git@github.com:LudvigWesterdahl/${arg_repo}.git" "${arg_repo_path}" 1>/dev/null 2>&1; then
             echo "clone failed"
         fi
     fi
 
-    if [ "$(git -C "${repo_path}" branch --show-current)" = "master" ]; then
-        echo "pulling ${repo}..."
-        if ! git -C "${repo_path}" pull 1>/dev/null 2>&1; then
+    if [ "$(git -C "${arg_repo_path}" branch --show-current)" = "master" ]; then
+        echo "pulling ${arg_repo}..."
+        if ! git -C "${arg_repo_path}" pull 1>/dev/null 2>&1; then
             echo "pull failed"
-	fi
+        fi
     else
-        echo "skipping pull ${repo} not on master branch!"
+        echo "skipping pull ${arg_repo} not on master branch!"
     fi
+}
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+    htext "Contains personal information!"
 }
 
 inst_is_installed() {
@@ -41,10 +52,12 @@ inst_is_installed() {
 
 inst_can_install() {
     if ! is_command "vim"; then
+        echo "missing vim"
         return 1
     fi
 
     if ! is_command "less"; then
+        echo "missing less"
         return 1
     fi
 
@@ -52,13 +65,13 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_pacman_installed ${SHORT_PKG}; then
-        pacman_install ${LONG_PKG}
+    if ! is_pacman_installed ${pacman_pkg}; then
+        pacman_install ${pacman_pkg}
     fi
 
-    git config --global user.email "${GIT_MAIL}"
-    git config --global user.name "${GIT_NAME}"
-    git config --global core.editor "${GIT_EDITOR}"
+    git config --global user.email "${git_mail}"
+    git config --global user.name "${git_name}"
+    git config --global core.editor "${git_editor}"
 
 
     handle_repository "lwdoc" "${HOME}/Documents/lwdoc"
@@ -74,14 +87,6 @@ inst_install_manual() {
     return 0
 }
 
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 0
-}
-
 inst_uninstall() {
-    pacman_uninstall ${SHORT_PKG}
+    pacman_uninstall ${pacman_pkg}
 }

@@ -1,19 +1,26 @@
 #!/bin/bash
 
-# Docs
-# 1. Usage:
-# shellcheck <file>
-
 installer_name="shellcheck"
-installer_description="installs shellcheck"
+installer_description="Installs shellcheck to validate shell scripts."
 installer_link="https://archlinux.org/packages/extra/x86_64/shellcheck/"
 
-SHORT_PKG="shellcheck"
-LONG_PKG="extra/${SHORT_PKG}"
+pacman_pkg="extra/shellcheck"
 
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "shellcheck FILE"
+    hexamples
+    htext "Check POSIX sh"
+    htext "shellcheck -s sh FILE"
+    hseealso
+    htext "${installer_link}"
+}
 
 inst_is_installed() {
-    is_pacman_installed ${SHORT_PKG} 
+    is_pacman_installed ${pacman_pkg}
 }
 
 inst_can_install() {
@@ -21,7 +28,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${LONG_PKG}
+    pacman_install ${pacman_pkg}
 }
 
 inst_can_install_manual() {
@@ -29,18 +36,9 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 1
-}
-
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 1
+    return 0
 }
 
 inst_uninstall() {
-    pacman_uninstall ${SHORT_PKG}
+    pacman_uninstall ${pacman_pkg}
 }
-

@@ -1,17 +1,25 @@
 #!/bin/bash
 
-# Docs
-# N/A
-
 installer_name="less"
-installer_description="installs less"
+installer_description="Installs less."
 installer_link="https://archlinux.org/packages/core/x86_64/less/"
 
-SHORT_PKG="less"
-LONG_PKG="core/${SHORT_PKG}"
+pacman_pkg="core/less"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+}
 
 inst_is_installed() {
-    is_pacman_installed ${SHORT_PKG}
+    is_pacman_installed ${pacman_pkg}
 }
 
 inst_can_install() {
@@ -19,7 +27,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${LONG_PKG}
+    pacman_install ${pacman_pkg}
 }
 
 inst_can_install_manual() {
@@ -30,14 +38,6 @@ inst_install_manual() {
     return 1
 }
 
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 1
-}
-
 inst_uninstall() {
-    pacman_uninstall ${SHORT_PKG}
+    pacman_uninstall ${pacman_pkg}
 }

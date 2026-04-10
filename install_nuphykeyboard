@@ -1,17 +1,26 @@
 #!/bin/bash
 
+# TODO:
 # Docs
 # 1. link to nuphy
 # 2. other...
-
-
-# TODO:
 # remove the nuphy keyboard md -> move into here
 
 installer_name="nuphykeyboard"
-installer_description="explains how to configure the nuphy halo v2 keyboard"
-installer_link="INSERT_LINK"
+installer_description="Explains how to configure the nuphy halo v2 keyboard."
+installer_link="-"
 
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+}
 
 inst_is_installed() {
     return 0
@@ -35,16 +44,6 @@ inst_install_manual() {
     return 0
 }
 
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 1
-}
-
 inst_uninstall() {
-    echo "uninstalling..."
-
-    return 0
+     return 0
 }

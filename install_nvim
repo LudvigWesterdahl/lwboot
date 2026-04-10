@@ -1,14 +1,24 @@
 #!/bin/bash
 
-# Docs
-# N/A
+# TODO
 
 installer_name="nvim"
-installer_description="installs neovim"
+installer_description="Installs neovim."
 installer_link="https://archlinux.org/packages/extra/x86_64/neovim/"
 
-SHORT_PKG="neovim"
-LONG_PKG="extra/${SHORT_PKG}"
+pacman_pkg="extra/neovim"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+}
 
 # Clone treesitter repo
 # make -C <dir>
@@ -25,6 +35,7 @@ inst_is_installed() {
 
 inst_can_install() {
     if ! is_command "unzip"; then
+        echo "missing unzip"
         return 1
     fi
     
@@ -32,8 +43,8 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_pacman_installed ${SHORT_PKG}; then
-        pacman_install ${LONG_PKG}
+    if ! is_pacman_installed ${pacman_pkg}; then
+        pacman_install ${pacman_pkg}
     fi
     
     mkdir $HOME/.config/nvim 2>/dev/null
@@ -50,15 +61,6 @@ inst_install_manual() {
     return 0
 }
 
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 0
-}
-
 inst_uninstall() {
-    pacman_uninstall ${SHORT_PKG}
+    pacman_uninstall ${pacman_pkg}
 }
-

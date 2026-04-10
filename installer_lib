@@ -38,8 +38,8 @@ is_command() {
 
 mv_bak() {
     arg_file="${1}"
+
     if [ ! -f "${arg_file}" ]; then
-        echo "${arg_file} does not exist, no bak will be created"
         return 0
     fi
     
@@ -47,6 +47,16 @@ mv_bak() {
     echo "mv ${arg_file} ${bak_file}"
     mv ${arg_file} ${bak_file}
     return 0
+}
+
+cp_bak() {
+    arg_src="${1}"
+    arg_dst="${2}"
+
+    mv_bak ${arg_dst}
+
+    echo "cp ${arg_src} ${arg_dst}"
+    cp ${arg_src} ${arg_dst}
 }
 
 is_pacman_installed() {

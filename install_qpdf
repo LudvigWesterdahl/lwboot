@@ -1,21 +1,28 @@
 #!/bin/bash
 
-# Docs
-# 1. doc page
-# https://qpdf.readthedocs.io
-# 2. usage
-# concat pdfs (the dot references doc1.pdf, same result)
-# qpdf doc1.pdf --pages . doc2.pdf doc3.pdf -- out.pdf
-
 installer_name="qpdf"
-installer_description="installs qpdf"
+installer_description="Installs qpdf."
 installer_link="https://archlinux.org/packages/extra/x86_64/qpdf/"
 
-SHORT_PKG="qpdf"
-LONG_PKG="extra/${SHORT_PKG}"
+pacman_pkg="extra/qpdf"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "Concatenate pdf:s (the following two examples are equivalent)"
+    htext "qpdf doc1.pdf --pages . doc2.pdf doc3.pdf -- out.pdf"
+    htext "qpdf doc1.pdf --pages doc1.pdf doc2.pdf doc3.pdf -- out.pdf"
+    hseealso
+    htext "${installer_link}"
+    htext "https://qpdf.readthedocs.io"
+}
 
 inst_is_installed() {
-    is_pacman_installed ${SHORT_PKG} 
+    is_pacman_installed ${pacman_pkg}
 }
 
 inst_can_install() {
@@ -23,7 +30,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${LONG_PKG}
+    pacman_install ${pacman_pkg}
 }
 
 inst_can_install_manual() {
@@ -34,15 +41,6 @@ inst_install_manual() {
     return 0
 }
 
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 0
-}
-
 inst_uninstall() {
-    pacman_uninstall ${SHORT_PKG}
+    pacman_uninstall ${pacman_pkg}
 }
-

@@ -1,27 +1,26 @@
 #!/bin/bash
 
 installer_name="fd"
-installer_description="installs fd"
+installer_description="Installs fd."
 installer_link="https://archlinux.org/packages/extra/x86_64/fd/"
 
-SHORT_PKG="fd"
-LONG_PKG="extra/${SHORT_PKG}"
+pacman_pkg="extra/fd"
 
 inst_help() {
-    htitle ${installer_name}
+    htitle "${installer_name}"
     hdesc
     htext "${installer_description}"
     husage
     htext "fd PATTERN [DIR]"
     hexamples
-    htext "Find files in /var/log containing pac:"
+    htext "Find files in /var/log containing pac"
     htext "fd pac /var/log"
     hseealso
     htext "${installer_link}"
 }
 
 inst_is_installed() {
-    is_pacman_installed ${SHORT_PKG} 
+    is_pacman_installed ${pacman_pkg}
 }
 
 inst_can_install() {
@@ -29,7 +28,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${LONG_PKG}
+    pacman_install ${pacman_pkg}
 }
 
 inst_can_install_manual() {
@@ -40,15 +39,6 @@ inst_install_manual() {
     return 0
 }
 
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 0
-}
-
 inst_uninstall() {
-    pacman_uninstall ${SHORT_PKG}
+    pacman_uninstall ${pacman_pkg}
 }
-

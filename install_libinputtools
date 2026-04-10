@@ -1,19 +1,29 @@
 #!/bin/bash
 
-# Docs
-# 1. To list devices to allow config of touchpad.
-# 2. Usage:
-#     libinput list-devices
-
 installer_name="libinputtools"
-installer_description="installs libinput"
+installer_description="Installs libinput-tools. Purpose to list devices to allow config of touchpad."
 installer_link="https://archlinux.org/packages/extra/x86_64/libinput-tools/"
 
-SHORT_PKG="libinput-tools"
-LONG_PKG="extra/${SHORT_PKG}"
+pacman_pkg="extra/libinput-tools"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "libinput"
+    hexamples
+    htext "List devices"
+    htext "libinput list-devices"
+    htext
+    htext "Get device info"
+    htext "udevadm info DEVICE"
+    hseealso
+    htext "${installer_link}"
+}
 
 inst_is_installed() {
-    is_pacman_installed ${SHORT_PKG} 
+    is_pacman_installed ${pacman_pkg}
 }
 
 inst_can_install() {
@@ -21,7 +31,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${LONG_PKG}
+    pacman_install ${pacman_pkg}
 }
 
 inst_can_install_manual() {
@@ -29,17 +39,9 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 1
-}
-
-inst_can_upgrade() {
-    return 1
-}
-
-inst_upgrade() {
-    return 1
+    return 0
 }
 
 inst_uninstall() {
-    pacman_uninstall ${SHORT_PKG}
+    pacman_uninstall ${pacman_pkg}
 }
