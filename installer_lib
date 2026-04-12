@@ -54,7 +54,7 @@ mv_bak() {
     
     bak_file="${arg_file}.$(date +%Y%m%d_%H%M%S).bak"
 
-    mv_log ${arg_file} ${bak_file}
+    mv -v ${arg_file} ${bak_file}
     return 0
 }
 
@@ -72,7 +72,7 @@ cp_bak() {
 
     mv_bak ${arg_dst}
 
-    cp_log ${arg_src} ${arg_dst}
+    cp -v ${arg_src} ${arg_dst}
 }
 
 is_pacman_installed() {

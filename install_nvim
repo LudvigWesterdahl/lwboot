@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# TODO
-
 installer_name="nvim"
 installer_description="Installs neovim."
 installer_link="https://archlinux.org/packages/extra/x86_64/neovim/"
@@ -11,9 +9,56 @@ pacman_pkg="extra/neovim"
 nvim_src=config/nvim
 nvim_dst=$HOME/.config/nvim
 
+cp_parser() {
+    arg_so_file="${1}"
+    arg_lang="${2}"
+
+    mkdir -p ${nvim_dst}/parser/bak
+    
+    parser_file="${nvim_dst}/parser/${arg_lang}.so"
+   
+    cp_bak ${arg_so_file} ${parser_file}
+
+    mv ${parser_file}*bak ${nvim_dst}/parser/bak 1>/dev/null 2>&1
+}
+
+handle_tree_sitter_java() {
+
+    repo=https://github.com/tree-sitter/tree-sitter-java
+    dest_dir=$HOME/Documents/tree-sitter-java
+
+    if [ ! -d $dest_dir ]; then
+        echo "git clone ${repo}"
+        if ! git clone ${repo} ${dest_dir} 1>/dev/null 2>&1; then
+            echo "git clone failed!"
+            return 0
+        fi
+    fi
+   
+    echo "git pull ${dest_dir}"
+    if ! git -C ${dest_dir} pull 1>/dev/null 2>&1; then
+        echo "git pull failed"
+        return 0
+    fi
+    
+    make -C ${dest_dir} 1>/dev/null
+
+    so_file="${dest_dir}/libtree-sitter-java.so"
+
+    if [ ! -f ${so_file} ]; then
+        echo "make failed missing ${so_file}"
+        return 0
+    fi
+
+    cp_parser ${so_file} "java"
+    
+    return 0
+}
+
 cp_query() {
     arg_lang="${1}"
     lang_dir_dst=${nvim_dst}/queries/${arg_lang}
+
     mkdir -p ${lang_dir_dst}
     cp -v ${nvim_src}/queries/${arg_lang}/highlights.scm ${lang_dir_dst}/highlights.scm
 }
@@ -30,16 +75,6 @@ inst_help() {
     hseealso
     htext "${installer_link}"
 }
-
-# Clone treesitter repo
-# make -C <dir>
-# if [ ! -f libtree-sitter-java.so ]
-#   quit, make failed!
-# mv --backup=numbered HOME/.config/nvim/parser/java.so ....parser/bak
-# mv <dir>/libtree-sitter-java.so HOME/.config/nvim/parser
-
-# Copy highlights.scm
-
 
 inst_is_installed() {
     return 1
@@ -68,6 +103,8 @@ inst_install() {
 
     cp_query "java"
     cp_query "c"
+
+    handle_tree_sitter_java
 }
 
 inst_can_install_manual() {

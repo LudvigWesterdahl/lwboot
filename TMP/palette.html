@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ghostty Palette</title>
+<style>
+  body { background: #282c34; color: #ffffff; font-family: monospace; padding: 2rem; }
+  h2 { font-size: 14px; color: #666666; text-transform: uppercase; letter-spacing: 0.1em; margin: 2rem 0 0.75rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .swatch { border-radius: 6px; overflow: hidden; }
+  .color { height: 60px; }
+  .info { background: #1d1f21; padding: 8px 10px; }
+  .name { font-size: 12px; font-weight: bold; margin: 0 0 2px; }
+  .hex { font-size: 11px; color: #888; margin: 0; }
+</style>
+</head>
+<body>
+
+<h2>Palette 0–7</h2>
+<div class="grid">
+  <div class="swatch"><div class="color" style="background:#1d1f21"></div><div class="info"><p class="name">0 — black</p><p class="hex">#1d1f21</p></div></div>
+  <div class="swatch"><div class="color" style="background:#cc6566"></div><div class="info"><p class="name">1 — red</p><p class="hex">#cc6566</p></div></div>
+  <div class="swatch"><div class="color" style="background:#b6bd68"></div><div class="info"><p class="name">2 — green</p><p class="hex">#b6bd68</p></div></div>
+  <div class="swatch"><div class="color" style="background:#f0c674"></div><div class="info"><p class="name">3 — yellow</p><p class="hex">#f0c674</p></div></div>
+  <div class="swatch"><div class="color" style="background:#82a2be"></div><div class="info"><p class="name">4 — blue</p><p class="hex">#82a2be</p></div></div>
+  <div class="swatch"><div class="color" style="background:#b294bb"></div><div class="info"><p class="name">5 — magenta</p><p class="hex">#b294bb</p></div></div>
+  <div class="swatch"><div class="color" style="background:#8abeb7"></div><div class="info"><p class="name">6 — cyan</p><p class="hex">#8abeb7</p></div></div>
+  <div class="swatch"><div class="color" style="background:#c4c8c6"></div><div class="info"><p class="name">7 — white</p><p class="hex">#c4c8c6</p></div></div>
+</div>
+
+<h2>Palette 8–15 (bright)</h2>
+<div class="grid">
+  <div class="swatch"><div class="color" style="background:#666666"></div><div class="info"><p class="name">8 — bright black</p><p class="hex">#666666</p></div></div>
+  <div class="swatch"><div class="color" style="background:#d54e53"></div><div class="info"><p class="name">9 — bright red</p><p class="hex">#d54e53</p></div></div>
+  <div class="swatch"><div class="color" style="background:#b9ca4b"></div><div class="info"><p class="name">10 — bright green</p><p class="hex">#b9ca4b</p></div></div>
+  <div class="swatch"><div class="color" style="background:#e7c547"></div><div class="info"><p class="name">11 — bright yellow</p><p class="hex">#e7c547</p></div></div>
+  <div class="swatch"><div class="color" style="background:#7aa6da"></div><div class="info"><p class="name">12 — bright blue</p><p class="hex">#7aa6da</p></div></div>
+  <div class="swatch"><div class="color" style="background:#c397d8"></div><div class="info"><p class="name">13 — bright magenta</p><p class="hex">#c397d8</p></div></div>
+  <div class="swatch"><div class="color" style="background:#70c0b1"></div><div class="info"><p class="name">14 — bright cyan</p><p class="hex">#70c0b1</p></div></div>
+  <div class="swatch"><div class="color" style="background:#eaeaea"></div><div class="info"><p class="name">15 — bright white</p><p class="hex">#eaeaea</p></div></div>
+</div>
+
+<h2>Special</h2>
+<div class="grid">
+  <div class="swatch"><div class="color" style="background:#282c34"></div><div class="info"><p class="name">background</p><p class="hex">#282c34</p></div></div>
+  <div class="swatch"><div class="color" style="background:#ffffff"></div><div class="info"><p class="name">foreground</p><p class="hex">#ffffff</p></div></div>
+  <div class="swatch"><div class="color" style="background:#ffffff"></div><div class="info"><p class="name">cursor</p><p class="hex">#ffffff</p></div></div>
+  <div class="swatch"><div class="color" style="background:#353a44"></div><div class="info"><p class="name">cursor text</p><p class="hex">#353a44</p></div></div>
+  <div class="swatch"><div class="color" style="background:#ffffff"></div><div class="info"><p class="name">selection bg</p><p class="hex">#ffffff</p></div></div>
+  <div class="swatch"><div class="color" style="background:#282c34"></div><div class="info"><p class="name">selection fg</p><p class="hex">#282c34</p></div></div>
+</div>
+
+</body>
+</html>
