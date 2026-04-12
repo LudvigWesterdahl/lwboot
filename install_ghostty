@@ -13,7 +13,8 @@ inst_help() {
     husage
     htext "-"
     hexamples
-    htext "-"
+    htext "List built in ghostty themes"
+    htext "ls -l /usr/share/ghostty/themes"
     hseealso
     htext "${installer_link}"
     htext "See install_kdeshortcuts"
@@ -32,7 +33,7 @@ inst_install() {
         pacman_install ${pacman_pkg}
     fi
 
-    cp_bak config/ghostty.config ${HOME}/.config/ghostty/config
+    cp config/ghostty.config ${HOME}/.config/ghostty/config
 
     return 0
 }

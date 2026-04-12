@@ -25,8 +25,8 @@ inst_can_install() {
 }
 
 inst_install() {
-    cp_bak config/bashrc "${HOME}/.bashrc"
-    cp_bak config/bash_profile "${HOME}/.bash_profile"
+    cp config/bashrc "${HOME}/.bashrc"
+    cp config/bash_profile "${HOME}/.bash_profile"
 
     return 0
 }

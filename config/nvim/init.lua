@@ -165,7 +165,7 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.inccommand = 'split'
 
 -- Show which line your cursor is on
-vim.o.cursorline = true
+vim.o.cursorline = false
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
@@ -742,15 +742,12 @@ require('lazy').setup({
   },
 
   {
-    'navarasu/onedark.nvim',
+    dir = vim.fn.stdpath("config") .. "/lua/lwcs",
     lazy = false,
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      require('onedark').setup {
-        style = 'cool',
-      }
-
-      require('onedark').load()
+      require('lwcs').setup()
+      vim.cmd.colorscheme("lwcs")
     end,
   },
 })

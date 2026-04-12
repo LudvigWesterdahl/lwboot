@@ -40,7 +40,7 @@ readonly INSTALLERS=(
   "install_qpdf"
   "install_wlclipboard"
   "install_fd"
-#  "install_nvim"
+  "install_nvim"
 )
 
 readonly ARG=${1}

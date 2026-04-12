@@ -8,6 +8,17 @@ installer_link="https://archlinux.org/packages/extra/x86_64/neovim/"
 
 pacman_pkg="extra/neovim"
 
+nvim_src=config/nvim
+nvim_dst=$HOME/.config/nvim
+
+cp_query() {
+    arg_lang="${1}"
+    lang_dir_dst=${nvim_dst}/queries/${arg_lang}
+    mkdir -p ${lang_dir_dst}
+    cp -v ${nvim_src}/queries/${arg_lang}/highlights.scm ${lang_dir_dst}/highlights.scm
+}
+
+
 inst_help() {
     htitle "${installer_name}"
     hdesc
@@ -29,6 +40,7 @@ inst_help() {
 
 # Copy highlights.scm
 
+
 inst_is_installed() {
     return 1
 }
@@ -48,9 +60,14 @@ inst_install() {
     fi
     
     mkdir $HOME/.config/nvim 2>/dev/null
+    mkdir $HOME/.config/nvim/colors 2>/dev/null
+    mkdir $HOME/.config/nvim/lua 2>/dev/null
     
-    cp config/nvim/init.lua $HOME/.config/nvim/init.lua
-    cp config/nvim/stylua.toml $HOME/.config/nvim/.stylua.toml
+    cp -v config/nvim/init.lua $HOME/.config/nvim/init.lua
+    cp -v config/nvim/stylua.toml $HOME/.config/nvim/.stylua.toml
+
+    cp_query "java"
+    cp_query "c"
 }
 
 inst_can_install_manual() {
