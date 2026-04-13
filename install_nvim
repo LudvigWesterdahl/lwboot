@@ -7,7 +7,7 @@ installer_link="https://archlinux.org/packages/extra/x86_64/neovim/"
 pacman_pkg="extra/neovim"
 
 nvim_src=config/nvim
-nvim_dst=$HOME/.config/nvim
+nvim_dst=${HOME}/.config/nvim
 
 cp_parser() {
     arg_so_file="${1}"
@@ -53,15 +53,6 @@ handle_tree_sitter_java() {
     return 0
 }
 
-cp_query() {
-    arg_lang="${1}"
-    lang_dir_dst=${nvim_dst}/queries/${arg_lang}
-
-    mkdir -p ${lang_dir_dst}
-    cp -v ${nvim_src}/queries/${arg_lang}/highlights.scm ${lang_dir_dst}/highlights.scm
-}
-
-
 inst_help() {
     htitle "${installer_name}"
     hdesc
@@ -91,16 +82,30 @@ inst_install() {
     if ! is_pacman_installed ${pacman_pkg}; then
         pacman_install ${pacman_pkg}
     fi
-    
-    mkdir $HOME/.config/nvim 2>/dev/null
-    mkdir $HOME/.config/nvim/colors 2>/dev/null
-    mkdir $HOME/.config/nvim/lua 2>/dev/null
-    
-    cp -v config/nvim/init.lua $HOME/.config/nvim/init.lua
-    cp -v config/nvim/stylua.toml $HOME/.config/nvim/.stylua.toml
 
-    cp_query "java"
-    cp_query "c"
+    mkdir ${nvim_dst} 2>/dev/null
+    mkdir ${nvim_dst}/colors 2>/dev/null
+    mkdir ${nvim_dst}/lua 2>/dev/null
+    mkdir ${nvim_dst}/parser 2>/dev/null
+    mkdir ${nvim_dst}/queries 2>/dev/null
+
+
+    cp -v ${nvim_src}/init.lua ${nvim_dst}/init.lua
+    cp -v ${nvim_src}/stylua.toml ${nvim_dst}/.stylua.toml
+
+    # lwcs
+    mkdir ${nvim_dst}/lua/lwcs 2>/dev/null
+    cp -v ${nvim_src}/colors/lwcs.lua ${nvim_dst}/colors/lwcs.lua
+    cp -v ${nvim_src}/lua/lwcs/groups.lua ${nvim_dst}/lua/lwcs/groups.lua
+    cp -v ${nvim_src}/lua/lwcs/init.lua ${nvim_dst}/lua/lwcs/init.lua
+
+    # queries c
+    mkdir ${nvim_dst}/queries/c 2>/dev/null
+    cp -v ${nvim_src}/queries/c/highlights.scm ${nvim_dst}/queries/c/highlights.scm
+
+    # queries java
+    mkdir ${nvim_dst}/queries/java 2>/dev/null
+    cp -v ${nvim_src}/queries/java/highlights.scm ${nvim_dst}/queries/java/highlights.scm
 
     handle_tree_sitter_java
 }
