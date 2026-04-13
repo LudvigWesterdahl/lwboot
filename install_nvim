@@ -107,7 +107,7 @@ inst_install() {
     mkdir ${nvim_dst}/queries/java 2>/dev/null
     cp -v ${nvim_src}/queries/java/highlights.scm ${nvim_dst}/queries/java/highlights.scm
 
-    handle_tree_sitter_java
+    # handle_tree_sitter_java
 }
 
 inst_can_install_manual() {

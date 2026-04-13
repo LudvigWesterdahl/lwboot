@@ -119,11 +119,11 @@ vim.o.showmode = true
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
 -- Display tab as 2 spaces
-vim.opt.tabstop = 2
+vim.opt.tabstop = 4
 -- Create indent when you type enter
 vim.opt.smartindent = true
 -- Number of spaces for each level
-vim.opt.shiftwidth = 2
+vim.opt.shiftwidth = 4
 -- Use spaces instead of tab
 vim.opt.expandtab = true
 
