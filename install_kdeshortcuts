@@ -54,7 +54,7 @@ create_desktop_file_shortcut() {
     desktopfile="net.local.${argname}.desktop"
     outfile="${HOME}/.local/share/applications/${desktopfile}"
 
-    mv_bak ${outfile}
+    mv_bak ${outfile} "${HOME}/.local/share/applications/bak"
 
     echo "[Desktop Entry]" >> ${outfile}
     echo "Exec=${argexec}" >> ${outfile}

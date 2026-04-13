@@ -13,19 +13,17 @@ cp_parser() {
     arg_so_file="${1}"
     arg_lang="${2}"
 
-    mkdir -p ${nvim_dst}/parser/bak
-    
     parser_file="${nvim_dst}/parser/${arg_lang}.so"
-   
-    cp_bak ${arg_so_file} ${parser_file}
+    bak_dir="${nvim_dst}/parser/bak"
+    mkdir -p ${bak_dir}
 
-    mv ${parser_file}*bak ${nvim_dst}/parser/bak 1>/dev/null 2>&1
+    mv_bak ${parser_file} ${bak_dir}
+    cp -v ${arg_so_file} ${parser_file}
 }
 
 handle_tree_sitter_java() {
-
-    repo=https://github.com/tree-sitter/tree-sitter-java
-    dest_dir=$HOME/Documents/tree-sitter-java
+    repo="https://github.com/tree-sitter/tree-sitter-java"
+    dest_dir="$HOME/Documents/tree-sitter-java"
 
     if [ ! -d $dest_dir ]; then
         echo "git clone ${repo}"
