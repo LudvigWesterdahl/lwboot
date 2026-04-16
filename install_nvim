@@ -15,7 +15,7 @@ cp_parser() {
 
     parser_file="${nvim_dst}/parser/${arg_lang}.so"
     bak_dir="${nvim_dst}/parser/bak"
-    mkdir -p ${bak_dir}
+    mkdir -p ${bak_dir} 2>/dev/null
 
     mv_bak ${parser_file} ${bak_dir}
     cp -v ${arg_so_file} ${parser_file}

@@ -55,7 +55,7 @@ create_desktop_file_shortcut() {
     outfile="${HOME}/.local/share/applications/${desktopfile}"
     
     bak_dir="${HOME}/.local/share/applications/bak"
-    mkdir ${bak_dir}
+    mkdir ${bak_dir} 2>/dev/null
     mv_bak ${outfile} ${bak_dir}
 
     echo "[Desktop Entry]" >> ${outfile}

@@ -1,133 +1,75 @@
 --[[
 
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||   KICKSTART.NVIM   ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
+GUIDES
+:help lua-guide
+html version:  https://neovim.io/doc/user/lua-guide.html
 
-What is Kickstart?
+:Tutor
 
-  Kickstart.nvim is *not* a distribution.
+:help
 
-  Kickstart.nvim is a starting point for your own configuration.
-    The goal is that you can read every line of code, top-to-bottom, understand
-    what your configuration is doing, and modify it to suit your needs.
+"<space>sh" to search the doc
 
-    Once you've done that, you can start exploring, configuring and tinkering to
-    make Neovim your own! That might mean leaving Kickstart just the way it is for a while
-    or immediately breaking it into modular pieces. It's up to you!
+:checkhealth
 
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
+:help option-list
 
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
+:help vim.o
 
-Kickstart Guide:
+:help clipboard
 
-  TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
+:help hlsearch
 
-    If you don't know what this means, type the following:
-      - <escape key>
-      - :
-      - Tutor
-      - <enter key>
+:help vim.keymap.set()
 
-    (If you already know the Neovim basics, you can skip this step.)
+:help confirm
 
-  Once you've completed that, you can continue working through **AND READING** the rest
-  of the kickstart init.lua.
+Check status of plugins
+:Lazy
+Press ? for help and :q to close.
 
-  Next, run AND READ `:help`.
-    This will open up a help window with some basic information
-    about reading, navigating and searching the builtin help documentation.
+Update plugins
+:Lazy update
 
-    This should be the first place you go to look when you're stuck or confused
-    with something. It's one of my favorite Neovim features.
+:help telescope
 
-    MOST IMPORTANTLY, we provide a keymap "<space>sh" to [s]earch the [h]elp documentation,
-    which is very useful when you're not exactly sure of what you're looking for.
+:help telescope.setup()
 
-  I have left several `:help X` comments throughout the init.lua
-    These are hints about where to find more information about the relevant settings,
-    plugins or Neovim features used in Kickstart.
+:Telescope help_tags
 
-   NOTE: Look for lines like this
+:help telescope.builtin
 
-    Throughout the file. These are for you, the reader, to help you understand what is happening.
-    Feel free to delete them once you know what you're doing, but they should serve as a guide
-    for when you are first encountering a few different constructs in your Neovim config.
+:help lua-guide-autocommands
 
-If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
+:help mapleader
 
-I hope you enjoy your Neovim journey,
-- TJ
+Debug autocmds
+You can put print("called 1") or whatever. Then type :messages to see output.
+The vim.schedule wrapping is the fix for a surprising number of "my autocmd ran but the editor didn't update" bugs.
 
-P.S. You can delete this when you're done too. It's your config now! :)
+
+
 --]]
 
--- set cursor
 vim.opt.guicursor = ''
 
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
--- [[ Setting options ]]
--- See `:help vim.o`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
-
--- Make line numbers default
 vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
 vim.o.relativenumber = true
-
--- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
-
 vim.o.showmode = true
 
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
--- Display tab as 2 spaces
 vim.opt.tabstop = 4
--- Create indent when you type enter
 vim.opt.smartindent = true
--- Number of spaces for each level
 vim.opt.shiftwidth = 4
--- Use spaces instead of tab
 vim.opt.expandtab = true
-
--- Enable break indent
 vim.o.breakindent = true
 
 -- Enable undo/redo changes even after closing and reopening a file
@@ -144,7 +86,7 @@ vim.o.signcolumn = 'yes'
 vim.o.updatetime = 250
 
 -- Decrease mapped sequence wait time
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 1500
 
 -- Configure how new splits should be opened
 vim.o.splitright = true
@@ -170,17 +112,19 @@ vim.o.cursorline = false
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
 
--- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
--- instead raise a dialog asking if you wish to save the current file(s)
--- See `:help 'confirm'`
+-- Ask if quitting before save
 vim.o.confirm = true
 
--- [[ Basic Keymaps ]]
---  See `:help vim.keymap.set()`
-
--- Clear highlights on search when pressing <Esc> in normal mode
---  See `:help hlsearch`
+-- Escape to disable highlights in NORMAL mode
+vim.o.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+-- Disables highlight when entering INSERT mode
+vim.api.nvim_create_autocmd('InsertEnter', {
+  callback = function()
+    vim.schedule(function() vim.cmd 'nohlsearch' end)
+  end,
+})
 
 -- Diagnostic Config & Keymaps
 -- See :help vim.diagnostic.Opts
@@ -230,7 +174,6 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
 -- [[ Basic Autocommands ]]
---  See `:help lua-guide-autocommands`
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
@@ -241,8 +184,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
--- [[ Install `lazy.nvim` plugin manager ]]
---    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
+-- Installs lazy nvim plugin manager
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -250,10 +192,10 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   if vim.v.shell_error ~= 0 then error('Error cloning lazy.nvim:\n' .. out) end
 end
 
----@type vim.Option
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
+-- Attach parsers
 local parsers = {
   'bash',
   'c',
@@ -261,7 +203,6 @@ local parsers = {
 }
 local parsers_set = {}
 for _, lang in ipairs(parsers) do
-  -- vim.treesitter.language.add(lang)
   parsers_set[lang] = true
 end
 
@@ -272,18 +213,7 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- [[ Configure and install plugins ]]
---
---  To check the current status of your plugins, run
---    :Lazy
---
---  You can press `?` in this menu for help. Use `:q` to close the window
---
---  To update plugins you can run
---    :Lazy update
---
--- NOTE: Here is where you install your plugins.
-require('lazy').setup({
+require('lazy').setup {
   -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -311,13 +241,6 @@ require('lazy').setup({
     'nvim-telescope/telescope.nvim',
     -- By default, Telescope is included and acts as your picker for everything.
 
-    -- If you would like to switch to a different picker (like snacks, or fzf-lua)
-    -- you can disable the Telescope plugin by setting enabled to false and enable
-    -- your replacement picker by requiring it explicitly (e.g. 'custom.plugins.snacks')
-
-    -- Note: If you customize your config for yourself,
-    -- it’s best to remove the Telescope plugin config entirely
-    -- instead of just disabling it here, to keep your config clean.
     enabled = true,
     event = 'VimEnter',
     dependencies = {
@@ -339,27 +262,6 @@ require('lazy').setup({
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
-      -- Telescope is a fuzzy finder that comes with a lot of different things that
-      -- it can fuzzy find! It's more than just a "file finder", it can search
-      -- many different aspects of Neovim, your workspace, LSP, and more!
-      --
-      -- The easiest way to use Telescope, is to start by doing something like:
-      --  :Telescope help_tags
-      --
-      -- After running this command, a window will open up and you're able to
-      -- type in the prompt window. You'll see a list of `help_tags` options and
-      -- a corresponding preview of the help.
-      --
-      -- Two important keymaps to use while in Telescope are:
-      --  - Insert mode: <c-/>
-      --  - Normal mode: ?
-      --
-      -- This opens a window that shows you all of the keymaps for the current
-      -- Telescope picker. This is really useful to discover what Telescope can
-      -- do as well as how to actually do it!
-
-      -- [[ Configure Telescope ]]
-      -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -370,6 +272,11 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        pickers = {
+          current_buffer_fuzzy_find = { previewer = true, debounce = 1000 },
+          live_grep = { debounce = 500 },
+          buffers = { previewer = true, sort_lastused = true },
+        },
         extensions = {
           ['ui-select'] = { require('telescope.themes').get_dropdown() },
         },
@@ -379,7 +286,6 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
 
-      -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
@@ -430,10 +336,11 @@ require('lazy').setup({
       -- Override default behavior and theme when searching
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+        builtin.current_buffer_fuzzy_find()
+        --[[builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
           winblend = 10,
-          previewer = false,
         })
+        --]]
       end, { desc = '[/] Fuzzily search in current buffer' })
 
       -- It's also possible to pass additional configuration options.
@@ -673,25 +580,22 @@ require('lazy').setup({
     },
   },
 
-
   {
-      -- Autocompletion
-      -- See https://cmp.saghen.dev/configuration/general.html
+    -- Autocompletion
+    -- See https://cmp.saghen.dev/configuration/general.html
     'saghen/blink.cmp',
     event = 'VimEnter',
     version = '1.*',
     dependencies = {
-          -- Snippet Engine
-          {
-            'L3MON4D3/LuaSnip',
-            version = '2.*',
-            build = (function()
-              return 'make install_jsregexp'
-            end)(),
-            dependencies = {},
-            opts = {},
-          },
-        },
+      -- Snippet Engine
+      {
+        'L3MON4D3/LuaSnip',
+        version = '2.*',
+        build = (function() return 'make install_jsregexp' end)(),
+        dependencies = {},
+        opts = {},
+      },
+    },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
@@ -746,15 +650,15 @@ require('lazy').setup({
   },
 
   {
-    dir = vim.fn.stdpath("config") .. "/lua/lwcs",
+    dir = vim.fn.stdpath 'config' .. '/lua/lwcs',
     lazy = false,
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       require('lwcs').setup()
-      vim.cmd.colorscheme("lwcs")
+      vim.cmd.colorscheme 'lwcs'
     end,
   },
-})
+}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
