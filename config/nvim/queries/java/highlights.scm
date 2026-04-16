@@ -1,28 +1,12 @@
-
-[
- (character_literal)
-(string_literal)
-] @lw_string (#set! priority 90)
-
-(string_literal (escape_sequence) @lw_keyword)
-; (import_declaration) @lw_import_keyword (#set! priority 90)
-; (import_declaration (scoped_identifier) @lwjava_import_ref)
-
-; Found using:
-; nvim --headless -c "lua print(vim.inspect(vim.treesitter.language.inspect('java')))" -c "q" 2>&1 | grep -o '"[^"]*"' | sort -u
-
-
 ; ====================
-; lwjava_XXXX
+; lwjava_field_ref
 ; ====================
 (field_access object: (identifier) field: (identifier) @lwjava_field_ref)
-
 (enum_constant) @lwjava_field_ref
 
 ; ====================
 ; lwjava_annotation
 ; ====================
-
 (annotation name: (identifier) @lwjava_annotation)
 (annotation_type_declaration name: (identifier) @lwjava_annotation)
 (annotation "@" @lwjava_annotation)
@@ -31,34 +15,54 @@
 ; ====================
 ; lwjava_comment
 ; ====================
-[
-(line_comment)
-(block_comment)
- ] @lwjava_comment
+(line_comment) @lwjava_comment
+(block_comment) @lwjava_comment
+
+; ====================
+; lwjava_import_ref
+; ====================
+(import_declaration (scoped_identifier) @lwjava_import_ref)
+
+; ====================
+; lwjava_import_asterisk
+; ====================
+(import_declaration (asterisk) @lwjava_import_asterisk)
+
+; ====================
+; lwjava_import_keyword
+; ====================
+"import" @lwjava_import_keyword
+
+; ====================
+; lw_string
+; ====================
+(character_literal)  @lw_string (#set! priority 90)
+(string_literal)  @lw_string (#set! priority 90)
+
+; ====================
+; lw_null
+; ====================
+(null_literal) @lw_null
 
 ; ====================
 ; lw_literal
 ; ====================
-[
- (true)
- (false)
- (null_literal)
- (decimal_integer_literal)
-(decimal_floating_point_literal)
- ] @lw_literal
+[(true) (false)] @lw_literal
+[(decimal_integer_literal) (decimal_floating_point_literal)] @lw_literal
+(string_literal (escape_sequence) @lw_literal)
 
 ; ====================
 ; lw_keyword
 ; ====================
+; nvim --headless -c "lua print(vim.inspect(vim.treesitter.language.inspect('java')))" -c "q" 2>&1 | grep -o '"[^"]*"' | sort -u
+(this) @lw_keyword
+(super) @lw_keyword
 [
-  (boolean_type)
-  (integral_type)
-  (floating_point_type)
-  (void_type)
- (this)
- (super)
-] @lw_keyword
-
+ (boolean_type)
+ (integral_type)
+ (floating_point_type)
+ (void_type)
+ ] @lw_keyword
 
 
 [
@@ -69,7 +73,6 @@
  "catch"
  "class"
  "continue"
-; "const"
  "default"
  "do"
  "else"
@@ -79,10 +82,9 @@
  "final"
  "finally"
  "for"
-; "goto"
  "if"
  "implements"
- "import"
+ ; "import"
  "instanceof"
  "interface"
  "@interface"
@@ -98,20 +100,13 @@
  "return"
  "static"
  "strictfp"
-; "super"
  "switch"
  "synchronized"
-; "this"
  "throw"
  "throws"
  "transient"
  "try"
-; "var"
-; "void"
  "volatile"
  "while"
-; "true"
-; "false"
-; "null"
  ] @lw_keyword
 

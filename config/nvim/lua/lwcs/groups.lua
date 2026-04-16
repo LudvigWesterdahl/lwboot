@@ -32,15 +32,16 @@ M.setup = function()
     whiteBright = '#eaeaea',
   }
 
-  local green600 = '#43A047'
+  local green1 = '#67cc65'
+  local purple1 = '#9b74f0'
+  local blue1 = '#749ff0'
 
   -- TODO: with LSP:
-  -- 1. italic on static method call
+  -- 1. italic on static method call, also on field access, including enum
   -- 2. red on field member access (this.VAR), color VAR
   -- 4. block comment vs line comment. And if possible @param varName with underline
   -- @param + italic, and darker color for the arg name
-  -- TODO general:
-  -- 3. fix the green string color, not entirely right yet
+  -- can import an annotation be highlighted with that color? import lombok.require..
 
   -- General
   any('Normal', { bg = c.background, fg = c.foreground })
@@ -50,15 +51,17 @@ M.setup = function()
 
   -- Language: any
   fg('@lw_keyword', c.blue)
-  fg('@lw_literal', c.blueBright)
-  fg('@lw_string', green600)
+  fg('@lw_literal', blue1)
+  fg('@lw_string', c.yellow)
+  any('@lw_null', { fg = blue1, bold = true })
 
   -- Language: java
-  fg('@lwjava_import_ref', '#0000FF')
-  any('@lwjava_field_ref', { fg = c.red, bold = false })
-
-  fg('@lwjava_annotation', c.yellow)
   fg('@lwjava_comment', c.blackBright)
+  any('@lwjava_import_ref', { fg = c.cursorText })
+  any('@lwjava_field_ref', { fg = c.red, bold = false })
+  any('@lwjava_annotation', { fg = c.magentaBright, italic = false })
+  any('@lwjava_import_asterisk', { fg = c.yellow, bold = true })
+  any('@lwjava_import_keyword', { link = '@lwjava_import_ref' })
 
   -- Language: c
   -- TODO

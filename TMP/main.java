@@ -1,3 +1,5 @@
+package mypackage;
+
 import java.util.concurrent.ThreadLocalRandom;
 import java.lang.annotation.*;
 
