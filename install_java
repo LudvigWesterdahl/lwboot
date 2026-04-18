@@ -1,0 +1,61 @@
+#!/bin/bash
+
+installer_name="java"
+installer_description="Installs java 17, 21 and docs."
+installer_link="https://wiki.archlinux.org/title/Java"
+
+pacman_pkg1="extra/jdk17-openjdk"
+pacman_pkg2="extra/jdk21-openjdk"
+pacman_pkg3="extra/openjdk21-doc"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "Switching versions"
+    htext "archlinux-java --help"
+    htext
+    htext "Find the javadoc files"
+    htext "pacman -Ql openjdk21-doc | grep index.html"
+    hseealso
+    htext "${installer_link}"
+    htext
+    htext "Java 17"
+    htext "https://archlinux.org/packages/extra/x86_64/jdk17-openjdk/"
+    htext
+    htext "Java 21"
+    htext "https://archlinux.org/packages/extra/x86_64/jdk21-openjdk/"
+    htext
+    htext "Java 21 docs"
+    htext "https://archlinux.org/packages/extra/x86_64/openjdk21-doc/"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${pacman_pkg1}
+    pacman_install ${pacman_pkg2}
+    pacman_install ${pacman_pkg3}
+
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 0
+}
+
+inst_uninstall() {
+    pacman_uninstall ${pacman_pkg}
+}

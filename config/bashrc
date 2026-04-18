@@ -14,6 +14,7 @@ alias ls="ls --color=tty"
 alias grep='grep --color=tty'
 alias top="top -e m -E m -o RES"
 alias wgetmbak="wget --mirror --convert-links --adjust-extension --no-parent --random-wait -e robots=off --reject=\"jpg,jpeg,png,gif,webp,svg,bmp,tiff,ico,mp4,avi,mov,wmv,flv,webm,pdf,zip,rar,iso,exe\""
+alias java21doc="brave /usr/share/doc/java21-openjdk/index.html"
 
 # ============================
 # ===   environment vars   ===
@@ -24,6 +25,8 @@ export HISTCONTROL=ignoredups
 export HISTSIZE=5000
 # command prompt
 PS1='[\u:\w]$ '
+# export java_home
+export JAVA_HOME=/usr/lib/jvm/default
 
 # ================
 # ===   misc   ===
