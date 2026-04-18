@@ -2,6 +2,7 @@ package mypackage;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.lang.annotation.*;
+import java.util.*;
 
 public final class Main {
 
@@ -83,6 +84,11 @@ Some multilin ecomment
         
         final Initializer myInit = new MyInitializer();
         System.out.println("myInit.order = " + myInit.order());
+
+        final java.util.List<Integer> list = new java.util.ArrayList<Integer>();
+        final List<Integer> list2 = new ArrayList<>();
+        list.add(123);
+        System.out.printf("list out [list=%s]%n", list);
 
 
 

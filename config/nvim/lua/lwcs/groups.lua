@@ -42,6 +42,7 @@ M.setup = function()
   -- 4. block comment vs line comment. And if possible @param varName with underline
   -- @param + italic, and darker color for the arg name
   -- can import an annotation be highlighted with that color? import lombok.require..
+  -- java.util.List<Integer> and also new java.util.ArrayList, color the scoped part like import.
 
   -- General
   any('Normal', { bg = c.background, fg = c.foreground })
