@@ -1,12 +1,17 @@
-package mypackage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.lang.annotation.*;
-import java.util.*;
+import java.lang.annotation.Documented;
 
 public final class Main {
 
+    /**
+     * This is the javadoc
+     */
     @Target(ElementType.FIELD)
+    @Documented
     public @interface UpdateMaskField {
 
         String value() default "";
@@ -27,24 +32,31 @@ public final class Main {
         @UpdateMaskField(value = "hi")
         private final int order = 39;
 
+        private static final int MAX_WIDTH = 200;
+
         private int m;
 
         public MyInitializer() {
             super();
+            printMe(true);
+            final String someString = String.format("h=%s", "hi");
 
-            m = 39;
+            m = MAX_WIDTH;
         }
 
         @Override
         public int order() {
-            return this.m + order;
+            final int myOrd = 25;
+
+            return this.m + order + myOrd;
         }
     }
 
     /**
-     * This is a comment
+     * This is a comment {@code a = 3} and {@link Initializer} and {@link UpdateMaskField}.
      * @param b this is the variable
      */
+    @Deprecated
     private static final void printMe(final boolean b) {
         // This is another comment
 
@@ -57,7 +69,9 @@ Some multilin ecomment
     }
 
     public enum Color {
-
+        /**
+         * The RED
+         */
         RED,
         BLUE;
     }
@@ -87,8 +101,13 @@ Some multilin ecomment
 
         final java.util.List<Integer> list = new java.util.ArrayList<Integer>();
         final List<Integer> list2 = new ArrayList<>();
-        list.add(123);
+        list.add(500);
         System.out.printf("list out [list=%s]%n", list);
+        list2.add(500);
+
+        list.add(500);
+
+        
 
 
 

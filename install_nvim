@@ -14,16 +14,14 @@ cp_parser() {
     arg_lang="${2}"
 
     parser_file="${nvim_dst}/parser/${arg_lang}.so"
-    bak_dir="${nvim_dst}/parser/bak"
-    mkdir -p ${bak_dir} 2>/dev/null
 
-    mv_bak ${parser_file} ${bak_dir}
+    mv_bak ${parser_file}
     cp -v ${arg_so_file} ${parser_file}
 }
 
-handle_tree_sitter_java() {
-    repo="https://github.com/tree-sitter/tree-sitter-java"
-    dest_dir="$HOME/Documents/tree-sitter-java"
+git_clone_pull() {
+    arg_repo="${1}"
+    arg_dest_dir="${2}"
 
     if [ ! -d $dest_dir ]; then
         echo "git clone ${repo}"
@@ -38,6 +36,56 @@ handle_tree_sitter_java() {
         echo "git pull failed"
         return 0
     fi
+
+    return 0
+}
+
+handle_vscode_test() {
+    version="0.45.0"
+    vsix_url="https://marketplace.visualstudio.com/_apis/public/gallery/publishers/vscjava/vsextensions/vscode-java-test/${version}/vspackage"
+    dest_dir="$HOME/Documents/vscode-java-test"
+    dest_file_gz="${dest_dir}/vscodetest.vsix.gz"
+    dest_file_zip="${dest_dir}/vscodetest.vsix"
+
+    jar_file=$(ls ${dest_dir}/extension/server/*.jar 2>/dev/null)
+    if [ "${jar_file}" != "" ]; then
+        echo "found vscode test ${version} jar files"
+        return 0
+    fi
+
+    mkdir -p ${dest_dir}
+
+    echo "downloading ${vsix_url}"
+    curl -L -o ${dest_file} ${vsix_url}
+
+    echo "decompressing ${dest_file_gz}"
+    gzip --force -d ${dest_file}
+
+    echo "unzipping ${dest_file_zip}"
+    unzip -o ${dest_file_zip} -d ${dest_dir}
+}
+
+handle_java_debug() {
+    repo="https://github.com/microsoft/java-debug"
+    dest_dir="$HOME/Documents/java-debug"
+
+    c1="com.microsoft.java.debug.plugin"
+    jar_file=$(ls ${dest_dir}/${c1}/target/${c1}-*.jar 2>/dev/null)
+
+    if [ "${jar_file}" = "" ]; then
+        git_clone_pull $repo $dest_dir
+        mvn -f ${dest_dir}/pom.xml clean install
+    else
+        echo "found java debug jar files"
+    fi
+}
+
+
+handle_tree_sitter_java() {
+    repo="https://github.com/tree-sitter/tree-sitter-java"
+    dest_dir="$HOME/Documents/tree-sitter-java"
+
+    git_clone_pull $repo $dest_dir
     
     make -C ${dest_dir} 1>/dev/null
 
@@ -57,12 +105,26 @@ inst_help() {
     htitle "${installer_name}"
     hdesc
     htext "${installer_description}"
+    htext
+    htext "Also builds java parsers, debug and test jars"
     husage
     htext "-"
     hexamples
     htext "-"
     hseealso
     htext "${installer_link}"
+    htext
+    htext "Delete all temporary nvim related files to start fresh"
+    htext "rm -rf ~/.config/nvim"
+    htext "rm -rf ~/.local/share/nvim"
+    htext "rm -rf ~/.local/state/nvim"
+    htext "rm -rf ~/.cache/nvim"
+    htext
+    htext "Java Debug Server repository"
+    htext "https://github.com/microsoft/java-debug"
+    htext
+    htext "Test runner for java repository"
+    htext "https://github.com/microsoft/vscode-java-test"
 }
 
 inst_is_installed() {
@@ -72,6 +134,11 @@ inst_is_installed() {
 inst_can_install() {
     if ! is_command "unzip"; then
         echo "missing unzip"
+        return 1
+    fi
+
+    if ! is_command "mvn"; then
+        echo "missing mvn"
         return 1
     fi
     
@@ -88,6 +155,7 @@ inst_install() {
     mkdir ${nvim_dst}/lua 2>/dev/null
     mkdir ${nvim_dst}/parser 2>/dev/null
     mkdir ${nvim_dst}/queries 2>/dev/null
+    mkdir ${nvim_dst}/ftplugin 2>/dev/null
 
 
     cp -v ${nvim_src}/init.lua ${nvim_dst}/init.lua
@@ -107,7 +175,14 @@ inst_install() {
     mkdir ${nvim_dst}/queries/java 2>/dev/null
     cp -v ${nvim_src}/queries/java/highlights.scm ${nvim_dst}/queries/java/highlights.scm
 
-    # handle_tree_sitter_java
+    # ftplugin
+    cp -v ${nvim_src}/ftplugin/java.lua ${nvim_dst}/ftplugin/java.lua
+
+    handle_tree_sitter_java
+    
+    handle_java_debug
+
+    handle_vscode_test
 }
 
 inst_can_install_manual() {

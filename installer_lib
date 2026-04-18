@@ -38,16 +38,22 @@ is_command() {
 
 mv_bak() {
     arg_file="${1}"
-    arg_dst="${2}"
 
     if [ ! -f "${arg_file}" ]; then
         return 0
     fi
-    
-    bak_file="${arg_file}.$(date +%Y%m%d_%H%M%S).bak"
 
-    mv -v ${arg_file} ${bak_file}
-    mv -v ${bak_file} ${arg_dst}
+
+    file_dir=$(dirname ${arg_file})
+    file_name=$(basename ${arg_file}) 
+    curr_dir=$(realpath .)
+
+    bak_dir="${curr_dir}/bak${file_dir}" 
+    bak_file="${file_name}.$(date +%Y%m%d_%H%M%S).bak"
+
+    mkdir -p ${bak_dir}
+    mv -v ${arg_file} ${bak_dir}/${bak_file}
+
     return 0
 }
 

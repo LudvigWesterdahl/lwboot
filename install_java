@@ -7,6 +7,7 @@ installer_link="https://wiki.archlinux.org/title/Java"
 pacman_pkg1="extra/jdk17-openjdk"
 pacman_pkg2="extra/jdk21-openjdk"
 pacman_pkg3="extra/openjdk21-doc"
+pacman_pkg4="extra/openjdk21-src"
 
 inst_help() {
     htitle "${installer_name}"
@@ -31,6 +32,9 @@ inst_help() {
     htext
     htext "Java 21 docs"
     htext "https://archlinux.org/packages/extra/x86_64/openjdk21-doc/"
+    htext
+    htext "Java 21 sources"
+    htext "https://archlinux.org/packages/extra/x86_64/openjdk21-src/"
 }
 
 inst_is_installed() {
@@ -45,6 +49,7 @@ inst_install() {
     pacman_install ${pacman_pkg1}
     pacman_install ${pacman_pkg2}
     pacman_install ${pacman_pkg3}
+    pacman_install ${pacman_pkg4}
 
 }
 

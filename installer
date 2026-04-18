@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Docs
-# 1. Sensitive information in install_git
-
 readonly PROG_PATH=${0}
 readonly PROG_DIR=${0%/*}
 readonly FULL_PATH=$(realpath ${PROG_PATH})
@@ -40,6 +37,7 @@ readonly INSTALLERS=(
   "install_qpdf"
   "install_wlclipboard"
   "install_fd"
+  "install_jdtls"
   "install_nvim"
 )
 

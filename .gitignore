@@ -5,7 +5,12 @@ brave-sync-code.txt
 id_rsa
 id_rsa.pub
 
+# General files
 /.idea/
 .DS_Store
 *~
 \#*\#
+
+# backup dir
+bak/
+
