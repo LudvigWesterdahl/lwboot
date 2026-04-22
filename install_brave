@@ -40,7 +40,7 @@ inst_can_install() {
         return 1
     fi
 
-    if [[ -f "${brave_sync_code}" ]]; then
+    if [ ! -f "${brave_sync_code}" ]; then
         echo "missing file ${brave_sync_code}"
         return 1
     fi
@@ -50,9 +50,9 @@ inst_can_install() {
 
 inst_install() {
     aur_build_dir=$HOME/aur-builds/brave-bin
-    git clone https://aur.archlinux.org/brave-bin.git ${aur_build_dir}
+    git clone https://aur.archlinux.org/brave-bin.git "${aur_build_dir}"
 
-    makepkg --noconfirm -si --dir ${aur_build_dir}
+    makepkg --noconfirm -si --dir "${aur_build_dir}"
 
     # TODO: replace 4 spaces with 2 across all files
     # TODO: create helper for kwriteconfig, searrch across
@@ -62,7 +62,7 @@ inst_install() {
     kwriteconfig6 --file kdeglobals --group General --key Http "${brave_desktop}"
     kwriteconfig6 --file kdeglobals --group General --key Https "${brave_desktop}"
     
-    rm -rf ${aur_build_dir}
+    rm -rf "${aur_build_dir}"
 
     return 0
 }
