@@ -17,6 +17,8 @@ readonly INSTALLERS=(
   "install_vim"
 #  "install_git"
   "install_basedevel"
+  "install_gcc"
+  "install_gdb"
   "install_brave"
   "install_archwallpaper"
   "install_xorgxev"
@@ -39,6 +41,10 @@ readonly INSTALLERS=(
   "install_fd"
   "install_jdtls"
   "install_nvim"
+  "install_libiconv"
+  "install_feh"
+  "install_hexyl"
+  "install_tealdeer"
 )
 
 readonly ARG=${1}

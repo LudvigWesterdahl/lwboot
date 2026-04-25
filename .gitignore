@@ -10,6 +10,7 @@ id_rsa.pub
 .DS_Store
 *~
 \#*\#
+a.out
 
 # backup dir
 bak/

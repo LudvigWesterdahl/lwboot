@@ -1,24 +1,23 @@
 #!/bin/bash
 
-installer_name="vim"
-installer_description="Installs vim."
-installer_link="https://archlinux.org/packages/extra/x86_64/vim/"
+installer_name="tealdeer"
+installer_description="Installs tealdeer, simplified man pages."
+installer_link="https://archlinux.org/packages/extra/x86_64/tealdeer/"
 
-pacman_pkg="extra/vim"
+pacman_pkg="extra/tealdeer"
 
 inst_help() {
     htitle "${installer_name}"
     hdesc
     htext "${installer_description}"
     husage
-    htext "-"
+    htext "tldr PAGE"
     hexamples
-    htext "Show binary content of a compiled binary excluding NULL rows"
-    htext "xxd -a a.out"
+    htext "tldr feh"
+    htext
+    htext "tldr gzip"
     hseealso
     htext "${installer_link}"
-    htext
-    htext "It also provides xxd command."
 }
 
 inst_is_installed() {
@@ -38,7 +37,7 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 0
+    return 1
 }
 
 inst_uninstall() {

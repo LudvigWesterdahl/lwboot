@@ -1,0 +1,50 @@
+#!/bin/bash
+
+installer_name="libiconv"
+installer_description="Installs libiconv, GNU charset conversion library."
+installer_link="https://archlinux.org/packages/extra/x86_64/libiconv/"
+
+pacman_pkg="extra/libiconv"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "List all available character set encodings"
+    htext "iconv -l"
+    htext
+    htext "Convert from UTF-8 to ISO-8859-1"
+    htext "iconv -f UTF-8 -t ISO-8859-1 FILE > OUT"
+    htext
+    htext "Converts and transliterates characters like ö to o"
+    htext "iconv -f iso-8859-1 -t ascii//TRANSLIT FILE > OUT"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    is_pacman_installed ${pacman_pkg}
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install ${pacman_pkg}
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall ${pacman_pkg}
+}

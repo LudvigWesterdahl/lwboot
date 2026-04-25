@@ -7,8 +7,7 @@ int main(int argc, char **argv)
 
     printf("The value of argc is %d\n", argc);
 
-    int i;
-    for (i = 0; i < argc; i++) {
+    for (int i = 0; i < argc; i++) {
         printf("arg %d is %s\n", i, argv[i]);
     }
 

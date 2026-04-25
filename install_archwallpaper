@@ -13,11 +13,14 @@ inst_help() {
     husage
     htext "-"
     hexamples
-    htext "List installed and available wallpapers"
+    htext "List installed and available wallpapers from ${pacman_pkg}"
     htext "ls -1 /usr/share/backgrounds/archlinux"
     hseealso
     htext "${installer_link}"
     htext "https://bbs.archlinux.org/viewtopic.php?id=259604"
+    htext
+    htext "Arch Linux minimal wallpapers"
+    htext "https://github.com/LagrangianLad/arch-minimal-wallpapers"
 }
 
 inst_is_installed() {
@@ -34,7 +37,9 @@ inst_install() {
     fi
 
     wallpaper_img="/usr/share/backgrounds/archlinux/conference.png"
-    lockscreen_img="/usr/share/backgrounds/archlinux/simple.png"
+    lockscreen_img="/usr/share/backgrounds/archlinux/split.png"
+    lockscreen_img="${HOME}/Documents/lwboot/config/wallpapers/ayu-mirage.png"
+    wallpaper_img=${lockscreen_img}
 
 
     plasma-apply-wallpaperimage ${wallpaper_img}
