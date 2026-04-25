@@ -13,9 +13,14 @@ inst_help() {
     husage
     htext "tldr PAGE"
     hexamples
+    htext "Show a tldr page"
     htext "tldr feh"
     htext
-    htext "tldr gzip"
+    htext "Update the local cache"
+    htext "tldr --update"
+    htext
+    htext "Clear the local cache"
+    htext "tldr --clear-cache"
     hseealso
     htext "${installer_link}"
 }
