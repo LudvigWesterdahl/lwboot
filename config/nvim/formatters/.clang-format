@@ -1,0 +1,6 @@
+---
+# Empty default section
+---
+Language: C
+BasedOnStyle: LLVM
+...

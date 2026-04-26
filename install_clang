@@ -13,7 +13,8 @@ inst_help() {
     husage
     htext "-"
     hexamples
-    htext "-"
+    htext "Format a C file using a given .clang-format file"
+    htext "clang-format -i --style=file:.clang-format FILE"
     hseealso
     htext "${installer_link}"
     htext

@@ -181,6 +181,7 @@ inst_install() {
 
     # formatters
     cp -v ${nvim_src}/formatters/intellij-codestyle.xml ${nvim_dst}/formatters/intellij-codestyle.xml
+    cp -v ${nvim_src}/formatters/.clang-format ${nvim_dst}/formatters/.clang-format
 
     handle_tree_sitter_java
     

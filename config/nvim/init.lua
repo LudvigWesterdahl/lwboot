@@ -592,17 +592,25 @@ require('lazy').setup {
         java = { 'intellij' },
         xml = { "intellij" },
         html = { 'intellij' },
+        c = { "clangformat" },
       },
       formatters = {
         intellij = {
           command = '/usr/share/idea/bin/format.sh',
           args = {
-            '-s', vim.fn.expand('~/.config/nvim/formatters/intellij-codestyle.xml'),
+            '-s', vim.fn.stdpath("config") .. '/formatters/intellij-codestyle.xml',
             '$FILENAME',
           },
           stdin = false,
           tmpfile_format = '.conform.$RANDOM.$FILENAME',
         },
+        clangformat = {
+          command = "clang-format",
+          args = {
+             '--assume-filename', '$FILENAME',
+            "--style=file:" .. vim.fn.stdpath("config") .. "/formatters/.clang-format",
+        },
+      }
       },
     })
     vim.keymap.set('n', '<leader>f', function()
