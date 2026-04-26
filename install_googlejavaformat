@@ -1,0 +1,57 @@
+#!/bin/bash
+
+installer_name="googlejavaformat"
+installer_description="Installs google-java-format."
+installer_link="https://aur.archlinux.org/packages/google-java-format"
+
+pacman_pkg="google-java-format"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "google-java-format --aosp -i FILE"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+}
+
+# TODO: how to re-install AUR packages? Create arg to inst_install OPT_2. Also remove check here then for is_command
+inst_is_installed() {
+    is_command google-java-format
+}
+
+inst_can_install() {
+    if ! is_command git; then
+        echo "missing git"
+        return 1
+    fi
+
+    return 0
+}
+
+# TODO: create AUR helper
+inst_install() {
+    aur_build_dir=$HOME/aur-builds/google-java-format
+    git clone https://aur.archlinux.org/google-java-format.git ${aur_build_dir}
+
+    makepkg --noconfirm -si --dir ${aur_build_dir}
+
+    rm -rf ${aur_build_dir}
+
+    return 0
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 0
+}
+
+inst_uninstall() {
+    pacman_uninstall ${pacman_pkg}
+}

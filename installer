@@ -47,6 +47,7 @@ readonly INSTALLERS=(
   "install_tealdeer"
   "install_clang"
   "install_pacmancontrib"
+  "install_googlejavaformat"
 )
 
 readonly ARG=${1}

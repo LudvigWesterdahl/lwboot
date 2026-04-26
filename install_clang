@@ -17,8 +17,16 @@ inst_help() {
     hseealso
     htext "${installer_link}"
     htext
-    htext "ClanFormat"
+    htext "ClangFormat"
     htext "https://clang.llvm.org/docs/ClangFormat.html"
+    htext
+    htext "ClangFormatStyleOptions 22.1.0"
+    htext "https://releases.llvm.org/22.1.0/tools/clang/docs/ClangFormatStyleOptions.html"
+    htext
+    htext "Creating the .clang-format file"
+    htext "1) Run the command for foo.java, foo.c, foo.json"
+    htext "clang-format -style=Google -assume-filename=foo.java -dump-config > .clang-format.java"
+    htext "2) Note the defaults and override as needed"
 }
 
 inst_is_installed() {
