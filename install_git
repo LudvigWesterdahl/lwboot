@@ -72,7 +72,7 @@ inst_install() {
     git config --global user.email "${git_mail}"
     git config --global user.name "${git_name}"
     git config --global core.editor "${git_editor}"
-
+    git config --global init.defaultBranch "master"
 
     handle_repository "lwdoc" "${HOME}/Documents/lwdoc"
     handle_repository "Scripts" "${HOME}/bin/scripts"

@@ -48,6 +48,7 @@ readonly INSTALLERS=(
   "install_clang"
   "install_pacmancontrib"
   "install_googlejavaformat"
+  "install_intellij"
 )
 
 readonly ARG=${1}

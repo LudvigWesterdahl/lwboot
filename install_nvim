@@ -156,6 +156,7 @@ inst_install() {
     mkdir ${nvim_dst}/parser 2>/dev/null
     mkdir ${nvim_dst}/queries 2>/dev/null
     mkdir ${nvim_dst}/ftplugin 2>/dev/null
+    mkdir ${nvim_dst}/formatters 2>/dev/null
 
 
     cp -v ${nvim_src}/init.lua ${nvim_dst}/init.lua
@@ -177,6 +178,9 @@ inst_install() {
 
     # ftplugin
     cp -v ${nvim_src}/ftplugin/java.lua ${nvim_dst}/ftplugin/java.lua
+
+    # formatters
+    cp -v ${nvim_src}/formatters/intellij-codestyle.xml ${nvim_dst}/formatters/intellij-codestyle.xml
 
     handle_tree_sitter_java
     

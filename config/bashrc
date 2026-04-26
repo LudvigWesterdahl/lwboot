@@ -16,6 +16,25 @@ alias top="top -e m -E m -o RES"
 alias wgetmbak="wget --mirror --convert-links --adjust-extension --no-parent --random-wait -e robots=off --reject=\"jpg,jpeg,png,gif,webp,svg,bmp,tiff,ico,mp4,avi,mov,wmv,flv,webm,pdf,zip,rar,iso,exe\""
 alias java21doc="brave /usr/share/doc/java21-openjdk/index.html"
 
+
+# ============================
+# ===   helper functions   ===
+# ============================
+fmtjava() {
+    arg_dir="${1}"
+
+    format_dir="."
+    if [ "${arg_dir}" != "" ]; then
+        format_dir=${arg_dir}
+    fi
+
+    /usr/share/idea/bin/format.sh \
+        -s ~/.config/nvim/formatters/intellij-codestyle.xml \
+        -m '*.java' \
+        -r \
+        "${format_dir}"
+}
+
 # ============================
 # ===   environment vars   ===
 # ============================

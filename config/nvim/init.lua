@@ -132,6 +132,33 @@ vim.api.nvim_create_autocmd('InsertEnter', {
   end,
 })
 
+vim.o.autoread = true
+
+-- Actually trigger the disk check on common events
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI', }, {
+  pattern = '*',
+  callback = function()
+    -- Don't run while in command-line mode (would interrupt typing :commands)
+    if vim.fn.mode() ~= 'c' and vim.fn.bufexists(0) == 1 then
+      vim.cmd('silent! checktime')
+    end
+  end,
+  desc = 'Check if file changed on disk',
+})
+
+-- Notify when a buffer reloads, so silent changes don't confuse you
+vim.api.nvim_create_autocmd('FileChangedShellPost', {
+  pattern = '*',
+  callback = function()
+    vim.notify(
+      'File changed on disk. Buffer reloaded.',
+      vim.log.levels.WARN,
+      { title = 'autoread' }
+    )
+  end,
+  desc = 'Notify on external file change',
+})
+
 -- Diagnostic Config & Keymaps
 -- See :help vim.diagnostic.Opts
 vim.diagnostic.config {
@@ -504,6 +531,7 @@ require('lazy').setup {
               border = "rounded",
               winblend = 0,
               scrollbar = false,
+              direction_priority = { "n", "s" },
             },
             documentation = { 
               auto_show = true, 
@@ -512,6 +540,10 @@ require('lazy').setup {
                 border = "rounded",
                 winblend = 0,
                 scrollbar = false,
+      direction_priority = {
+        menu_north = { "n", "s" },
+        menu_south = { "s", "n" },
+      },
               },
             },
 
@@ -552,6 +584,32 @@ require('lazy').setup {
           vim.cmd.colorscheme 'lwcs'
         end,
       },
+{
+  'stevearc/conform.nvim',
+  config = function()
+    require('conform').setup({
+      formatters_by_ft = {
+        java = { 'intellij' },
+        xml = { "intellij" },
+        html = { 'intellij' },
+      },
+      formatters = {
+        intellij = {
+          command = '/usr/share/idea/bin/format.sh',
+          args = {
+            '-s', vim.fn.expand('~/.config/nvim/formatters/intellij-codestyle.xml'),
+            '$FILENAME',
+          },
+          stdin = false,
+          tmpfile_format = '.conform.$RANDOM.$FILENAME',
+        },
+      },
+    })
+    vim.keymap.set('n', '<leader>f', function()
+      require('conform').format({ async = true, timeout_ms = 10000  })
+    end)
+  end,
+}
     }
 
     -- The line beneath this is called `modeline`. See `:help modeline`
