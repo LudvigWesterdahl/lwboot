@@ -1,10 +1,10 @@
 #!/bin/bash
 
-installer_name="clang"
-installer_description="Installs clang, mainly to get access to clang-format."
-installer_link="https://archlinux.org/packages/extra/x86_64/clang/"
+installer_name="pacmancontrib"
+installer_description="Installs pacman-contrib to use paccache for cleaning up pacman cache."
+installer_link="https://archlinux.org/packages/extra/x86_64/pacman-contrib/"
 
-pacman_pkg="extra/clang"
+pacman_pkg="extra/pacman-contrib"
 
 inst_help() {
     htitle "${installer_name}"
@@ -17,8 +17,7 @@ inst_help() {
     hseealso
     htext "${installer_link}"
     htext
-    htext "ClanFormat"
-    htext "https://clang.llvm.org/docs/ClangFormat.html"
+    htext "See installer_docs for paccache usage."
 }
 
 inst_is_installed() {

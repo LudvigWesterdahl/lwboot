@@ -16,6 +16,13 @@ inst_help() {
     htext
     htext "Create two columns using colon as separtor"
     htext 'echo "v1:v2" | column --table -s ":" -C "name=INSTALL FILE,width=25,strictwidth" -C "name=DOCUMENTATION" -l 2'
+    htext
+    htext "Clean up journalctl logs"
+    htext "sudo journalctl --vacuum-time=7d"
+    htext
+    htext "Clean up pacman cache (dry run first)"
+    htext "paccache -dk1"
+    htext "paccache -rk1"
     hseealso
     htext "${installer_link}"
 }
