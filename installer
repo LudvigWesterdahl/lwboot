@@ -45,6 +45,7 @@ readonly INSTALLERS=(
   "install_feh"
   "install_hexyl"
   "install_tealdeer"
+  "install_clang"
 )
 
 readonly ARG=${1}
