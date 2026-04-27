@@ -92,6 +92,9 @@ config_touchpad() {
 inst_install() {
   config_touchpad
 
+  # systemsettings kcm_smserver
+  kwriteconfig6 --file ksmserverrc --group General --key loginMode emptySession
+
   return 0
 }
 
