@@ -88,6 +88,15 @@ M.setup = function()
   any("BlinkCmpDoc", { bg = c.background })
   any("BlinkCmpDocBorder", { bg = c.background })
 
+  -- Plugin: flash
+
+  local flashFg = c.blackBright
+  any("FlashBackdrop", { fg = flashFg })
+  any("FlashMatch", { fg = flashFg, bg = "NONE" })
+  any("FlashCurrent", { fg = flashFg, bg = "NONE" })
+  any("FlashLabel", { fg = c.yellow, bg = "NONE", bold = true })
+
+
   -- Language: any
   fg('@lw_keyword', c.blue)
   fg('@lw_literal', blue1)

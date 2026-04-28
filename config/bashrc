@@ -35,6 +35,12 @@ fmtjava() {
         "${format_dir}"
 }
 
+rundisown() {
+    "$@" 1>/dev/null 2>&1 & disown
+}
+
+
+
 # ============================
 # ===   environment vars   ===
 # ============================

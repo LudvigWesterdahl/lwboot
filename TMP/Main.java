@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -20,7 +19,6 @@ public final class Main {
     public interface Initializer {
 
         int order();
-
     }
 
     public static class MyClass {
@@ -54,6 +52,7 @@ public final class Main {
 
     /**
      * This is a comment {@code a = 3} and {@link Initializer} and {@link UpdateMaskField}.
+     *
      * @param b this is the variable
      */
     @Deprecated
@@ -95,27 +94,23 @@ Some multilin ecomment
 
         final String val = "NBSP=\u020F!!!";
         final char nbsp = '\u020F';
-        
+
         final Initializer myInit = new MyInitializer();
         System.out.println("myInit.order = " + myInit.order());
 
         final java.util.List<Integer> list = new java.util.ArrayList<Integer>();
         final List<Integer> list2 = new ArrayList<>();
         list.add(500);
+
         System.out.printf("list out [list=%s]%n", list);
         list2.add(500);
 
         list.add(500);
 
-        
-
-
-
-
         if (arg.startsWith("12")) {
             throw new IllegalArgumentException(String.format(
-                "bad arg %s",
-                arg
+                    "bad arg %s",
+                    arg
             ));
         }
 
@@ -132,3 +127,6 @@ Some multilin ecomment
         printArg("got rand = " + rand);
     }
 }
+
+
+
