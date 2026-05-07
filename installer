@@ -49,6 +49,7 @@ readonly INSTALLERS=(
   "install_pacmancontrib"
   "install_googlejavaformat"
   "install_intellij"
+  "install_postman"
 )
 
 readonly ARG=${1}
