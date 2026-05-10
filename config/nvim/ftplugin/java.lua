@@ -42,6 +42,7 @@ local config = {
           'jdk.*',
           'sun.*',
         },
+        guessMethodArguments = "off",
       },
       sources = {
         organizeImports = {
@@ -87,9 +88,6 @@ end, 1000)
 -- Optional: Java-specific keymaps (only active in Java buffers)
 local opts = { buffer = true, silent = true }
 vim.keymap.set('n', '<leader>oi', "<cmd>lua require('jdtls').organize_imports()<cr>", opts)
-vim.keymap.set('n', '<leader>ev', "<cmd>lua require('jdtls').extract_variable()<cr>", opts)
-vim.keymap.set('n', '<leader>ec', "<cmd>lua require('jdtls').extract_constant()<cr>", opts)
-vim.keymap.set('v', '<leader>em', "<esc><cmd>lua require('jdtls').extract_method(true)<cr>", opts)
 
 
 

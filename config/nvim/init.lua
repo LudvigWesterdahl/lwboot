@@ -125,6 +125,12 @@ vim.o.confirm = true
 vim.o.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Navigating between windows without C-w prefix.
+vim.keymap.set('n', '<C-h>', '<C-w>h', { silent = true })
+vim.keymap.set('n', '<C-j>', '<C-w>j', { silent = true })
+vim.keymap.set('n', '<C-k>', '<C-w>k', { silent = true })
+vim.keymap.set('n', '<C-l>', '<C-w>l', { silent = true })
+
 -- Disables highlight when entering INSERT mode
 vim.api.nvim_create_autocmd('InsertEnter', {
   callback = function()
@@ -201,10 +207,10 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+-- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+-- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+-- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+-- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -523,7 +529,7 @@ require('lazy').setup {
             -- <c-k>: Toggle signature help
             --
             -- See :h blink-cmp-config-keymap for defining your own keymap
-            preset = 'default',
+            preset = 'super-tab',
 
             -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
             --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -543,7 +549,7 @@ require('lazy').setup {
               direction_priority = { "n", "s" },
             },
             documentation = { 
-              auto_show = true, 
+              auto_show = false, 
               auto_show_delay_ms = 500,
               window = {
                 border = "rounded",
@@ -591,7 +597,36 @@ require('lazy').setup {
   },
   config = function()
     local dap, dapui = require('dap'), require('dapui')
-    dapui.setup()
+dapui.setup({
+    layouts = {
+      {
+        -- Left side: scopes, breakpoints, stacks, watches stacked vertically
+        elements = {
+          { id = 'scopes',      size = 0.30 },
+         -- { id = 'breakpoints', size = 0.20 },
+          { id = 'stacks',      size = 0.25 },
+          -- { id = 'watches',     size = 0.25 },
+        },
+        size = math.floor(vim.o.columns * 0.4),  -- 40% of screen width
+        position = 'left',
+      },
+
+    -- Console strip — separate panel, also at bottom, stacks above the previous
+    -- { elements = { { id = 'console', size = 1.0 }, }, size = 2, position = 'bottom', },
+  {
+    -- REPL strip
+    elements = {
+      { id = 'repl', size = 1.0 },
+    },
+    size = 12,
+    position = 'bottom',
+  },
+  
+
+
+    },
+  })
+
     -- auto open/close UI on debug session
     dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
     dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end

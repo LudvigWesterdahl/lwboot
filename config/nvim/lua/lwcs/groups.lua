@@ -37,6 +37,7 @@ M.setup = function()
   local green1 = '#67cc65'
   local purple1 = '#9b74f0'
   local blue1 = '#749ff0'
+  local green2 = '#b3f6c0'
 
   -- TODO: with LSP:
   -- 4. block comment vs line comment. And if possible @param varName with underline
@@ -99,13 +100,13 @@ M.setup = function()
   -- Language: any
   fg('@lw_keyword', c.blue)
   fg('@lw_literal', blue1)
-  fg('@lw_string', c.yellow)
+  fg('@lw_string', green2)
   any('@lw_null', { fg = blue1, bold = true })
 
   -- Language: java
   any("@lwjava_comment", { fg = c.blackBright, italic = true })
   any('@lwjava_import_ref', { fg = c.cursorText })
-  any('@lwjava_field_ref', { fg = c.red, bold = false })
+  any('@lwjava_field_ref', { fg = c.blueBright, bold = false })
   any('@lwjava_annotation', { fg = c.magentaBright, italic = false })
   any('@lwjava_import_asterisk', { fg = c.yellow, bold = true })
   any('@lwjava_import_keyword', { link = '@lwjava_import_ref' })
@@ -120,7 +121,7 @@ M.setup = function()
   any("@lsp.typemod.method.static.java", {italic = true})
   any("@lsp.typemod.property.static.java", {italic = true})
   any("@lsp.type.method.java", {link="@lsp"})
-  any("@lsp.type.class.java", {link="@lsp"})
+  any("@lsp.type.class.java", { fg = c.foreground }) -- Ensures Inner class gets colored white vs a field access like System.out.
   any("@lsp.typemod.keyword.documentation.java", {fg = c.blackBright, bold = true, underline = true})
   any("@lsp.typemod.parameter.documentation.java", {fg = c.blackBright, bold = true, underline = false})
   any("LSP_CODE", {link="LINK_TO"})
