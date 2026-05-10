@@ -1,3 +1,8 @@
+if vim.b.did_ftplugin_java then
+  return
+end
+vim.b.did_ftplugin_java = true
+
 -- Workspace dir: unique per project, persistent across sessions
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 print("project_name = " .. project_name)
