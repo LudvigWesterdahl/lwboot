@@ -326,12 +326,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 vim.keymap.set('n', '<leader>tc', "<cmd>lua require('jdtls').test_class()<cr>", opts)
 vim.keymap.set('n', '<leader>tm', "<cmd>lua require('jdtls').test_nearest_method()<cr>", opts)
 
--- Debug controls (these are dap, not jdtls — fine to put in init.lua too)
 vim.keymap.set('n', '<F5>',  "<cmd>lua require('dap').continue()<cr>", opts)
 vim.keymap.set('n', '<F10>', "<cmd>lua require('dap').step_over()<cr>", opts)
 vim.keymap.set('n', '<F11>', "<cmd>lua require('dap').step_into()<cr>", opts)
 vim.keymap.set('n', '<F12>', "<cmd>lua require('dap').step_out()<cr>", opts)
 vim.keymap.set('n', '<leader>b', "<cmd>lua require('dap').toggle_breakpoint()<cr>", opts)
+vim.keymap.set('n', '<leader>dq', function() require('dap').disconnect() end, { silent = true })
   end,
 })
 
@@ -596,6 +596,18 @@ require('lazy').setup {
     dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
     dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
     dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
+    dap.listeners.before.disconnect['dapui_config'] = function() dapui.close() end
+     -- Java attach config for debugging running JVMs (e.g., jars started with -agentlib:jdwp=...)
+     -- Press F5 to show dialog to attach
+    dap.configurations.java = dap.configurations.java or {}
+    table.insert(dap.configurations.java, {
+      type = 'java',
+      request = 'attach',
+      name = 'Attach to localhost:5005',
+      hostName = 'localhost',
+      port = 5005,
+    })
+
   end,
 },
 
