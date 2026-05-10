@@ -13,9 +13,12 @@ local bundles = {}
 vim.list_extend(bundles, vim.split(vim.fn.glob(home .. '/Documents/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar', true), '\n'))
 vim.list_extend(bundles, vim.split(vim.fn.glob(home .. '/Documents/vscode-java-test/extension/server/*.jar', true), '\n'))
 
+local lombok_jar = vim.split(vim.fn.glob(home .. '/.m2/repository/org/projectlombok/lombok/*/lombok-*.jar', true), '\n')[1]
+
 local config = {
   cmd = {
     'jdtls',
+    '--jvm-arg=-javaagent:' .. lombok_jar,
     '-data', workspace_dir,
   },
 
@@ -63,6 +66,23 @@ local config = {
 
 -- This does the per-buffer start/attach dance
 require('jdtls').start_or_attach(config)
+
+-- Wire jdtls's debug adapter into nvim-dap and scan for main classes
+-- require('jdtls').setup_dap({ hotcodereplace = 'auto' })
+-- require('jdtls.dap').setup_dap_main_class_configs()
+
+-- Skip JDK internals on step-into (waits 1s for async config population)
+vim.defer_fn(function()
+  for _, conf in ipairs(require('dap').configurations.java or {}) do
+    conf.stepFilters = {
+--      skipClasses = { "$JDK", "junit.*", "org.junit.*" },
+      skipClasses = {},
+      skipSynthetics = true,
+      skipStaticInitializers = true,
+      skipConstructors = false,
+    }
+  end
+end, 1000)
 
 -- Optional: Java-specific keymaps (only active in Java buffers)
 local opts = { buffer = true, silent = true }

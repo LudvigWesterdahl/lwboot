@@ -89,7 +89,6 @@ M.setup = function()
   any("BlinkCmpDocBorder", { bg = c.background })
 
   -- Plugin: flash
-
   local flashFg = c.blackBright
   any("FlashBackdrop", { fg = flashFg })
   any("FlashMatch", { fg = flashFg, bg = "NONE" })
@@ -121,6 +120,7 @@ M.setup = function()
   any("@lsp.typemod.method.static.java", {italic = true})
   any("@lsp.typemod.property.static.java", {italic = true})
   any("@lsp.type.method.java", {link="@lsp"})
+  any("@lsp.type.class.java", {link="@lsp"})
   any("@lsp.typemod.keyword.documentation.java", {fg = c.blackBright, bold = true, underline = true})
   any("@lsp.typemod.parameter.documentation.java", {fg = c.blackBright, bold = true, underline = false})
   any("LSP_CODE", {link="LINK_TO"})

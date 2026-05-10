@@ -1,8 +1,9 @@
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.lang.annotation.*;
-import java.lang.annotation.Documented;
 
 public final class Main {
 

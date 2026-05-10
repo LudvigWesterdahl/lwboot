@@ -322,7 +322,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
       end)
     end, opts)
 
-    -- your other LSP keymaps: gd, gr, <leader>rn, <leader>ca, etc.
+-- Run/debug tests
+vim.keymap.set('n', '<leader>tc', "<cmd>lua require('jdtls').test_class()<cr>", opts)
+vim.keymap.set('n', '<leader>tm', "<cmd>lua require('jdtls').test_nearest_method()<cr>", opts)
+
+-- Debug controls (these are dap, not jdtls — fine to put in init.lua too)
+vim.keymap.set('n', '<F5>',  "<cmd>lua require('dap').continue()<cr>", opts)
+vim.keymap.set('n', '<F10>', "<cmd>lua require('dap').step_over()<cr>", opts)
+vim.keymap.set('n', '<F11>', "<cmd>lua require('dap').step_into()<cr>", opts)
+vim.keymap.set('n', '<F12>', "<cmd>lua require('dap').step_out()<cr>", opts)
+vim.keymap.set('n', '<leader>b', "<cmd>lua require('dap').toggle_breakpoint()<cr>", opts)
   end,
 })
 
@@ -574,6 +583,21 @@ require('lazy').setup {
           'mfussenegger/nvim-dap',  -- optional, only if you want debugging
         },
       },
+{
+  'rcarriga/nvim-dap-ui',
+  dependencies = {
+    'mfussenegger/nvim-dap',
+    'nvim-neotest/nvim-nio',
+  },
+  config = function()
+    local dap, dapui = require('dap'), require('dapui')
+    dapui.setup()
+    -- auto open/close UI on debug session
+    dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
+    dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
+    dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
+  end,
+},
 
       {
         dir = vim.fn.stdpath 'config' .. '/lua/lwcs',
