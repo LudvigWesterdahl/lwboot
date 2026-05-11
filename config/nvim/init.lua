@@ -338,6 +338,16 @@ vim.keymap.set('n', '<F11>', "<cmd>lua require('dap').step_into()<cr>", opts)
 vim.keymap.set('n', '<F12>', "<cmd>lua require('dap').step_out()<cr>", opts)
 vim.keymap.set('n', '<leader>b', "<cmd>lua require('dap').toggle_breakpoint()<cr>", opts)
 vim.keymap.set('n', '<leader>dq', function() require('dap').disconnect() end, { silent = true })
+vim.keymap.set('n', '<leader>du', function() require('dapui').toggle() end)
+
+vim.keymap.set('n', '<leader>dU', function() require('dapui').toggle({reset = true}) end)
+--vim.keymap.set('n', '<leader>dU', function()
+--  local dapui = require('dapui')
+ -- dapui.close()
+  -- dapui.open({ reset = true})
+-- end)
+
+
   end,
 })
 
@@ -399,7 +409,13 @@ require('lazy').setup {
               buffers = { previewer = true, sort_lastused = true },
             },
             extensions = {
-              ['ui-select'] = { require('telescope.themes').get_dropdown() },
+              ['ui-select'] = { require('telescope.themes').get_dropdown({
+                  layout_config = {
+                    width = 0.9,    -- 90% of screen width
+                    height = 0.5,
+                  },
+              }) 
+            },
             },
           }
 
@@ -410,10 +426,35 @@ require('lazy').setup {
           local builtin = require 'telescope.builtin'
           vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
           vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-          vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+          --vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+
+          vim.keymap.set('n', '<leader>sf', function()
+  builtin.find_files({
+    path_display = { filename_first = { reverse_directories = false } },
+  })
+end, { desc = '[S]earch [F]iles' })
+
+
           vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
           vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-          vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+          --vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+          
+
+          vim.keymap.set('n', '<leader>sg', function()
+  builtin.live_grep({
+    path_display = { filename_first = { reverse_directories = false } },
+  })
+end, { desc = '[S]earch by [G]rep' })
+
+vim.keymap.set('n', '<leader>sG', function()
+  builtin.live_grep({
+    --path_display = { filename_first = { reverse_directories = false } },
+    path_display = { "filename_first" },
+    additional_args = function() return { '--max-count=1' } end,
+  })
+end, { desc = '[S]earch by [G]rep (files only)' })
+
+
 
           -- line_width can be set to "full"
           vim.keymap.set('n', '<leader>sd', function()
@@ -612,7 +653,7 @@ dapui.setup({
       },
 
     -- Console strip — separate panel, also at bottom, stacks above the previous
-    -- { elements = { { id = 'console', size = 1.0 }, }, size = 2, position = 'bottom', },
+     { elements = { { id = 'console', size = 1.0 }, }, size = 8, position = 'bottom', },
   {
     -- REPL strip
     elements = {
@@ -629,9 +670,9 @@ dapui.setup({
 
     -- auto open/close UI on debug session
     dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
-    dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
-    dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
-    dap.listeners.before.disconnect['dapui_config'] = function() dapui.close() end
+    -- dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
+    -- dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
+    -- dap.listeners.before.disconnect['dapui_config'] = function() dapui.close() end
      -- Java attach config for debugging running JVMs (e.g., jars started with -agentlib:jdwp=...)
      -- Press F5 to show dialog to attach
     dap.configurations.java = dap.configurations.java or {}
@@ -700,7 +741,7 @@ dapui.setup({
     },
     labels = "abcdefghijklmnopqrstuvwxyz",
     label = {
-        distance = false,
+        distance = true,
         reuse = "none",
         uppercase = false,  -- only use lowercase a-z, no caps
     },

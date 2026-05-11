@@ -3,15 +3,21 @@ if vim.b.did_ftplugin_java then
 end
 vim.b.did_ftplugin_java = true
 
+
+-- Root of the project — jdtls needs this to understand your build
+-- local root_markers = { 'gradlew', 'mvnw', '.git', 'pom.xml', 'build.gradle' }
+local root_markers = { 'gradlew', 'mvnw', '.git' }
+local root_dir = require('jdtls.setup').find_root(root_markers)
+if root_dir == '' then
+    print("not in a java project")
+    return
+end
+
 -- Workspace dir: unique per project, persistent across sessions
-local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
+local project_name = vim.fn.fnamemodify(root_dir, ':p:h:t')
 print("project_name = " .. project_name)
 local workspace_dir = vim.fn.stdpath('cache') .. '/jdtls-workspace/' .. project_name
 
--- Root of the project — jdtls needs this to understand your build
-local root_markers = { 'gradlew', 'mvnw', '.git', 'pom.xml', 'build.gradle' }
-local root_dir = require('jdtls.setup').find_root(root_markers)
-if root_dir == '' then return end  -- not in a java project, bail
 
 local home = os.getenv("HOME")
 local bundles = {}
@@ -68,14 +74,15 @@ local config = {
   },
 
   capabilities = vim.lsp.protocol.make_client_capabilities(),
+  on_attach = function(client, bufnr)
+    require('jdtls').setup_dap({ hotcodereplace = 'auto' })
+    require('jdtls.dap').setup_dap_main_class_configs()
+  end,
 }
 
 -- This does the per-buffer start/attach dance
 require('jdtls').start_or_attach(config)
 
--- Wire jdtls's debug adapter into nvim-dap and scan for main classes
--- require('jdtls').setup_dap({ hotcodereplace = 'auto' })
--- require('jdtls.dap').setup_dap_main_class_configs()
 
 -- Skip JDK internals on step-into (waits 1s for async config population)
 vim.defer_fn(function()
@@ -93,7 +100,9 @@ end, 1000)
 -- Optional: Java-specific keymaps (only active in Java buffers)
 local opts = { buffer = true, silent = true }
 vim.keymap.set('n', '<leader>oi', "<cmd>lua require('jdtls').organize_imports()<cr>", opts)
-
+vim.keymap.set('n', '<leader>tc', "<cmd>lua require('jdtls').test_class()<cr>", opts)
+vim.keymap.set('n', '<leader>tm', "<cmd>lua require('jdtls').test_nearest_method()<cr>", opts)
+vim.keymap.set('n', '<leader>tp', "<cmd>lua require('jdtls.dap').pick_test()<cr>", opts)
 
 
 
