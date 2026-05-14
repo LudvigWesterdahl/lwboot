@@ -52,8 +52,9 @@ The vim.schedule wrapping is the fix for a surprising number of "my autocmd ran 
 Inspect a plugin methods
 :lua print(vim.inspect(require('blink.cmp')))
 
-
-
+Plugin: nvim-tree
+:help nvim-tree-highlight-groups
+:NvimTreeHiTest
 
 --]]
 
@@ -62,8 +63,9 @@ vim.opt.guicursor = ''
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+-- for nvim-tree: disable netrw at the very start of your init.lua
+  vim.g.loaded_netrw = 1
+  vim.g.loaded_netrwPlugin = 1
 
 vim.o.number = true
 vim.o.relativenumber = true
@@ -76,6 +78,7 @@ vim.opt.tabstop = 4
 vim.opt.smartindent = true
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
+vim.opt.cmdheight = 1
 vim.o.breakindent = true
 
 -- Enable undo/redo changes even after closing and reopening a file
@@ -351,6 +354,70 @@ vim.keymap.set('n', '<leader>dU', function() require('dapui').toggle({reset = tr
   end,
 })
 
+
+require('vim._core.ui2').enable({
+
+  enable = true, -- Whether to enable or disable the UI.
+
+  msg = { -- Options related to the message module.
+
+    ---@type string|table<string, 'cmd'|'msg'|'pager'> Default message target
+
+    ---or table mapping |ui-messages| kinds, triggers and IDs to a target.
+
+    ---Table keys are are matched as a Lua pattern to the message ID. 'default'
+
+    ---mapping applies to any omitted kind: { default = 'cmd', progress = 'msg' }.
+
+    targets = 'cmd',
+
+    cmd = { -- Options related to messages in the cmdline window.
+
+      height = 0.5 -- Maximum height while expanded for messages beyond 'cmdheight'.
+
+    },
+
+    dialog = { -- Options related to dialog window.
+
+      height = 0.5, -- Maximum height.
+
+    },
+
+    msg = { -- Options related to msg window.
+
+      height = 0.5, -- Maximum height.
+
+      timeout = 4000, -- Time a message is visible in the message window.
+
+    },
+
+    pager = { -- Options related to message window.
+
+      height = 1, -- Maximum height.
+
+    },
+
+  },
+
+})
+
+vim.keymap.set("n", "<leader>e", function()
+  require("nvim-tree.api").tree.toggle({
+    find_file = false,
+    update_root = false,
+    focus = true,
+  })
+end, { desc = "[E]xplorer toggle" })
+
+vim.keymap.set("n", "<leader>E", function()
+  require("nvim-tree.api").tree.toggle({
+    find_file = true,
+    update_root = false,
+    focus = true,
+  })
+end, { desc = "[E]xplorer toggle (find file)" })
+
+
 require('lazy').setup {
   -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
 
@@ -395,9 +462,6 @@ require('lazy').setup {
         cond = function() return vim.fn.executable 'make' == 1 end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
-
-      -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       require('telescope').setup {
@@ -426,13 +490,29 @@ require('lazy').setup {
           local builtin = require 'telescope.builtin'
           vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
           vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-          --vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
 
           vim.keymap.set('n', '<leader>sf', function()
   builtin.find_files({
     path_display = { filename_first = { reverse_directories = false } },
   })
 end, { desc = '[S]earch [F]iles' })
+
+vim.keymap.set('n', '<leader>sF', function()
+  builtin.find_files({
+    path_display = { filename_first = { reverse_directories = false } },
+    hidden = true,
+    no_ignore = true,
+    no_ignore_parent = true,
+    file_ignore_patterns = {
+  '^%.git/',
+  '/%.git/',
+  '^node_modules/',
+  '/node_modules/',
+  '^target/',
+  '/target/',
+    },
+  })
+end, { desc = '[S]earch [F]iles (all, including hidden + gitignored)' })
 
 
           vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
@@ -753,6 +833,159 @@ dapui.setup({
     { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
   },
 },
+
+-- See: https://www.nerdfonts.com/cheat-sheet
+-- https://github.com/nvim-tree/nvim-web-devicons
+{
+    "nvim-tree/nvim-web-devicons",
+    lazy = false,
+    config = function()
+      require("nvim-web-devicons").setup({
+        default = true,
+        color_icons = true,
+        strict = true,
+        override = {
+          default_icon = {
+           -- icon = "\u{ea7b}",
+            icon = "\u{eb60}",
+            name = "Default"
+          },
+        },
+        -- See below for defaults:
+        -- https://github.com/nvim-tree/nvim-web-devicons/blob/master/lua/nvim-web-devicons/default/icons_by_filename.lua
+        override_by_filename = {
+          ["pom.xml"] = { icon = "\u{f05c0}", name = "_OF_pom.xml", },
+          ["readme.md"] = { icon = "\u{f0afa}", name = "_OF_readme.md", },
+          ["config"] = { icon = "\u{eb60}", name = "_OF_config" },
+          [".gitignore"] = { icon = "\u{f02a2}", name = "_OF_.gitignore"},
+          ["commit_editmsg"] = { icon = "\u{eb60}", name = "_OF_commit_editmsg" },
+          ["dockerfile"] = { icon = "\u{f0868}", name = "_OF_dockerfile" },
+          [".dockerignore"] = { icon = "\u{f0868}", name = "_OF_.dockerignore" },
+          ["TEMPLATE"] = { icon = "\u{ebc6}", name = "_OF_TEMPLATE", },
+        },
+        -- See below for defaults:
+        -- https://github.com/nvim-tree/nvim-web-devicons/blob/master/lua/nvim-web-devicons/default/icons_by_file_extension.lua
+        override_by_extension = {
+          ["java"] = { icon = "\u{ec15}", name = "_OE_java" },
+          ["md"] = { icon = "\u{f0afa}", name = "_OE_md" },
+          ["yml"] = { icon = "\u{e615}", name = "_OE_yml" },
+          ["yaml"] = { icon = "\u{e615}", name = "_OE_yaml" },
+          ["toml"] = { icon = "\u{e615}", name = "_OE_toml", },
+          ["txt"] = { icon = "\u{eb60}", name = "_OE_txt" },
+          ["Dockerfile"] = { icon = "\u{f0868}", name = "_OE_Dockerfile" },
+          ["dockerignore"] = { icon = "\u{f0868}", name = "_OE_dockerignore", },
+          ["service"] = { icon = "\u{ebc6}", name = "_OE_service", },
+          ["timer"] = { icon = "\u{ebc6}", name = "_OE_timer", },
+          ["c"] = { icon = "\u{e61e}", name = "_OE_c", },
+          ["html"] = { icon = "\u{e60e}", name = "_OE_html", },
+          ["bak"] = { icon = "\u{eb60}", name = "_OE_bak", },
+          ["out"] = { icon = "\u{eb60}", name = "_OE_out", },
+          ["json"] = { icon = "\u{e60b}", name = "_OE_json", },
+          ["js"] = { icon = "\u{e60c}", name = "_OE_js", },
+          ["ts"] = { icon = "\u{e628}", name = "_OE_ts", },
+          ["tsx"] = { icon = "\u{e628}", name = "_OE_tsx", },
+          ["css"] = { icon = "\u{e614}", name = "_OE_css", },
+          ["png"] = { icon = "\u{f03e}", name = "_OE_png", },
+          ["jpeg"] = { icon = "\u{f03e}", name = "_OE_jpeg", },
+          ["jpg"] = { icon = "\u{f03e}", name = "_OE_jpg", },
+          ["xml"] = { icon = "\u{f05c0}", name = "_OE_xml", },
+          ["svg"] = { icon = "\u{f05c0}", name = "_OE_svg", },
+          ["lua"] = { icon = "\u{e620}", name = "_OE_lua", },
+          ["scm"] = { icon = "\u{f0627}", name = "_OE_scm", },
+          ["TEMPLATE"] = { icon = "\u{ebc6}", name = "_OE_TEMPLATE", },
+        },
+
+      })
+    end,
+  },
+
+{
+"nvim-tree/nvim-tree.lua",
+version = "*",
+lazy = false,
+dependencies = {
+  "nvim-tree/nvim-web-devicons",
+},
+config = function()
+  local function on_attach(bufnr)
+    local api = require("nvim-tree.api")
+
+    -- load defaults first so you keep all the built-in keybinds
+    api.config.mappings.default_on_attach(bufnr)
+
+    -- then remove "s" so flash can use it
+    pcall(vim.keymap.del, "n", "s", { buffer = bufnr })
+  end
+
+  local glyphsGit1 = {
+          unstaged  = "[u]",
+          staged    = "[s]",
+          unmerged  = "[m]",
+          renamed   = "[r]",
+          untracked = "[n]",
+          deleted   = "[d]",
+          ignored   = "[i]",
+        }
+  local glyphsGit2 = {
+          unstaged  = "",
+          staged    = "",
+          unmerged  = "[m]",
+          renamed   = "[r]",
+          untracked = "",
+          deleted   = "[d]",
+          ignored   = "",
+        }
+
+  require("nvim-tree").setup({
+    on_attach = on_attach,
+    sort = {
+      sorter = "case_sensitive",
+    },
+    view = {
+      width = 40,
+    },
+    renderer = {
+      group_empty = true,
+      highlight_git = "all",
+      highlight_opened_files = "none",
+    icons = {
+      show = {
+        git = true,
+        folder_arrow = true,
+      },
+      symlink_arrow = " \u{f061} ",
+      glyphs = {
+        symlink = "\u{eb60}",
+        folder = {
+          -- arrow_closed = "\u{f0da}",
+          -- arrow_open   = "\u{f0d7}",
+          arrow_closed = " ",
+          arrow_open   = " ",
+          default      = "\u{f07b}",
+          open         = "\u{f115}",
+          empty        = "\u{f07b}",
+          empty_open   = "\u{f115}",
+          symlink      = "\u{f07b}",
+          symlink_open = "\u{f115}",
+        },
+        git = glyphsGit2,
+      },
+    },
+    },
+    filters = {
+      dotfiles = false,
+      git_ignored = false,
+    },
+  })
+end,
+},
+
+
+
+
+
+
+
     }
 
     -- The line beneath this is called `modeline`. See `:help modeline`

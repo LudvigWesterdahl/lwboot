@@ -52,6 +52,12 @@ M.setup = function()
   bg('NormalFloat', c.background)
   bg('NormalNC', c.background)
 
+  -- Git
+  any("gitignoreGlob", { fg = c.cursor })
+  any("gitignorePattern", { fg = c.cursor })
+  any("gitignoreNegation", { fg = c.cursor })
+  any("gitignoreComment", { fg = c.blackBright, italic = true })
+
   -- Diagnostics
   --
   -- Diagnostic<Severity>               : base color (used by several consumers)
@@ -96,6 +102,99 @@ M.setup = function()
   any("FlashCurrent", { fg = flashFg, bg = "NONE" })
   any("FlashLabel", { fg = c.yellow, bg = "NONE", bold = true })
 
+  -- Plugin: nvim-web-devicons
+  local devIconWhiteFg = c.cursor
+  local devIconRedFg = c.red
+  local devIconBlueFg = c.blueBright
+  local devIconYellowFg = c.yellow
+  local devIconMagentaFg = c.magenta
+  any("DevIconDefault", { fg = devIconWhiteFg })
+  any("DevIcon_OF_pom.xml", { fg = devIconRedFg })
+  any("DevIcon_OF_readme.md", { fg = devIconBlueFg })
+  any("DevIcon_OF_config", { fg = devIconWhiteFg })
+  any("DevIcon_OF_.gitignore", { fg = devIconRedFg })
+  any("DevIcon_OF_commit_editmsg", { fg = devIconWhiteFg })
+  any("DevIcon_OF_dockerfile", { fg = devIconBlueFg })
+  any("DevIcon_OF_.dockerignore", { fg = devIconBlueFg })
+  any("DevIcon_OF_TEMPLATE", { fg = devIconWhiteFg })
+  any("DevIcon_OF_TEMPLATE", { fg = devIconWhiteFg })
+  any("DevIcon_OF_TEMPLATE", { fg = devIconWhiteFg })
+  any("DevIcon_OF_TEMPLATE", { fg = devIconWhiteFg })
+  any("DevIcon_OF_TEMPLATE", { fg = devIconWhiteFg })
+  any("DevIcon_OE_java", { fg = devIconRedFg })
+  any("DevIcon_OE_md", { fg = devIconBlueFg })
+  any("DevIcon_OE_yml", { fg = devIconWhiteFg })
+  any("DevIcon_OE_yaml", { fg = devIconWhiteFg })
+  any("DevIcon_OE_toml", { fg = devIconWhiteFg })
+  any("DevIcon_OE_txt", { fg = devIconWhiteFg })
+  any("DevIcon_OE_Dockerfile", { fg = devIconBlueFg })
+  any("DevIcon_OE_dockerignore", { fg = devIconBlueFg })
+  any("DevIcon_OE_service", { fg = devIconYellowFg })
+  any("DevIcon_OE_timer", { fg = devIconYellowFg })
+  any("DevIcon_OE_c", { fg = devIconBlueFg })
+  any("DevIcon_OE_html", { fg = devIconRedFg })
+  any("DevIcon_OE_bak", { fg = devIconWhiteFg })
+  any("DevIcon_OE_out", { fg = devIconWhiteFg })
+  any("DevIcon_OE_json", { fg = devIconYellowFg })
+  any("DevIcon_OE_js", { fg = devIconYellowFg })
+  any("DevIcon_OE_ts", { fg = devIconBlueFg })
+  any("DevIcon_OE_tsx", { fg = devIconBlueFg })
+  any("DevIcon_OE_css", { fg = devIconBlueFg })
+  any("DevIcon_OE_png", { fg = devIconWhiteFg })
+  any("DevIcon_OE_jpeg", { fg = devIconWhiteFg })
+  any("DevIcon_OE_jpg", { fg = devIconWhiteFg })
+  any("DevIcon_OE_xml", { fg = devIconRedFg })
+  any("DevIcon_OE_svg", { fg = devIconRedFg })
+  any("DevIcon_OE_lua", { fg = devIconBlueFg })
+  any("DevIcon_OE_scm", { fg = devIconWhiteFg })
+  any("DevIcon_OE_TEMPLATE", { fg = devIconWhiteFg })
+
+  -- Plugin: nvim-tree
+  local nvimTreeFolderFg = c.yellow
+  local nvimTreeGitNewFg = c.red
+  local nvimTreeGitDirtyFg = c.blueBright
+  local nvimTreeGitStagedFg = green1
+  local nvimTreeGitDirtyFg = c.blueBright
+  local nvimTreeGitNewFg = c.red
+  local nvimTreeGitStagedFg = green1
+  local nvimTreeGitMergeFg = c.red
+  local nvimTreeGitRenamedFg = c.red
+  local nvimTreeGitDeletedFg = c.red
+  local nvimTreeGitIgnoredFg = c.blackBright
+
+  any("NvimTreeSpecialFile", { fg = c.cursor, bold = false })
+  any("NvimTreeImageFile", { fg = c.cursor, bold = false })
+  any("NvimTreeFolderName", { fg = nvimTreeFolderFg, bold = false })
+  any("NvimTreeEmptyFolderName", { fg = nvimTreeFolderFg, bold = false })
+  any("NvimTreeOpenedFolderName", { fg = nvimTreeFolderFg , bold = false })
+  any("NvimTreeFolderIcon", { fg = nvimTreeFolderFg, bold = false })
+  any("NvimTreeOpenedFolderIcon", { fg =  nvimTreeFolderFg, bold = false })
+  any("NvimTreeExecFile", { fg = c.cursor, bold = false })
+  any("NvimTreeSymlink", { fg = c.cursor, underline = false })
+  any("NvimTreeSymlinkFolderName", { fg =  nvimTreeFolderFg, underline = false })
+
+
+  any("NvimTreeGitDirtyIcon",       { fg = nvimTreeGitDirtyFg })
+  any("NvimTreeGitFileDirtyHL",     { fg = nvimTreeGitDirtyFg })
+  any("NvimTreeGitFolderDirtyHL",   { fg = nvimTreeGitDirtyFg })
+  any("NvimTreeGitNewIcon",         { fg = nvimTreeGitNewFg })
+  any("NvimTreeGitFileNewHL",       { fg = nvimTreeGitNewFg })
+  any("NvimTreeGitFolderNewHL",     { fg = nvimTreeGitNewFg })
+  any("NvimTreeGitStagedIcon",      { fg = nvimTreeGitStagedFg })
+  any("NvimTreeGitFileStagedHL",    { fg = nvimTreeGitStagedFg })
+  any("NvimTreeGitFolderStagedHL",  { fg = nvimTreeGitStagedFg })
+  any("NvimTreeGitMergeIcon",       { fg = nvimTreeGitMergeFg })
+  any("NvimTreeGitFileMergeHL",     { fg = nvimTreeGitMergeFg })
+  any("NvimTreeGitFolderMergeHL",   { fg = nvimTreeGitMergeFg })
+  any("NvimTreeGitRenamedIcon",     { fg = nvimTreeGitRenamedFg })
+  any("NvimTreeGitFileRenamedHL",   { fg = nvimTreeGitRenamedFg })
+  any("NvimTreeGitFolderRenamedHL", { fg = nvimTreeGitRenamedFg })
+  any("NvimTreeGitDeletedIcon",     { fg = nvimTreeGitDeletedFg })
+  any("NvimTreeGitFileDeletedHL",   { fg = nvimTreeGitDeletedFg })
+  any("NvimTreeGitFolderDeletedHL", { fg = nvimTreeGitDeletedFg })
+  any("NvimTreeGitIgnoredIcon",     { fg = nvimTreeGitIgnoredFg })
+  any("NvimTreeGitFileIgnoredHL",   { fg = nvimTreeGitIgnoredFg })
+  any("NvimTreeGitFolderIgnoredHL", { fg = nvimTreeGitIgnoredFg })
 
   -- Language: any
   fg('@lw_keyword', c.blue)

@@ -1,0 +1,66 @@
+#!/bin/bash
+
+installer_name="fonts"
+installer_description="Installs fonts on the system."
+installer_link=""
+
+pacman_pkg1="extra/ttf-jetbrains-mono-nerd"
+pacman_pkg2="extra/ttf-ubuntu-mono-nerd"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "Show installed fonts"
+    htext "fc-list"
+    htext
+    htext "Show fonts visible by ghostty"
+    htext "ghostty +list-fonts"
+    hseealso
+    htext "${installer_link}"
+    htext
+    htext "JetBrains Mono Nerd Font"
+    htext "https://archlinux.org/packages/extra/any/ttf-jetbrains-mono-nerd/"
+    htext
+    htext "Ubuntu Mono Nerd Font"
+    htext "https://archlinux.org/packages/extra/any/ttf-ubuntu-mono-nerd/"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    if ! is_pacman_installed ${pacman_pkg1}; then
+        pacman_install ${pacman_pkg1}
+    fi
+
+    if ! is_pacman_installed ${pacman_pkg2}; then
+        pacman_install ${pacman_pkg2}
+    fi
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    if is_pacman_installed ${pacman_pkg1}; then
+        pacman_uninstall ${pacman_pkg1}
+    fi
+
+    if is_pacman_installed ${pacman_pkg2}; then
+        pacman_uninstall ${pacman_pkg2}
+    fi
+}

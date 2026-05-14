@@ -8,6 +8,8 @@ readonly PROG_NAME=$(basename $0)
 
 readonly INSTALLERS=(
   "install_docs"
+  "install_docs_keybinds_ghostty"
+  "install_docs_keybinds_nvim"
   "install_less"
   "install_gzip"
   "install_xz"
@@ -25,6 +27,7 @@ readonly INSTALLERS=(
   "install_evtest"
   "install_mandb"
   "install_manpages"
+  "install_fonts"
   "install_ghostty"
   "install_bashrc"
   "install_kdeshortcuts"

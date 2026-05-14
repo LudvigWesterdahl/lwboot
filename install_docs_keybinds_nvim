@@ -1,0 +1,47 @@
+#!/bin/bash
+
+installer_name="docs_keybinds_nvim"
+installer_description="Neovim keybindings documentation."
+installer_link="-"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "Search for files"
+    htext "<leader>sf"
+    htext "<leader>sF"
+    htext
+    htext "Open splits"
+    htext "<C-w>s"
+    htext "<C-w>v"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    return 0
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    return 0
+}
