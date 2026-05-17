@@ -39,18 +39,22 @@ M.setup = function()
   local blue1 = '#749ff0'
   local green2 = '#b3f6c0'
 
-  -- TODO: with LSP:
-  -- 4. block comment vs line comment. And if possible @param varName with underline
-  -- @param + italic, and darker color for the arg name
-  -- can import an annotation be highlighted with that color? import lombok.require..
-  -- java.util.List<Integer> and also new java.util.ArrayList, color the scoped part like import.
-
   -- General
   any('Normal', { bg = c.background, fg = c.foreground })
   any('Cursor', { bg = c.cursor, fg = c.cursorText })
   any('FloatBorder', { bg = c.background, fg = c.cursor })
   bg('NormalFloat', c.background)
   bg('NormalNC', c.background)
+  -- fixes cyan coloring of guifg= stuff.
+  any("Special", { fg = c.cursor })
+  any("Function", { fg = c.cursor })
+  any("Directory", { fg = c.cursor })
+
+  local searchBg = c.yellow
+  local searchFg = c.background
+  any("Search", { bg = searchBg, fg = searchFg, bold = false, underline = false })
+  any("IncSearch", { bg = searchBg, fg = searchFg, bold = false, underline = false })
+  any("CurSearch", { bg = searchBg, fg = searchFg, bold = false, underline = false })
 
   -- Git
   any("gitignoreGlob", { fg = c.cursor })
@@ -88,6 +92,9 @@ M.setup = function()
 
   any("DiagnosticUnnecessary", { fg = c.blackBright })
   any("DiagnosticDeprecated", { strikethrough = true })
+
+  -- Plugin: telescope
+  any("TelescopeMatching", { fg = c.yellow, bold = true })
 
   -- Plugin: blink
   any("BlinkCmpMenu", { bg = c.background })

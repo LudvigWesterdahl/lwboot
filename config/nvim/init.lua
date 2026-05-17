@@ -56,6 +56,18 @@ Plugin: nvim-tree
 :help nvim-tree-highlight-groups
 :NvimTreeHiTest
 
+Plugin: nvim-web-devicons
+:NvimWebDeviconsHiTest
+
+Plugin telescope:
+:Telescope highlights
+
+Just running the following to figure out all highlights in a new buffer
+:enew | put =execute('hi')
+
+If you want visibility of the actual colors:
+:hi<CR>
+
 --]]
 
 vim.opt.guicursor = ''
@@ -119,7 +131,7 @@ vim.o.inccommand = 'split'
 vim.o.cursorline = false
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
+vim.o.scrolloff = 1
 
 -- Ask if quitting before save
 vim.o.confirm = true
@@ -410,11 +422,27 @@ vim.keymap.set("n", "<leader>e", function()
 end, { desc = "[E]xplorer toggle" })
 
 vim.keymap.set("n", "<leader>E", function()
-  require("nvim-tree.api").tree.toggle({
-    find_file = true,
-    update_root = false,
-    focus = true,
-  })
+
+  local api = require("nvim-tree.api")
+  local view = require("nvim-tree.view")
+
+  if view.is_visible() then
+    -- Tree is open
+    local current_win = vim.api.nvim_get_current_win()
+    local tree_win = view.get_winnr()
+
+    if current_win == tree_win then
+      -- Already focused on tree → toggle it closed
+      api.tree.toggle({ find_file = true, update_root = false, focus = true })
+    else
+      -- Tree open but not focused → focus it and find current file
+      api.tree.find_file({ open = true, focus = true, update_root = false })
+    end
+  else
+    -- Tree closed → open it and find file
+    api.tree.toggle({ find_file = true, update_root = false, focus = true })
+  end
+
 end, { desc = "[E]xplorer toggle (find file)" })
 
 

@@ -18,6 +18,16 @@ inst_help() {
     htext "Open splits"
     htext "<C-w>s"
     htext "<C-w>v"
+    htext
+    htext "Scroll screen top, center, bottom respecting vim.o.scrolloff"
+    htext "zt"
+    htext "zz"
+    htext "zb"
+    htext
+    htext "Scroll screen down and up"
+    htext "<C-e>"
+    htext "<C-y>"
+    htext
     hseealso
     htext "${installer_link}"
 }

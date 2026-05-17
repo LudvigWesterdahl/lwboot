@@ -53,6 +53,7 @@ readonly INSTALLERS=(
   "install_googlejavaformat"
   "install_intellij"
   "install_postman"
+  "install_vlc"
 )
 
 readonly ARG=${1}

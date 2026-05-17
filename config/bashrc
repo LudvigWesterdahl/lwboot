@@ -21,6 +21,7 @@ alias jdebugy="java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,addres
 #alias braved="rundisown brave"
 alias braved="setsid -f brave >>\"$HOME/.local/share/braved-brave.log\" 2>&1"
 alias postmand="setsid -f postman >>\"$HOME/.local/share/postmand-postman.log\" 2>&1"
+alias vlcd="setsid -f vlc >>\"$HOME/.local/share/vlcd-vlc.log\" 2>&1"
 
 
 # ============================
