@@ -29,7 +29,16 @@ inst_help() {
     htext "<C-y>"
     htext
     htext "LSP code actions like import a class or generate toString"
-    htext "<leader>ca"
+    htext "gra"
+    htext
+    htext "LSP rename symbol"
+    htext "grn"
+    htext
+    htext "LSP hover"
+    htext "grh"
+    htext
+    htext "LSP symbol"
+    htext "grs"
     htext
     htext "Select a code snippet"
     htext "<leader>fs"

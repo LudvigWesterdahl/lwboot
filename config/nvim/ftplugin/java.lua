@@ -113,7 +113,6 @@ vim.keymap.set('n', '<leader>oi', "<cmd>lua require('jdtls').organize_imports()<
 vim.keymap.set('n', '<leader>tc', "<cmd>lua require('jdtls').test_class()<cr>", opts)
 vim.keymap.set('n', '<leader>tm', "<cmd>lua require('jdtls').test_nearest_method()<cr>", opts)
 vim.keymap.set('n', '<leader>tp', "<cmd>lua require('jdtls.dap').pick_test()<cr>", opts)
-vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "[C]ode [A]ction" })
 
 
 

@@ -315,56 +315,14 @@ local function centered_float(fn, cfg)
   fn({})
 end
 
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(args)
-    local bufnr = args.buf
-    local opts = { buffer = bufnr }
-
-    vim.keymap.set("n", "<leader>bh", function()
-      centered_float(vim.lsp.buf.hover, {border = "rounded", title = " LSP Hover "})
-    end, opts)
-
-    vim.keymap.set("n", "<leader>bs", function()
-      vim.lsp.buf.signature_help({
-        border = 'rounded',
-        max_width = 80,
-        max_height = 20,
-      })
-
-      -- After opening, fix the conceal in the float
-      vim.schedule(function()
-        for _, win in ipairs(vim.api.nvim_list_wins()) do
-          local config = vim.api.nvim_win_get_config(win)
-          if config.relative ~= '' then
-            vim.wo[win].conceallevel = 2
-            vim.wo[win].concealcursor = 'n'
-          end
-        end
-      end)
-    end, opts)
-
--- Run/debug tests
-vim.keymap.set('n', '<leader>tc', "<cmd>lua require('jdtls').test_class()<cr>", opts)
-vim.keymap.set('n', '<leader>tm', "<cmd>lua require('jdtls').test_nearest_method()<cr>", opts)
-
-vim.keymap.set('n', '<F5>',  "<cmd>lua require('dap').continue()<cr>", opts)
-vim.keymap.set('n', '<F10>', "<cmd>lua require('dap').step_over()<cr>", opts)
-vim.keymap.set('n', '<F11>', "<cmd>lua require('dap').step_into()<cr>", opts)
-vim.keymap.set('n', '<F12>', "<cmd>lua require('dap').step_out()<cr>", opts)
-vim.keymap.set('n', '<leader>b', "<cmd>lua require('dap').toggle_breakpoint()<cr>", opts)
+vim.keymap.set('n', '<F5>',  function() require('dap').continue() end)
+vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
+vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
+vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
+vim.keymap.set('n', '<leader>b',  function() require('dap').toggle_breakpoint() end)
 vim.keymap.set('n', '<leader>dq', function() require('dap').disconnect() end, { silent = true })
 vim.keymap.set('n', '<leader>du', function() require('dapui').toggle() end)
-
-vim.keymap.set('n', '<leader>dU', function() require('dapui').toggle({reset = true}) end)
---vim.keymap.set('n', '<leader>dU', function()
---  local dapui = require('dapui')
- -- dapui.close()
-  -- dapui.open({ reset = true})
--- end)
-
-
-  end,
-})
+vim.keymap.set('n', '<leader>dU', function() require('dapui').toggle({ reset = true }) end)
 
 
 require('vim._core.ui2').enable({
@@ -778,6 +736,37 @@ end, { desc = '[S]earch by [G]rep (files only)' })
               -- Useful when you're not sure what type a variable is and you want to see
               -- the definition of its *type*, not where it was *defined*.
               vim.keymap.set('n', 'grt', builtin.lsp_type_definitions, { buffer = buf, desc = '[G]oto [T]ype Definition' })
+
+-- Rename the symbol under your cursor across the workspace.
+    vim.keymap.set('n', 'grn', vim.lsp.buf.rename, { buffer = buf, desc = '[R]e[n]ame Symbol' })
+    -- Show code actions available at the cursor (quick fixes, refactors, etc.).
+    vim.keymap.set({ 'n', 'x' }, 'gra', vim.lsp.buf.code_action, { buffer = buf, desc = '[G]oto Code [A]ction' })
+
+    vim.keymap.set("n", "grh", function()
+      centered_float(vim.lsp.buf.hover, {border = "rounded", title = " LSP Hover "})
+    end, {buffer = buf, desc = "[G]oto [H]hover"})
+
+
+    vim.keymap.set("n", "grs", function()
+      vim.lsp.buf.signature_help({
+        border = 'rounded',
+        max_width = 80,
+        max_height = 20,
+      })
+
+      -- After opening, fix the conceal in the float
+      vim.schedule(function()
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+          local config = vim.api.nvim_win_get_config(win)
+          if config.relative ~= '' then
+            vim.wo[win].conceallevel = 2
+            vim.wo[win].concealcursor = 'n'
+          end
+        end
+      end)
+    end, {buffer = buf, desc = "[G]oto [S]ignature help"})
+
+
             end,
           })
 

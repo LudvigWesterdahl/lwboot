@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class Main {
+public final class MainDummy {
 
     /**
      * This is the javadoc
@@ -16,6 +16,8 @@ public final class Main {
 
         String value() default "";
     }
+
+    
 
     public interface Initializer {
 
