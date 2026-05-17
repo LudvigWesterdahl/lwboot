@@ -43,6 +43,12 @@ inst_help() {
     htext "Select a code snippet"
     htext "<leader>fs"
     htext
+    htext "Comment code lines (vim-commentary built into core)"
+    htext ":set commentstring?"
+    htext "gcc"
+    htext "gc{motion}"
+    htext "gc5j"
+    htext
     hseealso
     htext "${installer_link}"
 }

@@ -212,6 +212,39 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+-- Run: :set filetype? to see which filetype the current file is.
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = "c",
+  callback = function()
+      vim.bo.commentstring = '/* %s */'
+  end,
+})
+
+-- Example how to get input from user and execute arbitrary command.
+vim.keymap.set('n', '<leader>hello', function()
+  local count = tonumber(vim.fn.input('Num lines (including current): '))
+  if not count or count < 1 then
+    print('\nInvalid count')
+    return
+  end
+  local seq = vim.fn.input('Sequence to insert: ')
+  if seq == '' then
+    print('\nAborted')
+    return
+  end
+
+  -- Escape special regex chars in the replacement
+  local escaped = vim.fn.escape(seq, [[/\&~]])
+
+  local start_line = vim.fn.line('.')
+  local end_line = start_line + count - 1
+  local command = string.format('%d,%ds/^/%s/', start_line, end_line, escaped)
+  print("will execute: " .. command)
+  vim.cmd(command)
+
+  -- vim.cmd()
+end, { desc = 'Prepend sequence to N lines' })
+
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')

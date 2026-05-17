@@ -17,7 +17,6 @@ public final class MainDummy {
         String value() default "";
     }
 
-    
 
     public interface Initializer {
 
