@@ -54,6 +54,8 @@ export HISTSIZE=5000
 PS1='[\u:\w]$ '
 # export java_home
 export JAVA_HOME=/usr/lib/jvm/default
+# https://donottrack.sh/
+export DO_NOT_TRACK=1
 
 # ================
 # ===   misc   ===
