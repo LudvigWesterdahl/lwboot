@@ -52,6 +52,9 @@ inst_help() {
     htext "Close a buffer that works well with nvim-tree and keeps window"
     htext "<leader>bd"
     htext
+    htext "Search keybindings"
+    htext "<leader>sk"
+    htext
     hseealso
     htext "${installer_link}"
 }
