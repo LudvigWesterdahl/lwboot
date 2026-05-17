@@ -212,6 +212,24 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+
+
+vim.keymap.set("n", "<leader>bd", function()
+  local cur = vim.api.nvim_get_current_buf()
+  local alt = vim.fn.bufnr("#")
+  if alt ~= -1 and alt ~= cur and vim.fn.buflisted(alt) == 1 then
+    vim.api.nvim_set_current_buf(alt)
+  else
+    vim.cmd("bprevious")
+  end
+  if vim.api.nvim_get_current_buf() == cur then
+    vim.cmd("enew")
+  end
+  vim.api.nvim_buf_delete(cur, { force = false })
+end, { desc = "Delete buffer" })
+
+
+
 -- Run: :set filetype? to see which filetype the current file is.
 vim.api.nvim_create_autocmd('FileType', {
   pattern = "c",

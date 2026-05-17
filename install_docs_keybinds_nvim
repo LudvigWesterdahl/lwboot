@@ -49,6 +49,9 @@ inst_help() {
     htext "gc{motion}"
     htext "gc5j"
     htext
+    htext "Close a buffer that works well with nvim-tree and keeps window"
+    htext "<leader>bd"
+    htext
     hseealso
     htext "${installer_link}"
 }
