@@ -28,6 +28,12 @@ inst_help() {
     htext "<C-e>"
     htext "<C-y>"
     htext
+    htext "LSP code actions like import a class or generate toString"
+    htext "<leader>ca"
+    htext
+    htext "Select a code snippet"
+    htext "<leader>fs"
+    htext
     hseealso
     htext "${installer_link}"
 }

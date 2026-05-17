@@ -446,6 +446,176 @@ vim.keymap.set("n", "<leader>E", function()
 end, { desc = "[E]xplorer toggle (find file)" })
 
 
+local function snippet_picker()
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local conf = require("telescope.config").values
+    local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+    local ls = require("luasnip")
+
+    -- get snippets for current filetype + "all" filetype
+    local ft = vim.bo.filetype
+    local snippets = {}
+    for _, snip in ipairs(ls.get_snippets(ft) or {}) do
+        table.insert(snippets, snip)
+    end
+    for _, snip in ipairs(ls.get_snippets("all") or {}) do
+        table.insert(snippets, snip)
+    end
+
+    if #snippets == 0 then
+        vim.notify("No snippets for filetype: " .. ft, vim.log.levels.WARN)
+        return
+    end
+
+    pickers.new({}, {
+        prompt_title = "Snippets (" .. ft .. ")",
+        finder = finders.new_table({
+            results = snippets,
+            entry_maker = function(snip)
+                local desc = ""
+                if snip.dscr and snip.dscr[1] then
+                    desc = "  —  " .. snip.dscr[1]
+                elseif snip.name then
+                    desc = "  —  " .. snip.name
+                end
+                local trigger = snip.trigger or "?"
+                return {
+                    value = snip,
+                    display = trigger .. desc,
+                    ordinal = trigger .. " " .. (snip.name or "") .. " " .. (snip.dscr and snip.dscr[1] or ""),
+                }
+            end,
+        }),
+        sorter = conf.generic_sorter({}),
+        attach_mappings = function(prompt_bufnr, _)
+            actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+                local selection = action_state.get_selected_entry()
+                if selection and selection.value then
+                    ls.snip_expand(selection.value)
+                end
+            end)
+            return true
+        end,
+    }):find()
+end
+
+local function snippet_picker_with_preview()
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local previewers = require("telescope.previewers")
+    local conf = require("telescope.config").values
+    local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+    local ls = require("luasnip")
+
+    local ft = vim.bo.filetype
+    local snippets = {}
+    for _, snip in ipairs(ls.get_snippets(ft) or {}) do
+        table.insert(snippets, snip)
+    end
+    for _, snip in ipairs(ls.get_snippets("all") or {}) do
+        table.insert(snippets, snip)
+    end
+
+    if #snippets == 0 then
+        vim.notify("No snippets for filetype: " .. ft, vim.log.levels.WARN)
+        return
+    end
+
+    pickers.new({
+        preview = {
+            timeout = 500,
+            treesitter = true,
+        },
+        debounce = 100,
+    }, {
+        prompt_title = "Snippets (" .. ft .. ")",
+
+        finder = finders.new_table({
+            results = snippets,
+            entry_maker = function(snip)
+                local desc = ""
+                if snip.dscr and snip.dscr[1] then
+                    desc = "  —  " .. snip.dscr[1]
+                elseif snip.name then
+                    desc = "  —  " .. snip.name
+                end
+                local trigger = snip.trigger or "?"
+                return {
+                    value = snip,
+                    display = trigger .. desc,
+                    ordinal = trigger .. " " .. (snip.name or "") .. " " .. (snip.dscr and snip.dscr[1] or ""),
+                }
+            end,
+        }),
+
+        sorter = conf.generic_sorter({}),
+
+        previewer = previewers.new_buffer_previewer({
+            title = "Snippet Preview",
+            define_preview = function(self, entry, status)
+                local snip = entry.value
+                local lines = {}
+
+                -- header
+                table.insert(lines, "Trigger:     " .. (snip.trigger or "?"))
+                if snip.name then
+                    table.insert(lines, "Name:        " .. snip.name)
+                end
+                if snip.dscr and snip.dscr[1] then
+                    table.insert(lines, "Description: " .. table.concat(snip.dscr, " "))
+                end
+                table.insert(lines, "")
+                table.insert(lines, "─── Body ───")
+                table.insert(lines, "")
+
+                -- snippet body
+                local ok, docstring = pcall(function() return snip:get_docstring() end)
+                if ok and docstring then
+                    for _, line in ipairs(docstring) do
+                        table.insert(lines, line)
+                    end
+                else
+                    table.insert(lines, "(could not render snippet body)")
+                end
+
+                vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+                -- no filetype = no syntax highlighting = cheaper render = less flicker
+                -- if you want syntax highlighting, uncomment:
+                -- vim.bo[self.state.bufnr].filetype = ft
+
+vim.schedule(function()
+    local bufnr = self.state.bufnr
+    if not vim.api.nvim_buf_is_valid(bufnr) then return end
+    pcall(vim.treesitter.start, bufnr, ft)
+   end)
+
+
+            end,
+        }),
+
+        attach_mappings = function(prompt_bufnr, _)
+            actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+                local selection = action_state.get_selected_entry()
+                if selection and selection.value then
+                    ls.snip_expand(selection.value)
+                end
+            end)
+            return true
+        end,
+    }):find()
+end
+
+vim.keymap.set('n', '<leader>fs', snippet_picker_with_preview, { desc = '[F]ind [S]nippets' })
+
+
+
+
+
 require('lazy').setup {
   -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
 
@@ -574,6 +744,7 @@ end, { desc = '[S]earch by [G]rep (files only)' })
           vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
           vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
+
           -- :JdtShowLogs
 
           -- This runs on LSP attach per buffer (see main LSP attach function in 'neovim/nvim-lspconfig' config for more info,
@@ -639,6 +810,39 @@ end, { desc = '[S]earch by [G]rep (files only)' })
         end,
       },
 
+{
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    build = "make install_jsregexp",
+    event = "InsertEnter",
+    config = function()
+        local ls = require("luasnip")
+
+        -- LuaSnip core config
+        ls.config.set_config({
+            history = true,                          -- allow jumping back into a snippet you've already left
+            updateevents = "TextChanged,TextChangedI", -- live-update dynamic nodes as you type
+            enable_autosnippets = true,              -- snippets that fire without trigger keypress
+            delete_check_events = "TextChanged",     -- clean up dead snippets on text change
+        })
+
+        -- Path where your snippet files live
+        local snippet_path = vim.fn.stdpath("config") .. "/snippets"
+
+        -- Load snippets
+        -- 1. Your Lua snippets from ~/.config/nvim/snippets/*.lua
+        require("luasnip.loaders.from_lua").lazy_load({
+            paths = { snippet_path },
+        })
+
+    end,
+},
+
+
+
+
+
+
       {
         -- Autocompletion
         -- See https://cmp.saghen.dev/configuration/general.html
@@ -646,13 +850,8 @@ end, { desc = '[S]earch by [G]rep (files only)' })
         event = 'VimEnter',
         version = '1.*',
         dependencies = {
-          -- Snippet Engine
           {
             'L3MON4D3/LuaSnip',
-            version = '2.*',
-            build = (function() return 'make install_jsregexp' end)(),
-            dependencies = {},
-            opts = {},
           },
         },
         opts = {
@@ -679,6 +878,8 @@ end, { desc = '[S]earch by [G]rep (files only)' })
             --
             -- See :h blink-cmp-config-keymap for defining your own keymap
             preset = 'super-tab',
+    ["<Tab>"] = { "select_and_accept", "fallback" },
+    ["<S-Tab>"] = { "fallback" },
 
             -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
             --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
