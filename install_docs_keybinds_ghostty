@@ -21,6 +21,23 @@ inst_help() {
     htext "<C-+>"
     htext "<C-->"
     htext
+    htext "Create and change tabs"
+    htext "<C-S-t>"
+    htext "<C-Tab>"
+    htext
+    htext "Open splits right and bottom"
+    htext "<C-S-o>"
+    htext "<C-S-e>"
+    htext
+    htext "Close a tab or split"
+    htext "<C-S-w>"
+    htext
+    htext "Move between splits"
+    htext "<C-A-Up>"
+    htext "<C-A-Down>"
+    htext "<C-A-Left>"
+    htext "<C-A-Right>"
+    htext
     htext "DESCRIPTION"
     htext "KEYBIND"
     htext

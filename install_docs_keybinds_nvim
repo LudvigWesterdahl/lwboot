@@ -55,6 +55,15 @@ inst_help() {
     htext "Search keybindings"
     htext "<leader>sk"
     htext
+    htext "Change folder to root (nvim-tree)"
+    htext "<leader><CR>"
+    htext
+    htext "Insert the next keystroke literally"
+    htext "1) Enter INSERT mode then type"
+    htext "<C-v>"
+    htext "2) Then type Ctrl + Shift + : (SWE layout), expect following output:"
+    htext "<C-S-.>
+    htext
     hseealso
     htext "${installer_link}"
 }

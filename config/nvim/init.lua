@@ -230,6 +230,7 @@ end, { desc = "Delete buffer" })
 
 
 
+
 -- Run: :set filetype? to see which filetype the current file is.
 vim.api.nvim_create_autocmd('FileType', {
   pattern = "c",
@@ -1181,6 +1182,9 @@ config = function()
 
     -- load defaults first so you keep all the built-in keybinds
     api.config.mappings.default_on_attach(bufnr)
+
+
+    vim.keymap.set("n", "<leader><CR>", api.tree.change_root_to_node, { desc = "CD", buffer = bufnr, silent = true})
 
     -- then remove "s" so flash can use it
     pcall(vim.keymap.del, "n", "s", { buffer = bufnr })
