@@ -1,7 +1,7 @@
 #!/bin/bash
 
-installer_name="docs_keybinds_ghostty"
-installer_description="Ghostty keybindings documentation."
+installer_name="docs_keybinds_arch"
+installer_description="Arch keybindings documentation."
 installer_link="-"
 
 inst_help() {
@@ -11,15 +11,20 @@ inst_help() {
     husage
     htext "-"
     hexamples
-    htext "Fullscreen"
-    htext "<C-CR>"
+    htext "Toggle fullscreen windowed"
+    htext "<M-S-Up>"
     htext
-    htext "Toggle inspector"
-    htext "<C-S-i>"
+    htext "Resize to tile"
+    htext "<M-Up>"
+    htext "<M-Down>"
+    htext "<M-Left>"
+    htext "<M-Right>"
     htext
-    htext "Change font size"
-    htext "<C-+>"
-    htext "<C-->"
+    htext "Toggle language"
+    htext "<A-S>"
+    htext
+    htext "Open ghostty"
+    htext "<A-Space>"
     htext
     htext "DESCRIPTION"
     htext "KEYBIND"

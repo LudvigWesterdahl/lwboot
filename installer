@@ -8,6 +8,7 @@ readonly PROG_NAME=$(basename $0)
 
 readonly INSTALLERS=(
   "install_docs"
+  "install_docs_keybinds_arch"
   "install_docs_keybinds_ghostty"
   "install_docs_keybinds_nvim"
   "install_less"
