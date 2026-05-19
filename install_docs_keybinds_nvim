@@ -62,7 +62,7 @@ inst_help() {
     htext "1) Enter INSERT mode then type"
     htext "<C-v>"
     htext "2) Then type Ctrl + Shift + : (SWE layout), expect following output:"
-    htext "<C-S-.>
+    htext "<C-S-.>"
     htext
     hseealso
     htext "${installer_link}"

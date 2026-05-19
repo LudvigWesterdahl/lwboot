@@ -1185,6 +1185,26 @@ config = function()
 
 
     vim.keymap.set("n", "<leader><CR>", api.tree.change_root_to_node, { desc = "CD", buffer = bufnr, silent = true})
+    vim.keymap.set("n", "<leader>cd", function()
+      local node = api.tree.get_node_under_cursor()
+      local path = node.absolute_path
+
+      if node.type ~= "file" and node.type ~= "directory" then
+        print("invalid node type " .. node.type .. " at " .. path)
+        return
+      end
+
+      if node.type == "file" then
+        path = vim.fn.fnamemodify(path, ":h")
+      end
+
+      print("opening " .. path)
+
+      -- ghostty +new-window --working-directory=
+      vim.fn.jobstart({ "ghostty", "+new-window", "--working-directory=" .. path }, { detach = true })
+
+    end, { desc = "[C][D] into directory in terminal", buffer = bufnr, silent = true})
+
 
     -- then remove "s" so flash can use it
     pcall(vim.keymap.del, "n", "s", { buffer = bufnr })
