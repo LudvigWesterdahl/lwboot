@@ -28,6 +28,15 @@ htext() {
     printf "%4s%s\n" "" "${1}"
 }
 
+bold_red() {
+    printf "\033[1;38;2;213;78;83m%s\033[0m\n" "${1}"
+}
+
+
+bold_yellow() {
+    printf "\033[1;38;2;240;198;116m%s\033[0m\n" "${1}"
+}
+
 is_command() {
     if command -v "${1}" >/dev/null 2>&1; then
         return 0

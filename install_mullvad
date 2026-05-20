@@ -1,0 +1,111 @@
+#!/bin/bash
+
+installer_name="mullvad"
+installer_description="Installs mullvad."
+installer_link="https://archlinux.org/packages/extra/x86_64/mullvad-vpn-daemon/"
+
+pacman_pkg="extra/mullvad-vpn-daemon"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+mullvad_connect() {
+    local auto_connect_setting=$(mullvad auto-connect get | grep ": off")
+    if [ "${auto_connect_setting}" != "" ]; then
+        echo "activating auto-connect"
+        mullvad auto-connect set on
+    fi
+
+    local connect_status=$(mullvad status | grep "Disconnected")
+    if [ "${connect_status}" != "" ]; then
+        echo "connecting"
+        mullvad connect
+    fi
+}
+
+mullvad_set_lan() {
+    local lan_setting=$(mullvad lan get | grep ": block")
+    if [ "${lan_setting}" != "" ]; then
+        mullvad lan set allow
+    fi
+}
+
+mullvad_login() {
+    local account_file="config/mullvad-account.txt"
+    if [ ! -f "${account_file}" ]; then
+        bold_yellow "skipping login missing: ${account_file}"
+        return 0
+    fi
+
+    chmod 400 ${account_file}
+
+    local login_status=$(mullvad account get | grep "Mullvad account:")
+    if [ "${login_status}" != "" ]; then
+        # already logged in
+        return 0
+    fi
+
+    if mullvad account login < "${account_file}" 1>/dev/null; then
+        echo "logged in"
+        return 0
+    else
+        bold_red "failed to login"
+        return 1
+    fi
+}
+
+inst_install() {
+    if ! is_pacman_installed ${pacman_pkg}; then
+        pacman_install ${pacman_pkg}
+    fi
+
+    local service="mullvad-daemon.service"
+    
+    # enabled | disabled
+    local enabled_status=$(systemctl is-enabled $service)
+    if [ "${enabled_status}" = "disabled" ]; then
+        echo "enabling: $service"
+        sudo systemctl enable $service
+    fi
+
+    # active | inactive
+    local active_status=$(systemctl is-active $service)
+    if [ "${active_status}" = "inactive" ]; then
+        echo "activating: $service"
+        sudo systemctl start $service
+    fi
+
+    if mullvad_login; then
+        mullvad_set_lan
+        mullvad_connect
+    fi
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall ${pacman_pkg}
+}

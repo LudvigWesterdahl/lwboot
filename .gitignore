@@ -1,9 +1,10 @@
 #
 # boot files
 #
-brave-sync-code.txt
 id_rsa
 id_rsa.pub
+brave-sync-code.txt
+mullvad-account.txt
 
 # General files
 /.idea/
