@@ -9,6 +9,7 @@ https://github.com/brave/brave-browser/issues/29411#issuecomment-1534565893
 
 Open device log: brave://device-log/
 
+
 This post explains how to allow the app to access the keyboard:
 https://www.reddit.com/r/Keychron/comments/12f3gat/useviaapp_in_linux_ie_via_support_useful_for/
 

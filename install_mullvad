@@ -11,7 +11,7 @@ inst_help() {
     hdesc
     htext "${installer_description}"
     husage
-    htext "-"
+    htext "mullvad --help"
     hexamples
     htext "-"
     hseealso
