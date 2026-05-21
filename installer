@@ -51,12 +51,13 @@ readonly INSTALLERS=(
   "install_tealdeer"
   "install_clang"
   "install_pacmancontrib"
-  "install_googlejavaformat"
   "install_intellij"
   "install_postman"
   "install_vlc"
   "install_mullvad"
   "install_gitleaks"
+  "install_docker"
+  "install_mariadbclients"
 )
 
 readonly ARG=${1}

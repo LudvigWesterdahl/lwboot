@@ -76,21 +76,7 @@ inst_install() {
         pacman_install ${pacman_pkg}
     fi
 
-    local service="mullvad-daemon.service"
-    
-    # enabled | disabled
-    local enabled_status=$(systemctl is-enabled $service)
-    if [ "${enabled_status}" = "disabled" ]; then
-        echo "enabling: $service"
-        sudo systemctl enable $service
-    fi
-
-    # active | inactive
-    local active_status=$(systemctl is-active $service)
-    if [ "${active_status}" = "inactive" ]; then
-        echo "activating: $service"
-        sudo systemctl start $service
-    fi
+    enable_start_service mullvad-daemon.service
 
     if mullvad_login; then
         mullvad_set_lan

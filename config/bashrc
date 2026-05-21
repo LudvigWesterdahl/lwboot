@@ -72,4 +72,6 @@ export DO_NOT_TRACK=1
 # ================
 # modify the umask from the 0022 default
 umask 0002
+# kernel stop intercepting <C-q> (0x11, ASCII XON) and <C-s> (0x13, ASCII XOFF), see stty -a, stty ixon to turn back on.
+stty -ixon
 

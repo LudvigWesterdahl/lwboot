@@ -66,6 +66,25 @@ mv_bak() {
     return 0
 }
 
+enable_start_service() {
+    arg_service="${1}"
+
+    local enabled_status=$(systemctl is-enabled "${arg_service}")
+    if [ "${enabled_status}" = "disabled" ]; then
+        echo "sudo systemctl enable ${arg_service}"
+        sudo systemctl enable "${arg_service}"
+    fi
+
+    # active | inactive
+    local active_status=$(systemctl is-active "${arg_service}")
+    if [ "${active_status}" = "inactive" ]; then
+        echo "sudo systemctl start ${arg_service}"
+        sudo systemctl start "${arg_service}"
+    fi
+
+    return 0
+}
+
 is_pacman_installed() {
     if pacman -Qe "${1}" >/dev/null 2>&1; then
         return 0

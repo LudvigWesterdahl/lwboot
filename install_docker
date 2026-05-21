@@ -1,0 +1,47 @@
+#!/bin/bash
+
+installer_name="docker"
+installer_description="Installs docker."
+installer_link="https://archlinux.org/packages/extra/x86_64/docker/"
+
+pacman_pkg="extra/docker"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    if ! is_pacman_installed ${pacman_pkg}; then
+        pacman_install ${pacman_pkg}
+    fi
+
+    enable_start_service docker.service
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall ${pacman_pkg}
+}
