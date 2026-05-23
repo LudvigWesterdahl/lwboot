@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="mullvad"
 installer_description="Installs mullvad."
@@ -27,13 +29,13 @@ inst_can_install() {
 }
 
 mullvad_connect() {
-    local auto_connect_setting=$(mullvad auto-connect get | grep ": off")
+    auto_connect_setting=$(mullvad auto-connect get | grep ": off")
     if [ "${auto_connect_setting}" != "" ]; then
         echo "activating auto-connect"
         mullvad auto-connect set on
     fi
 
-    local connect_status=$(mullvad status | grep "Disconnected")
+    connect_status=$(mullvad status | grep "Disconnected")
     if [ "${connect_status}" != "" ]; then
         echo "connecting"
         mullvad connect
@@ -41,22 +43,22 @@ mullvad_connect() {
 }
 
 mullvad_set_lan() {
-    local lan_setting=$(mullvad lan get | grep ": block")
+    lan_setting=$(mullvad lan get | grep ": block")
     if [ "${lan_setting}" != "" ]; then
         mullvad lan set allow
     fi
 }
 
 mullvad_login() {
-    local account_file="config/mullvad-account.txt"
+    account_file="config/mullvad-account.txt"
     if [ ! -f "${account_file}" ]; then
         bold_yellow "skipping login missing: ${account_file}"
         return 0
     fi
 
-    chmod 400 ${account_file}
+    chmod 400 "${account_file}"
 
-    local login_status=$(mullvad account get | grep "Mullvad account:")
+    login_status=$(mullvad account get | grep "Mullvad account:")
     if [ "${login_status}" != "" ]; then
         # already logged in
         return 0
@@ -72,8 +74,8 @@ mullvad_login() {
 }
 
 inst_install() {
-    if ! is_pacman_installed ${pacman_pkg}; then
-        pacman_install ${pacman_pkg}
+    if ! is_pacman_installed "${pacman_pkg}"; then
+        pacman_install "${pacman_pkg}"
     fi
 
     enable_start_service mullvad-daemon.service
@@ -93,5 +95,5 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${pacman_pkg}
+    pacman_uninstall "${pacman_pkg}"
 }

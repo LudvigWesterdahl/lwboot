@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="postman"
 installer_description="Installs postman desktop."
@@ -34,12 +36,12 @@ inst_can_install() {
 
 # TODO: create AUR helper
 inst_install() {
-    aur_build_dir=$HOME/aur-builds/postman-bin
-    git clone https://aur.archlinux.org/postman-bin.git ${aur_build_dir}
+    aur_build_dir="${HOME}/aur-builds/postman-bin"
+    git clone https://aur.archlinux.org/postman-bin.git "${aur_build_dir}"
 
-    makepkg --noconfirm -si --dir ${aur_build_dir}
+    makepkg --noconfirm -si --dir "${aur_build_dir}"
 
-    rm -rf ${aur_build_dir}
+    rm -rf "${aur_build_dir}"
 
     return 0
 }
@@ -53,5 +55,5 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${pacman_pkg}
+    pacman_uninstall "${pacman_pkg}"
 }

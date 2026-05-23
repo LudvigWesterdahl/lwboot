@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="kdeshortcuts"
 installer_description="Configures shortcuts for KDE Plasma 6"
@@ -54,17 +56,19 @@ create_desktop_file_shortcut() {
     desktopfile="net.local.${argname}.desktop"
     outfile="${HOME}/.local/share/applications/${desktopfile}"
     
-    mv_bak ${outfile}
+    mv_bak "${outfile}"
 
-    echo "[Desktop Entry]" >> ${outfile}
-    echo "Exec=${argexec}" >> ${outfile}
-    echo "Name=${argname}" >> ${outfile}
-    echo "NoDisplay=true" >> ${outfile}
-    echo "StartupNotify=false" >> ${outfile}
-    echo "Type=Application" >> ${outfile}
-    echo "X-KDE-GlobalAccel-CommandShortcut=true" >> ${outfile}
+    {
+    echo "[Desktop Entry]"
+    echo "Exec=${argexec}"
+    echo "Name=${argname}"
+    echo "NoDisplay=true"
+    echo "StartupNotify=false"
+    echo "Type=Application"
+    echo "X-KDE-GlobalAccel-CommandShortcut=true"
+    } >> "${outfile}"
 
-    wconfig2 services ${desktopfile} _launch "${argshortcut}"
+    wconfig2 services "${desktopfile}" _launch "${argshortcut}"
 
     return 0
 }

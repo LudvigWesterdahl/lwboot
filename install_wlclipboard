@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="wlclipboard"
 installer_description="Installs wl-clipboard to allow integration with clipboard in terminal applications."
@@ -25,7 +27,7 @@ inst_help() {
 }
 
 inst_is_installed() {
-    is_pacman_installed ${pacman_pkg}
+    is_pacman_installed "${pacman_pkg}"
 }
 
 inst_can_install() {
@@ -33,7 +35,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${pacman_pkg}
+    pacman_install "${pacman_pkg}"
 }
 
 inst_can_install_manual() {
@@ -45,5 +47,5 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${pacman_pkg}
+    pacman_uninstall "${pacman_pkg}"
 }

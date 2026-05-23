@@ -1,61 +1,52 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
-readonly KEY_FILE="id_rsa"
-readonly KEY_FILE_PUB="${KEY_FILE}.pub"
-readonly INSTALLER="installer"
-readonly INSTALL_GIT="install_git"
+readonly req_dir_1_ssh="${2}"
+readonly req_dir_2_lwboot="${1}"
+readonly req_file_1_key="id_rsa"
+readonly req_file_2_pub="id_rsa.pub"
 
-readonly REQ_FILES=(
-  "${KEY_FILE}"
-  "${KEY_FILE_PUB}"
-  "${INSTALLER}"
-)
+require_file() {
+    arg_file="${1}"
 
-readonly LWBOOT_DIR="${1}"
-readonly SSH_DIR="${2}"
-
-if [[ ! -d "${LWBOOT_DIR}" ]]; then
-    echo "folder to clone lwboot repository into ${LWBOOT_DIR} does not exist"
-    exit 1
-fi
-
-if [[ ! -d "${SSH_DIR}" ]]; then
-    echo "the ssh folder ${SSH_DIR} does  not exist"
-    exit 1
-fi
-
-declare req_files_exist=0
-for REQ_FILE in "${REQ_FILES[@]}"; do
-    if [[ ! -f "${REQ_FILE}" ]]; then
-        echo "file ${REQ_FILE} does not exist"
-        req_files_exist=1
+    if [ ! -f "${arg_file}" ]; then
+        echo "missing file ${arg_file}"
+        return 1
     fi
-done
 
-if [[ req_files_exist != 0 ]]; then
-  exit 1
-fi
+    return 0
+}
 
-source ${INSTALLER}
-echo "upgrading pacman..."
-pacman_upgrade
+require_dir() {
+    arg_dir="${1}"
 
-source ${INSTALL_GIT}
-echo "installing git..."
-pacman_install "extra/git"
+    if [ ! -d "${arg_dir}" ]; then
+        echo "missing dir ${arg_dir}"
+        return 1
+    fi
 
-echo "copying ${KEY_FILE} to ${SSH_DIR}"
-chmod 400 "${KEY_FILE}"
-cp "${KEY_FILE}" "${SSH_DIR}"
+    return 0
+}
 
-echo "copying ${KEY_FILE_PUB} to ${SSH_DIR}"
-chmod 444 "${KEY_FILE_PUB}"
-cp "${KEY_FILE_PUB}" "${SSH_DIR}"
+require_dir "${req_dir_1_ssh}"
+require_dir "${req_dir_2_lwboot}"
+require_file "${req_file_1_key}"
+require_file "${req_file_2_pub}"
 
-echo "cloning lwboot repository into ${LWBOOT_DIR}"
-declare LWBOOT_DIR_ABS="${LWBOOT_DIR}/lwboot"
-git clone git@github.com:LudvigWesterdahl/lwboot.git "${LWBOOT_DIR_ABS}"
+echo "copying ssh files into: ${req_dir_1_ssh}"
+chmod 400 "${req_file_1_key}"
+chmod 444 "${req_file_2_pub}"
+cp "${req_file_1_key}" "${req_dir_1_ssh}"
+cp "${req_file_2_pub}" "${req_dir_1_ssh}"
 
-echo "copying ${BRAVE_SYNC_CODE} to ${LWBOOT_DIR_ABS}"
-chmod 400 "${BRAVE_SYNC_CODE}"
-cp "${BRAVE_SYNC_CODE}" "${LWBOOT_DIR_ABS}"
+echo "upgrading pacman"
+sudo pacman --noconfirm -Syu
+sudo pacman --noconfirm -Fy
+
+echo "installing git"
+sudo pacman --noconfirm -S "extra/git"
+
+echo "cloning lwboot repository into: ${req_dir_2_lwboot}"
+git clone git@github.com:LudvigWesterdahl/lwboot.git "${req_dir_2_lwboot}/lwboot"
+

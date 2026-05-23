@@ -1,134 +1,178 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
-readonly PROG_PATH=${0}
-readonly PROG_DIR=${0%/*}
-readonly FULL_PATH=$(realpath ${PROG_PATH})
-readonly FULL_DIR=$(dirname ${FULL_PATH})
-readonly PROG_NAME=$(basename $0)
+# ===========================================================================
+# =========================        constants        =========================
+# ===========================================================================
 
-readonly INSTALLERS=(
-  "install_docs"
-  "install_docs_keybinds_arch"
-  "install_docs_keybinds_ghostty"
-  "install_docs_keybinds_nvim"
-  "install_less"
-  "install_gzip"
-  "install_xz"
-  "install_tar"
-  "install_zip"
-  "install_unzip"
-  "install_vim"
-#  "install_git"
-  "install_basedevel"
-  "install_gcc"
-  "install_gdb"
-  "install_brave"
-  "install_archwallpaper"
-  "install_xorgxev"
-  "install_evtest"
-  "install_mandb"
-  "install_manpages"
-  "install_fonts"
-  "install_ghostty"
-  "install_bashrc"
-  "install_kdeshortcuts"
-  "install_libinputtools"
-  "install_kdesettings"
-  "install_shellcheck"
-  "install_jq"
-  "install_tokei"
-  "install_slack"
-  "install_java"
-  "install_maven"
-  "install_qpdf"
-  "install_wlclipboard"
-  "install_fd"
-  "install_jdtls"
-  "install_nvim"
-  "install_libiconv"
-  "install_feh"
-  "install_hexyl"
-  "install_tealdeer"
-  "install_clang"
-  "install_pacmancontrib"
-  "install_intellij"
-  "install_postman"
-  "install_vlc"
-  "install_mullvad"
-  "install_gitleaks"
-  "install_docker"
-  "install_mariadbclients"
-)
+PROG_PATH="$(realpath "${0}")"
+readonly PROG_PATH
+PROG_DIR="$(dirname "${PROG_PATH}")"
+# shellcheck disable=SC2034 # SC2034 (warning): PROG_DIR appears unused. Verify use (or export if used externally).
+readonly PROG_DIR
+PROG_NAME="$(basename "${PROG_PATH}")"
+# shellcheck disable=SC2034 # SC2034 (warning): PROG_NAME appears unused. Verify use (or export if used externally).
+readonly PROG_NAME
 
-readonly ARG=${1}
-readonly OPT1=${2}
 
-source installer_lib
+# ===========================================================================
+# =========================        arguments        =========================
+# ===========================================================================
 
-if [[ "${ARG}" == "install" ]]; then
-    if [[ "${OPT1}" != "false" ]]; then
-        pacman_upgrade
-    fi
+# Argument 1: install | manual | uninstall | docs
+readonly installer_arg="${1:-}"
 
-    for i in "${!INSTALLERS[@]}"; do
-        source_installer "${INSTALLERS[$i]}"
+# Argument 2: false | true, defaults to true
+# If installer_arg is install and this is false skips upgrading pacman.
+readonly installer_opt_1="${2:-}"
+
+# ===========================================================================
+# =========================          main           =========================
+# ===========================================================================
+
+# shellcheck disable=SC1091 # SC1090 (warning): ShellCheck can't follow non-constant source. Use a directive to specify location.
+. ./installer_lib
+
+# Placeholders to be provided by the individual installers.
+installer_name=""
+installer_description=""
+installer_link=""
+describe_installer() {
+    printf '\033[1;38;2;122;166;218m%s\033[0m - %s\n' "${installer_name}" "${installer_description}"
+}
+
+run_install_out_1=""
+run_install() {
+    arg_installer="${1:-}"
+
+    # shellcheck disable=SC1090 # SC1090 (warning): ShellCheck can't follow non-constant source. Use a directive to specify location.
+    . "./${arg_installer}"
+
+    if [ "${installer_arg}" = "install" ]; then
+
         describe_installer
 
         if inst_is_installed; then
-            echo "skipping already installed"
-        elif inst_can_install; then
-            inst_install
+            return 0
+        fi
 
-            if [[ $? -ne 0 ]]; then
-                echo "failed"
-                exit 1
+        if inst_can_install; then
+            if ! inst_install; then
+                bold_red "failed inst_install for ${arg_installer}"
+                return 1
             fi
         else
-            echo "skipping cant install"
+            bold_yellow "skipping inst_install for ${arg_installer}"
         fi
-    done
 
-    for i in "${!INSTALLERS[@]}"; do
-        source_installer "${INSTALLERS[$i]}"
+        return 0
+    fi
 
+    if [ "${installer_arg}" = "manual" ]; then
         if inst_can_install_manual; then
-            echo -e "\033[1m${installer_name}\033[0m - manual installation steps"
-            inst_install_manual
-        fi
-    done
 
-    exit 0
-fi
-
-if [[ "${ARG}" == "uninstall" ]]; then
-    pacman_upgrade
-
-    for i in "${!INSTALLERS[@]}"; do
-        source_installer "${INSTALLERS[$i]}"
-
-        if inst_is_installed; then
             describe_installer
 
-            inst_uninstall
+            inst_install_manual
+        fi
 
-            if [[ $? -ne 0 ]]; then
-                echo "failed ${prog_inst_name}"
-                exit 1
-            else
-                echo "success ${prog_inst_name}"
+        return 0
+    fi
+
+
+    if [ "${installer_arg}" = "uninstall" ]; then
+
+        describe_installer
+
+        if inst_is_installed; then
+            if ! inst_uninstall; then
+                bold_red "failed inst_uninstall for ${arg_installer}"
+                return 1
             fi
         else
-            echo "skipping not installed ${prog_inst_name}"
+            bold_yellow "skipping not installed ${arg_installer}"
         fi
-    done
+
+        return 0
+    fi
+
+    if [ "${installer_arg}" = "docs" ]; then
+        inst_help_res=$(inst_help) || {
+            bold_red "failed to call inst_help: ${arg_installer}"
+            return 1
+        }
+        run_install_out_1="$(printf '%s%s\n\n\nx' "${run_install_out_1}" "${inst_help_res}")"
+        run_install_out_1="${run_install_out_1%x}"
+    fi
+}
+
+pacman_upgrade() {
+    sudo pacman --noconfirm -Syu
+    sudo pacman --noconfirm -Fy
+}
+
+if [ "${installer_arg}" = "install" ] && [ "${installer_opt_1}" != "false" ]; then
+    pacman_upgrade
 fi
 
-if [[ "${ARG}" == "docs" ]]; then
-    for i in "${!INSTALLERS[@]}"; do
-        source_installer "${INSTALLERS[$i]}"
-        output+=$(inst_help)
-        output+=$'\n\n\n'
-    done
-
-    echo "${output}" | less
+if [ "${installer_arg}" = "uninstall" ]; then
+    pacman_upgrade
 fi
+
+run_install install_docs
+run_install install_docs_keybinds_arch
+run_install install_docs_keybinds_ghostty
+run_install install_docs_keybinds_nvim
+run_install install_less
+run_install install_gzip
+run_install install_xz
+run_install install_tar
+run_install install_zip
+run_install install_unzip
+run_install install_vim
+run_install install_git
+run_install install_basedevel
+run_install install_gcc
+run_install install_gdb
+run_install install_brave
+run_install install_archwallpaper
+run_install install_xorgxev
+run_install install_evtest
+run_install install_mandb
+run_install install_manpages
+run_install install_fonts
+run_install install_ghostty
+run_install install_bashrc
+run_install install_kdeshortcuts
+run_install install_libinputtools
+run_install install_kdesettings
+run_install install_shellcheck
+run_install install_jq
+run_install install_tokei
+run_install install_slack
+run_install install_java
+run_install install_maven
+run_install install_qpdf
+run_install install_wlclipboard
+run_install install_fd
+run_install install_jdtls
+run_install install_nvim
+run_install install_libiconv
+run_install install_feh
+run_install install_hexyl
+run_install install_tealdeer
+run_install install_clang
+run_install install_pacmancontrib
+run_install install_intellij
+run_install install_postman
+run_install install_vlc
+run_install install_mullvad
+run_install install_gitleaks
+run_install install_docker
+run_install install_mariadbclients
+
+if [ "${installer_arg}" = "docs" ]; then
+    echo "${run_install_out_1}" | less
+fi
+

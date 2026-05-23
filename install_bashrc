@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="bashrc"
 installer_description="Copies bashrc and bash_profile into ${HOME}."

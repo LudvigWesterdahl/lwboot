@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="ghostty"
 installer_description="Installs ghostty and copies config file."
@@ -29,11 +31,11 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_pacman_installed ${pacman_pkg}; then
-        pacman_install ${pacman_pkg}
+    if ! is_pacman_installed "${pacman_pkg}"; then
+        pacman_install "${pacman_pkg}"
     fi
 
-    cp config/ghostty.config ${HOME}/.config/ghostty/config
+    cp config/ghostty.config "${HOME}/.config/ghostty/config"
 
     return 0
 }
@@ -47,5 +49,5 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${pacman_pkg}
+    pacman_uninstall "${pacman_pkg}"
 }

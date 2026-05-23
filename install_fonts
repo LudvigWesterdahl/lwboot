@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="fonts"
 installer_description="Installs fonts on the system."
@@ -38,13 +40,8 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_pacman_installed ${pacman_pkg1}; then
-        pacman_install ${pacman_pkg1}
-    fi
-
-    if ! is_pacman_installed ${pacman_pkg2}; then
-        pacman_install ${pacman_pkg2}
-    fi
+    pacman_install "${pacman_pkg1}"
+    pacman_install "${pacman_pkg2}"
 }
 
 inst_can_install_manual() {
@@ -56,11 +53,6 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    if is_pacman_installed ${pacman_pkg1}; then
-        pacman_uninstall ${pacman_pkg1}
-    fi
-
-    if is_pacman_installed ${pacman_pkg2}; then
-        pacman_uninstall ${pacman_pkg2}
-    fi
+    pacman_uninstall "${pacman_pkg1}"
+    pacman_uninstall "${pacman_pkg2}"
 }

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="kdesettings"
 installer_description="Configures kde settings such as natural scrolling."
@@ -35,12 +37,12 @@ inst_is_installed() {
 }
 
 inst_can_install() {
-  if ! is_command "libinput"; then
+  if ! is_command libinput; then
     echo "missing libinput"
     return 1
   fi
   
-  if ! is_command "udevadm"; then
+  if ! is_command udevadm; then
     echo "missing udevadm"
     return 1
   fi
@@ -55,16 +57,16 @@ set_inputdevice_prop() {
   arg_type="${3}"
   arg_val="${4}"
 
-  dev_name=$(udevadm info ${arg_dev_path} | grep "M:" | tr -d "M: ")
+  dev_name=$(udevadm info "${arg_dev_path}" | grep "M:" | tr -d "M: ")
   if [ "/dev/input/${dev_name}" != "${arg_dev_path}" ]; then
     echo "failed to find device name from ${arg_dev_path} got: ${dev_name}"
     return 1
   fi
 
 
-  val_before=$(busctl --user get-property org.kde.KWin /org/kde/KWin/InputDevice/${dev_name} org.kde.KWin.InputDevice ${arg_prop})
-  busctl --user set-property org.kde.KWin /org/kde/KWin/InputDevice/${dev_name} org.kde.KWin.InputDevice ${arg_prop} ${arg_type} ${arg_val}
-  val_after=$(busctl --user get-property org.kde.KWin /org/kde/KWin/InputDevice/${dev_name} org.kde.KWin.InputDevice ${arg_prop})
+  val_before=$(busctl --user get-property org.kde.KWin "/org/kde/KWin/InputDevice/${dev_name}" org.kde.KWin.InputDevice "${arg_prop}")
+  busctl --user set-property org.kde.KWin "/org/kde/KWin/InputDevice/${dev_name}" org.kde.KWin.InputDevice "${arg_prop}" "${arg_type}" "${arg_val}"
+  val_after=$(busctl --user get-property org.kde.KWin "/org/kde/KWin/InputDevice/${dev_name}" org.kde.KWin.InputDevice "${arg_prop}")
   
   echo "set input device property"
   echo "dev path:    ${arg_dev_path}"
@@ -78,7 +80,7 @@ config_touchpad() {
   echo "configuring touchpad: libinput list-devices will be called with sudo"
 
   dev_substring="Touchpad"
-  num_substring_lines=$(sudo libinput list-devices | grep "${dev_substring}" | wc -l)
+  num_substring_lines=$(sudo libinput list-devices | grep -c "${dev_substring}")
   if [ "${num_substring_lines}" -ne "1" ]; then
     echo "too many ${dev_substring} results expected 1 got ${num_substring_lines}"
     return 0
@@ -86,7 +88,7 @@ config_touchpad() {
   
   dev_path=$(sudo libinput list-devices | grep "${dev_substring}" -A 1 | tail -n 1 | tr -s " " "\n" | tail -n 1)
 
-  set_inputdevice_prop ${dev_path} naturalScroll b true
+  set_inputdevice_prop "${dev_path}" naturalScroll b true
 }
 
 inst_install() {

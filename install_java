@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="java"
 installer_description="Installs java 17, 21 and docs."
@@ -46,10 +48,10 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install ${pacman_pkg1}
-    pacman_install ${pacman_pkg2}
-    pacman_install ${pacman_pkg3}
-    pacman_install ${pacman_pkg4}
+    pacman_install "${pacman_pkg1}"
+    pacman_install "${pacman_pkg2}"
+    pacman_install "${pacman_pkg3}"
+    pacman_install "${pacman_pkg4}"
 
 }
 
@@ -62,5 +64,8 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${pacman_pkg}
+    pacman_uninstall "${pacman_pkg1}"
+    pacman_uninstall "${pacman_pkg2}"
+    pacman_uninstall "${pacman_pkg3}"
+    pacman_uninstall "${pacman_pkg4}"
 }

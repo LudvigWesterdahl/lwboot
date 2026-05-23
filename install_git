@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="git"
 installer_description="Installs and configures git. Also clones repositories."
@@ -23,14 +25,10 @@ handle_repository() {
         fi
     fi
 
-    if [ "$(git -C "${arg_repo_path}" branch --show-current)" = "master" ]; then
-        echo "pulling ${arg_repo}..."
-        if ! git -C "${arg_repo_path}" pull 1>/dev/null 2>&1; then
-            echo "pull failed"
-        fi
-    else
-        echo "skipping pull ${arg_repo} not on master branch!"
-    fi
+    current_branch=$(git -C "${arg_repo_path}" branch --show-current) || {
+        echo "failed to get current branch in ${arg_repo_path}"
+        return 1
+    }
 }
 
 inst_help() {
@@ -43,7 +41,6 @@ inst_help() {
     htext "-"
     hseealso
     htext "${installer_link}"
-    htext "Contains personal information!"
 }
 
 inst_is_installed() {
@@ -51,12 +48,12 @@ inst_is_installed() {
 }
 
 inst_can_install() {
-    if ! is_command "vim"; then
+    if ! is_command vim; then
         echo "missing vim"
         return 1
     fi
 
-    if ! is_command "less"; then
+    if ! is_command less; then
         echo "missing less"
         return 1
     fi
@@ -65,9 +62,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_pacman_installed ${pacman_pkg}; then
-        pacman_install ${pacman_pkg}
-    fi
+    pacman_install "${pacman_pkg}"
 
     git config --global user.email "${git_mail}"
     git config --global user.name "${git_name}"
@@ -76,7 +71,6 @@ inst_install() {
 
     handle_repository "lwdoc" "${HOME}/Documents/lwdoc"
     handle_repository "Scripts" "${HOME}/bin/scripts"
-    handle_repository "lwgitjournal" "${HOME}/Documents/lwgitjournal"
 }
 
 inst_can_install_manual() {
@@ -88,5 +82,5 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${pacman_pkg}
+    pacman_uninstall "${pacman_pkg}"
 }

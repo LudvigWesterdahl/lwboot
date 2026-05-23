@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="archwallpaper"
 installer_description="Installs archlinux-wallpaper and configures it."
@@ -32,17 +34,17 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_pacman_installed ${pacman_pkg}; then
-        pacman_install ${pacman_pkg}
+    if ! is_pacman_installed "${pacman_pkg}"; then
+        pacman_install "${pacman_pkg}"
     fi
 
     wallpaper_img="/usr/share/backgrounds/archlinux/conference.png"
     lockscreen_img="/usr/share/backgrounds/archlinux/split.png"
     lockscreen_img="${HOME}/Documents/lwboot/config/wallpapers/ayu-mirage.png"
-    wallpaper_img=${lockscreen_img}
+    wallpaper_img="${lockscreen_img}"
 
 
-    plasma-apply-wallpaperimage ${wallpaper_img}
+    plasma-apply-wallpaperimage "${wallpaper_img}"
 
     kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://${lockscreen_img}"
 }
@@ -56,5 +58,5 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${pacman_pkg}
+    pacman_uninstall "${pacman_pkg}"
 }

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="docs_keybinds_ghostty"
 installer_description="Ghostty keybindings documentation."

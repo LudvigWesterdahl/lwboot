@@ -228,6 +228,35 @@ vim.keymap.set("n", "<leader>bd", function()
   vim.api.nvim_buf_delete(cur, { force = false })
 end, { desc = "Delete buffer" })
 
+vim.keymap.set("n", "<leader>bD", function()
+  local cur = vim.api.nvim_get_current_buf()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if buf ~= cur
+       and vim.api.nvim_buf_is_loaded(buf)
+       and vim.bo[buf].buflisted
+       and not vim.bo[buf].modified
+    then
+      vim.api.nvim_buf_delete(buf, { force = false })
+    end
+  end
+end, { desc = "Delete all buffers except current (keeps modified)" })
+
+vim.keymap.set('n', '<leader>fr', function()
+  local old = vim.fn.input("Old: ")
+  if old == nil or old == "" then
+    return
+  end
+  local new = vim.fn.input("New: ")
+  if new == nil then
+    return
+  end
+
+  local cmd = string.format(".,$s/%s/%s/gc", old, new)
+  vim.cmd(cmd)
+end, { desc = "Substitute in range (prompt with / as separator)" })
+
+
+
 
 
 

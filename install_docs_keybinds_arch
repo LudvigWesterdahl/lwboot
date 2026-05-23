@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="docs_keybinds_arch"
 installer_description="Arch keybindings documentation."

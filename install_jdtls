@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="jdtls"
 installer_description="Installs jdtls, LSP for java."
@@ -20,7 +22,7 @@ inst_help() {
 
 # TODO: how to re-install AUR packages? Create arg to inst_install OPT_2. Also remove check here then for is_command
 inst_is_installed() {
-    is_pacman_installed ${pacman_pkg}
+    is_pacman_installed "${pacman_pkg}"
 }
 
 inst_can_install() {
@@ -34,12 +36,12 @@ inst_can_install() {
 
 # TODO: create AUR helper
 inst_install() {
-    aur_build_dir=$HOME/aur-builds/jdtls
-    git clone https://aur.archlinux.org/jdtls.git ${aur_build_dir}
+    aur_build_dir="${HOME}/aur-builds/jdtls"
+    git clone https://aur.archlinux.org/jdtls.git "${aur_build_dir}"
 
-    makepkg --noconfirm -si --dir ${aur_build_dir}
+    makepkg --noconfirm -si --dir "${aur_build_dir}"
 
-    rm -rf ${aur_build_dir}
+    rm -rf "${aur_build_dir}"
 
     return 0
 }
@@ -53,5 +55,5 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${pacman_pkg}
+    pacman_uninstall "${pacman_pkg}"
 }

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+set -e
+set -u
 
 installer_name="brave"
 installer_description="Installs brave and configures kde defaults."
@@ -49,7 +51,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    aur_build_dir=$HOME/aur-builds/brave-bin
+    aur_build_dir="${HOME}/aur-builds/brave-bin"
     git clone https://aur.archlinux.org/brave-bin.git "${aur_build_dir}"
 
     makepkg --noconfirm -si --dir "${aur_build_dir}"
@@ -74,7 +76,7 @@ inst_can_install_manual() {
 inst_install_manual() {
     echo "1. sync setup: settings > sync > I have a Sync Code (code printed next)"
 
-    if [ ! -f ${brave_sync_code} ]; then
+    if [ ! -f "${brave_sync_code}" ]; then
         echo "missing ${brave_sync_code}"
     else
         cat "${brave_sync_code}"
@@ -84,5 +86,5 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-    pacman_uninstall ${pacman_pkg}
+    pacman_uninstall "${pacman_pkg}"
 }

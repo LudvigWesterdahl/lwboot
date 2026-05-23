@@ -1,11 +1,9 @@
-#!/bin/bash
-
-# =====================================================================================
-# ============================== program installer utils ==============================
-# =====================================================================================
+#!/bin/sh
+set -e
+set -u
 
 htitle() {
-    printf "%25s%s\n" "" "${1}"
+    printf "%25s%s\n" "" "${1:-}"
 }
 
 hdesc() {
@@ -25,20 +23,21 @@ hseealso() {
 }
 
 htext() {
-    printf "%4s%s\n" "" "${1}"
+    printf "%4s%s\n" "" "${1:-}"
 }
 
 bold_red() {
-    printf "\033[1;38;2;213;78;83m%s\033[0m\n" "${1}"
+    printf "\033[1;38;2;213;78;83m%s\033[0m\n" "${1:-}"
 }
 
-
 bold_yellow() {
-    printf "\033[1;38;2;240;198;116m%s\033[0m\n" "${1}"
+    printf "\033[1;38;2;240;198;116m%s\033[0m\n" "${1:-}"
 }
 
 is_command() {
-    if command -v "${1}" >/dev/null 2>&1; then
+    arg_cmd="${1}"
+
+    if command -v "${arg_cmd}" >/dev/null 2>&1; then
         return 0
     else
         return 1
@@ -53,15 +52,15 @@ mv_bak() {
     fi
 
 
-    file_dir=$(dirname ${arg_file})
-    file_name=$(basename ${arg_file}) 
+    file_dir=$(dirname "${arg_file}")
+    file_name=$(basename "${arg_file}") 
     curr_dir=$(realpath .)
 
     bak_dir="${curr_dir}/bak${file_dir}" 
     bak_file="${file_name}.$(date +%Y%m%d_%H%M%S).bak"
 
-    mkdir -p ${bak_dir}
-    mv -v ${arg_file} ${bak_dir}/${bak_file}
+    mkdir -p "${bak_dir}"
+    mv -v "${arg_file}" "${bak_dir}/${bak_file}"
 
     return 0
 }
@@ -69,14 +68,14 @@ mv_bak() {
 enable_start_service() {
     arg_service="${1}"
 
-    local enabled_status=$(systemctl is-enabled "${arg_service}")
+    enabled_status=$(systemctl is-enabled "${arg_service}")
     if [ "${enabled_status}" = "disabled" ]; then
         echo "sudo systemctl enable ${arg_service}"
         sudo systemctl enable "${arg_service}"
     fi
 
     # active | inactive
-    local active_status=$(systemctl is-active "${arg_service}")
+    active_status=$(systemctl is-active "${arg_service}")
     if [ "${active_status}" = "inactive" ]; then
         echo "sudo systemctl start ${arg_service}"
         sudo systemctl start "${arg_service}"
@@ -85,8 +84,17 @@ enable_start_service() {
     return 0
 }
 
+long_to_short_pkg() {
+    arg_string="${1}"
+    split_last=$(echo "${arg_string}" | tr "/" "\n" | tail -n 1)
+    echo "${split_last}"
+}
+
 is_pacman_installed() {
-    if pacman -Qe "${1}" >/dev/null 2>&1; then
+    arg_pkg="${1}"
+
+    short_pkg=$(long_to_short_pkg "${arg_pkg}")
+    if pacman -Qe "${short_pkg}" >/dev/null 2>&1; then
         return 0
     else
         return 1
@@ -109,14 +117,13 @@ pacman_install() {
         return 0
     fi
 
-    if pacman -Qe "${short_pkg}" 1>/dev/null 2>&1; then
-        echo "already installed: ${arg_pkg} - ${short_pkg}"
+    if is_pacman_installed "${short_pkg}"; then
         return 0
     fi
 
     echo "installing: ${arg_pkg} - ${short_pkg}"
 
-    sudo pacman --noconfirm -S "${1}"
+    sudo pacman --noconfirm -S "${arg_pkg}"
 }
 
 pacman_uninstall() {
@@ -129,37 +136,6 @@ pacman_uninstall() {
 
     short_pkg=$(long_to_short_pkg "${arg_pkg}")
 
-    sudo pacman --noconfirm -R ${short_pkg}
+    sudo pacman --noconfirm -R "${short_pkg}"
 }
 
-# =============================================================================
-# ============================== installer utils ==============================
-# =============================================================================
-
-long_to_short_pkg() {
-    arg_string="${1}"
-    split_last=$(echo "${arg_string}" | tr "/" "\n" | tail -n 1)
-    echo "${split_last}"
-}
-
-describe_installer() {
-    echo -e "\033[1m${installer_name}\033[0m - ${installer_description}"
-    echo "| link: ${installer_link}"
-}
-
-prog_inst_name=""
-
-source_installer() {
-    prog_inst_name="${1}"
-    source ${prog_inst_name}
-}
-
-pacman_upgrade() {
-    if ! is_command pacman; then
-        echo "pacman does not exist"
-        exit 1
-    fi
-
-    sudo pacman --noconfirm -Syu
-    sudo pacman --noconfirm -Fy
-}
