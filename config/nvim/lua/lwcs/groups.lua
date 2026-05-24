@@ -54,7 +54,7 @@ M.setup = function()
   local searchFg = c.background
   any("Search", { bg = searchBg, fg = searchFg, bold = false, underline = false })
   any("IncSearch", { bg = searchBg, fg = searchFg, bold = false, underline = false })
-  any("CurSearch", { bg = searchBg, fg = searchFg, bold = false, underline = false })
+  any("CurSearch", { bg = c.cursor, fg = searchFg, bold = false, underline = false })
 
   -- Git
   any("gitignoreGlob", { fg = c.cursor })
