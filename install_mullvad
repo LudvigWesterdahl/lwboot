@@ -78,6 +78,7 @@ inst_install() {
 
     enable_start_service mullvad-daemon.service
 
+    # shellcheck disable=SC2310 # SC2310 (info): This function is invoked in an 'if' condition so set -e will be disabled. Invoke separately if failures should cause the script to exit.
     if mullvad_login; then
         mullvad_set_lan
         mullvad_connect

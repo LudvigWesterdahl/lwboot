@@ -104,6 +104,7 @@ is_pacman_installed() {
 pacman_install() {
     arg_pkg="${1}"
 
+    # shellcheck disable=SC2310 # SC2310 (info): This function is invoked in an 'if' condition so set -e will be disabled. Invoke separately if failures should cause the script to exit.
     if ! is_command pacman; then
         echo "pacman does not exist"
         exit 1
@@ -117,6 +118,7 @@ pacman_install() {
         return 0
     fi
 
+    # shellcheck disable=SC2310 # SC2310 (info): This function is invoked in an 'if' condition so set -e will be disabled. Invoke separately if failures should cause the script to exit.
     if is_pacman_installed "${short_pkg}"; then
         return 0
     fi
@@ -129,6 +131,7 @@ pacman_install() {
 pacman_uninstall() {
     arg_pkg="${1}"
 
+    # shellcheck disable=SC2310 # SC2310 (info): This function is invoked in an 'if' condition so set -e will be disabled. Invoke separately if failures should cause the script to exit.
     if ! is_command pacman; then
         echo "pacman does not exist"
         exit 1

@@ -23,12 +23,9 @@ handle_repository() {
         if ! git clone "git@github.com:LudvigWesterdahl/${arg_repo}.git" "${arg_repo_path}" 1>/dev/null 2>&1; then
             echo "clone failed"
         fi
+    else
+        echo "already exists ${arg_repo_path}"
     fi
-
-    current_branch=$(git -C "${arg_repo_path}" branch --show-current) || {
-        echo "failed to get current branch in ${arg_repo_path}"
-        return 1
-    }
 }
 
 inst_help() {
