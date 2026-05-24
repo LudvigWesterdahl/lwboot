@@ -124,6 +124,7 @@ run_install install_docs
 run_install install_docs_keybinds_arch
 run_install install_docs_keybinds_ghostty
 run_install install_docs_keybinds_nvim
+run_install install_nuphykeyboard
 run_install install_less
 run_install install_gzip
 run_install install_xz
@@ -171,6 +172,7 @@ run_install install_mullvad
 run_install install_gitleaks
 run_install install_docker
 run_install install_mariadbclients
+run_install install_dbeaver
 
 if [ "${installer_arg}" = "docs" ]; then
     echo "${run_install_out_1}" | less

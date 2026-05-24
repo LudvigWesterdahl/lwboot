@@ -3,7 +3,7 @@ set -e
 set -u
 
 installer_name="bashrc"
-installer_description="Copies bashrc and bash_profile into ${HOME}."
+installer_description="Copies bashrc and bash_profile."
 installer_link="-"
 
 inst_help() {
@@ -27,8 +27,14 @@ inst_can_install() {
 }
 
 inst_install() {
-    cp config/bashrc "${HOME}/.bashrc"
-    cp config/bash_profile "${HOME}/.bash_profile"
+    file_bashrc="${HOME}/.bashrc"
+    file_bash_profile="${HOME}/.bash_profile"
+
+    mv_bak "${file_bashrc}"
+    mv_bak "${file_bash_profile}"
+
+    cp -v config/bashrc "${file_bashrc}"
+    cp -v config/bash_profile "${file_bash_profile}"
 
     return 0
 }

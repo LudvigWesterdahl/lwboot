@@ -22,7 +22,7 @@ inst_help() {
 
 # TODO: how to re-install AUR packages? Create arg to inst_install OPT_2. Also remove check here then for is_command
 inst_is_installed() {
-    is_pacman_installed "${pacman_pkg}"
+    is_command jdtls
 }
 
 inst_can_install() {

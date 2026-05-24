@@ -24,6 +24,7 @@ alias braved="setsid -f brave >>\"\$HOME/.local/share/braved-brave.log\" 2>&1"
 alias postmand="setsid -f postman >>\"\$HOME/.local/share/postmand-postman.log\" 2>&1"
 alias vlcd="setsid -f vlc >>\"\$HOME/.local/share/vlcd-vlc.log\" 2>&1"
 alias slackd="setsid -f slack >>\"\$HOME/.local/share/slackd-slack.log\" 2>&1"
+alias dbeaverd="setsid -f dbeaver >>\"\$HOME/.local/share/dbeaverd-dbeaver.log\" 2>&1"
 
 # ============================
 # ===   helper functions   ===

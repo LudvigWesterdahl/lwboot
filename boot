@@ -37,8 +37,8 @@ require_file "${req_file_2_pub}"
 echo "copying ssh files into: ${req_dir_1_ssh}"
 chmod 400 "${req_file_1_key}"
 chmod 444 "${req_file_2_pub}"
-cp "${req_file_1_key}" "${req_dir_1_ssh}"
-cp "${req_file_2_pub}" "${req_dir_1_ssh}"
+cp -v "${req_file_1_key}" "${req_dir_1_ssh}"
+cp -v "${req_file_2_pub}" "${req_dir_1_ssh}"
 
 echo "upgrading pacman"
 sudo pacman --noconfirm -Syu

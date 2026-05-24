@@ -74,9 +74,7 @@ mullvad_login() {
 }
 
 inst_install() {
-    if ! is_pacman_installed "${pacman_pkg}"; then
-        pacman_install "${pacman_pkg}"
-    fi
+    pacman_install "${pacman_pkg}"
 
     enable_start_service mullvad-daemon.service
 

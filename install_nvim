@@ -154,9 +154,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_pacman_installed "${pacman_pkg}"; then
-        pacman_install "${pacman_pkg}"
-    fi
+    pacman_install "${pacman_pkg}"
 
     mkdir "${nvim_dst}" 2>/dev/null
     mkdir "${nvim_dst}/colors" 2>/dev/null

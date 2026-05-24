@@ -17,6 +17,10 @@ inst_help() {
     hexamples
     htext "Connect to db on localhost"
     htext "mariadb -h localhost -P 30010 -u root -phere --ssl=false sakra"
+    htext
+    htext "Show default settings from my.cnf"
+    htext "mariadb --print-defaults"
+    htext
     hseealso
     htext "${installer_link}"
 }
@@ -32,10 +36,11 @@ inst_can_install() {
 inst_install() {
     pacman_install "${pacman_pkg}"
 
-    config_file="${HOME}/.my.cnf"
-    mv_bak "${config_file}"
-    echo "[client]" >> "${config_file}"
-    echo "init-command=SET SESSION time_zone='+00:00'" >> "${config_file}"
+    file_config="${HOME}/.my.cnf"
+
+    mv_bak "${file_config}"
+
+    cp -v config/my.cnf "${file_config}"
 }
 
 inst_can_install_manual() {

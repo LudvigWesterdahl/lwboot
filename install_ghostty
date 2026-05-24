@@ -31,11 +31,13 @@ inst_can_install() {
 }
 
 inst_install() {
-    if ! is_pacman_installed "${pacman_pkg}"; then
-        pacman_install "${pacman_pkg}"
-    fi
+    pacman_install "${pacman_pkg}"
 
-    cp config/ghostty.config "${HOME}/.config/ghostty/config"
+    file_config="${HOME}/.config/ghostty/config"
+
+    mv_bak "${file_config}"
+
+    cp -v config/ghostty.config "${file_config}"
 
     return 0
 }

@@ -24,7 +24,7 @@ inst_help() {
 }
 
 inst_is_installed() {
-    is_pacman_installed "${pacman_pkg}"
+    return 1
 }
 
 inst_can_install() {

@@ -21,11 +21,11 @@ inst_help() {
 }
 
 inst_is_installed() {
-    is_pacman_installed "${pacman_pkg}"
+    return 1
 }
 
 inst_can_install() {
-    if ! is_command "java"; then
+    if ! is_command java; then
         echo "missing java"
         return 1
     fi
