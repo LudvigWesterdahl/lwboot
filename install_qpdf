@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-set -u
 
 installer_name="qpdf"
 installer_description="Installs qpdf."

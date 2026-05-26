@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-set -u
 
 installer_name="libinputtools"
 installer_description="Installs libinput-tools. Purpose to list devices to allow config of touchpad."

@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-set -u
 
 installer_name="tealdeer"
 installer_description="Installs tealdeer, simplified man pages."

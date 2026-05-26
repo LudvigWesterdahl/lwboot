@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-set -u
 
 installer_name="evtest"
 installer_description="Installs evtest. Purpose to replace usage of xev which didn't give the MSC_SCAN values."

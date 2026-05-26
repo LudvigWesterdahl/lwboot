@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-set -u
 
 installer_name="libiconv"
 installer_description="Installs libiconv, GNU charset conversion library."

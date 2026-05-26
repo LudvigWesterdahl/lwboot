@@ -1,10 +1,8 @@
 #!/bin/sh
 
-installer_name="maven"
-installer_description="Installs maven."
-installer_link="https://archlinux.org/packages/extra/any/maven/"
-
-pacman_pkg="extra/maven"
+installer_name="docs_sed"
+installer_description="sed documentation"
+installer_link="-"
 
 inst_help() {
     htitle "${installer_name}"
@@ -13,7 +11,11 @@ inst_help() {
     husage
     htext "-"
     hexamples
-    htext "-"
+    htext "Delete a line that starts and ends with string"
+    htext "sed -i '/^string$/d' FILE"
+    htext
+    htext "Create backup file for -i"
+    htext "sed -i.bak OPTIONS"
     hseealso
     htext "${installer_link}"
 }
@@ -23,16 +25,11 @@ inst_is_installed() {
 }
 
 inst_can_install() {
-    if ! is_command java; then
-        echo "missing java"
-        return 1
-    fi
-
     return 0
 }
 
 inst_install() {
-    pacman_install "${pacman_pkg}"
+    return 0
 }
 
 inst_can_install_manual() {
@@ -40,9 +37,9 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 0
+    return 1
 }
 
 inst_uninstall() {
-    pacman_uninstall "${pacman_pkg}"
+    return 0
 }

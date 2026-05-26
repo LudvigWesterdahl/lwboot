@@ -3,7 +3,8 @@
 - create script in Scripts repo: epub-util kindle <file.epub>
 
 Example:
-textebook-convert "My Book.epub" "My Book.azw3"
+text
+ebook-convert "My Book.epub" "My Book.azw3"
 Sending to Device (Kindle via USB)
 Calibre does not have a direct CLI command to "send to device" like the GUI's "Send to device" button, which handles proper placement, metadata, covers, and Kindle-specific files (e.g., thumbnails, page numbers via .apnx).
 Option 1: Simple Copy (No Full Metadata Integration)

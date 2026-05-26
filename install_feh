@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-set -u
 
 installer_name="feh"
 installer_description="Installs feh an image viewer."

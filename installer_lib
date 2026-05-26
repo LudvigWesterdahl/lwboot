@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-set -u
 
 htitle() {
     printf "%25s%s\n" "" "${1:-}"
@@ -42,6 +40,27 @@ is_command() {
     else
         return 1
     fi
+}
+
+cp_bak() {
+    arg_file="${1}"
+
+    if [ ! -f "${arg_file}" ]; then
+        return 0
+    fi
+
+
+    file_dir=$(dirname "${arg_file}")
+    file_name=$(basename "${arg_file}") 
+    curr_dir=$(realpath .)
+
+    bak_dir="${curr_dir}/bak${file_dir}" 
+    bak_file="${file_name}.$(date +%Y%m%d_%H%M%S).bak"
+
+    mkdir -p "${bak_dir}"
+    cp -v "${arg_file}" "${bak_dir}/${bak_file}"
+
+    return 0
 }
 
 mv_bak() {

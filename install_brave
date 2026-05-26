@@ -1,6 +1,4 @@
 #!/bin/sh
-set -e
-set -u
 
 installer_name="brave"
 installer_description="Installs brave and configures kde defaults."
