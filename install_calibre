@@ -18,6 +18,35 @@ inst_help() {
     htext
     htext "Get help for a given conversion"
     htext "ebook-convert FILE_FROM FILE_TO -h"
+    htext
+    htext "Complete guide to upload an epub to the kindle"
+    htext
+    htext "1) convert to azw3 format"
+    htext "ebook-convert file.epub file.azw3"
+    htext
+    htext "2) Connect the usb and find the device"
+    htext
+    htext "2.1) Check dmesg for something containing kindle"
+    htext "sudo dmesg"
+    htext
+    htext "2.2) Check block devices"
+    htext "lsblk"
+    htext
+    htext "2.3) Verify correct device"
+    htext "udevadm info /dev/sda"
+    htext
+    htext "3) Mount the filesystem"
+    htext "sudo mkdir -p /mnt/kindle"
+    htext "sudo mount /dev/sda /mnt/kindle"
+    htext
+    htext "4) Create folder in documents"
+    htext "sudo mkdir -p /mnt/kindle/documents/arch-uploads"
+    htext
+    htext "5) Copy file"
+    htext "sudo cp file.azw3 /mnt/kindle/documents/arch-uploads"
+    htext
+    htext "6) Unmount the filesystem"
+    htext "sudo umount /dev/sda"
     hseealso
     htext "${installer_link}"
     htext

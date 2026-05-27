@@ -1,0 +1,45 @@
+#!/bin/sh
+
+installer_name="usbutils"
+installer_description="Installs usbutils."
+installer_link="https://archlinux.org/packages/core/x86_64/usbutils/"
+
+pacman_pkg="core/usbutils"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "lsusb"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+    htext
+    htext "Main purpose of this was to allow uploading files to the kindle."
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install "${pacman_pkg}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall "${pacman_pkg}"
+}
