@@ -73,36 +73,14 @@ install_calibre_config_db() {
         return 1
     fi
 
-    file_src_db="${HOME}/library1.db"
-    dir_dest_db="${HOME}/.local/share/calibre"
-    file_dest_db="${dir_dest_db}/library1.db"
+    database_path="${HOME}/.local/share/calibre/library1.db"
+    library_path="${HOME}/.local/.share/calibre/lib"
 
-    # Adding lib to allow using gui to store the books there
-    mkdir -p "${dir_dest_db}/lib"
-
-
-    if [ -f "${file_src_db}" ]; then
-        bold_yellow "file ${file_src_db} exist consider moving it to ${file_dest_db}"
-    fi
-
-    if [ -d "${file_src_db}" ]; then
-        bold_yellow "dir ${file_src_db} exist consider moving it to ${file_dest_db}"
-    fi
-
-    already_modified_res="$(grep "${file_dest_db}" "${file_calibre_config}")"
-    if [ "${already_modified_res}" != "" ]; then
-        return 0
-    fi
-
-    dry_run_res="$(sed -n "s|${file_src_db}|${file_dest_db}|p" "${file_calibre_config}")"
-
-    if [ "${dry_run_res}" = "" ]; then
-        bold_red "failed to find ${file_src_db} in ${file_calibre_config}"
-        return 1
-    fi
+    mkdir -p "${library_path}"
 
     cp_bak "${file_calibre_config}"
-    sed -i "s|${file_src_db}|${file_dest_db}|" "${file_calibre_config}"
+    sed -i "s|\"database_path\".*|\"database_path\": \"${database_path}\",|" "${file_calibre_config}"
+    sed -i "s|\"library_path\".*|\"library_path\": \"${library_path}\",|" "${file_calibre_config}"
 
     return 0
 }
