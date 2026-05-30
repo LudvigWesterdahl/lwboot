@@ -68,6 +68,9 @@ Just running the following to figure out all highlights in a new buffer
 If you want visibility of the actual colors:
 :hi<CR>
 
+Check formatter for file
+:ConformInfo
+
 --]]
 
 vim.opt.guicursor = ''
@@ -772,6 +775,14 @@ vim.keymap.set('n', '<leader>sG', function()
 end, { desc = '[S]earch by [G]rep (files only)' })
 
 
+vim.keymap.set('n', '<leader><leader>', function()
+  builtin.buffers({
+    --path_display = { filename_first = { reverse_directories = false } },
+    path_display = { "filename_first" },
+  })
+end, { desc = '[ ] Find existing buffers' })
+
+
 
           -- line_width can be set to "full"
           vim.keymap.set('n', '<leader>sd', function()
@@ -781,7 +792,7 @@ end, { desc = '[S]earch by [G]rep (files only)' })
           vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
           vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
           vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
-          vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+          -- vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
 
           -- :JdtShowLogs
@@ -1084,6 +1095,7 @@ dapui.setup({
         xml = { "intellij" },
         html = { 'intellij' },
         c = { "clangformat" },
+        json = { "jq" },
       },
       formatters = {
         intellij = {
@@ -1100,11 +1112,17 @@ dapui.setup({
           args = {
              '--assume-filename', '$FILENAME',
             "--style=file:" .. vim.fn.stdpath("config") .. "/formatters/.clang-format",
+          },
         },
-      }
+        jq = {
+          command = "jq",
+          args = {
+            "--indent", "2", ".",
+          },
+        },
       },
     })
-    vim.keymap.set('n', '<leader>f', function()
+    vim.keymap.set('n', '<leader>fc', function()
       require('conform').format({ async = true, timeout_ms = 10000  })
     end)
   end,

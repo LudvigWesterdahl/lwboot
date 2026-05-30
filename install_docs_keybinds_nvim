@@ -64,6 +64,18 @@ inst_help() {
     htext "2) Then type Ctrl + Shift + : (SWE layout), expect following output:"
     htext "<C-S-.>"
     htext
+    htext "Open up picker to attach to 5005 with dap"
+    htext "F5"
+    htext
+    htext "JDTLS organize imports"
+    htext "<leader>oi"
+    htext "JDTLS test class"
+    htext "<leader>tc"
+    htext "JDTLS test method"
+    htext "<leader>tm"
+    htext "JDTLS pick test"
+    htext "<leader>tp"
+    htext
     hseealso
     htext "${installer_link}"
 }
