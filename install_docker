@@ -33,11 +33,20 @@ inst_install() {
 }
 
 inst_can_install_manual() {
-    return 1
+    return 0
 }
 
 inst_install_manual() {
-    return 1
+    echo "Add yourself to the docker group"
+    echo "1) Check which groups you belong to"
+    echo "groups"
+    echo "2) Add to docker group"
+    echo "sudo groupadd docker"
+    echo "sudo usermod -aG docker ${USER}"
+    echo "3) Reboot"
+    echo "reboot"
+
+    return 0
 }
 
 inst_uninstall() {
