@@ -75,6 +75,14 @@ M.setup = function()
   --
   -- DiagnosticUnnecessary              : LSP tag: Unnecessary (unused code, dead code)
   -- DiagnosticDeprecated               : LSP tag: Deprecated (deprecated APIs)
+
+
+  -- Info
+  any("DiagnosticVirtualTextInfo", { fg = c.blackBright } )
+  any("DiagnosticVirtualLinesInfo", { fg = c.blackBright } )
+  any("DiagnosticUnderlineInfo", {} )
+  any("DiagnosticSignInfo", { fg = c.blackBright, bold = true } )
+  any("DiagnosticFloatingInfo", { fg = c.cursor } )
   
   -- Warn
   any("DiagnosticVirtualTextWarn", { fg = c.blackBright } )

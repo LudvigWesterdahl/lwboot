@@ -205,7 +205,8 @@ vim.diagnostic.config {
   },
 }
 
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>qf', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>ql', vim.diagnostic.open_float, { desc = 'Open diagnostic line' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -407,6 +408,13 @@ vim.keymap.set('n', '<leader>b',  function() require('dap').toggle_breakpoint() 
 vim.keymap.set('n', '<leader>dq', function() require('dap').disconnect() end, { silent = true })
 vim.keymap.set('n', '<leader>du', function() require('dapui').toggle() end)
 vim.keymap.set('n', '<leader>dU', function() require('dapui').toggle({ reset = true }) end)
+vim.keymap.set('n', '<leader>ds', function() require('dapui').toggle({ layout = 2 }) end, { desc = 'Toggle DAP scopes and stacks' })
+-- vim.keymap.set('n', '<leader>dt1', function() require('dapui').toggle({ layout = 1 }) end, { desc = 'Toggle DAP layout 1' })
+-- vim.keymap.set('n', '<leader>dt2', function() require('dapui').toggle({ layout = 2 }) end, { desc = 'Toggle DAP layout 2' })
+-- vim.keymap.set('n', '<leader>dt3', function() require('dapui').toggle({ layout = 3 }) end, { desc = 'Toggle DAP layout 3' })
+-- vim.keymap.set('n', '<leader>dT1', function() require('dapui').toggle({ layout = 1, reset = true }) end, { desc = 'Toggle DAP layout 1' })
+-- vim.keymap.set('n', '<leader>dT2', function() require('dapui').toggle({ layout = 2, reset = true }) end, { desc = 'Toggle DAP layout 2' })
+-- vim.keymap.set('n', '<leader>dT3', function() require('dapui').toggle({ layout = 3, reset = true }) end, { desc = 'Toggle DAP layout 3' })
 
 
 require('vim._core.ui2').enable({
@@ -1028,38 +1036,43 @@ end, { desc = '[ ] Find existing buffers' })
   },
   config = function()
     local dap, dapui = require('dap'), require('dapui')
+
 dapui.setup({
-    layouts = {
-      {
-        -- Left side: scopes, breakpoints, stacks, watches stacked vertically
-        elements = {
-          { id = 'scopes',      size = 0.30 },
-         -- { id = 'breakpoints', size = 0.20 },
-          { id = 'stacks',      size = 0.25 },
-          -- { id = 'watches',     size = 0.25 },
-        },
-        size = math.floor(vim.o.columns * 0.4),  -- 40% of screen width
-        position = 'left',
+  layouts = {
+    -- [1]: primary
+    {
+      elements = {
+        { id = 'repl', size = 0.3 },
+        { id = 'console', size = 0.7 },
       },
-
-    -- Console strip — separate panel, also at bottom, stacks above the previous
-     { elements = { { id = 'console', size = 1.0 }, }, size = 8, position = 'bottom', },
-  {
-    -- REPL strip
-    elements = {
-      { id = 'repl', size = 1.0 },
+      size = 12,
+      position = 'bottom',
     },
-    size = 12,
-    position = 'bottom',
+
+    -- [2]: scopes and stacks
+    {
+      elements = {
+        { id = 'scopes', size = 0.7 },
+        { id = 'stacks', size = 0.3 },
+        -- { id = 'breakpoints', size = 0.5 },
+        -- { id = 'watches',     size = 0.5 },
+      },
+      size = 0.4,
+      position = 'right',
+    },
   },
-  
+})
 
+-- auto-open on session start — open ONLY layouts 1 & 2, leave stacks (3) hidden
+dap.listeners.after.event_initialized['dapui_config'] = function()
+  -- dapui.open({ layout = 1 })
+  dapui.open({ layout = 1 })
+end
 
-    },
-  })
 
     -- auto open/close UI on debug session
-    dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
+    -- dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
+
     -- dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
     -- dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
     -- dap.listeners.before.disconnect['dapui_config'] = function() dapui.close() end
