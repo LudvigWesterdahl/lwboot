@@ -18,6 +18,7 @@
 ; ((expansion) @lwbash_exp (#set! priority 90))
 ; Only works for certain anonymous tokens, see command under lw_keyword
 (expansion ["${" ":-" "}"] @lwbash_exp (#set! priority 90))
+(simple_expansion ["$"] @lwbash_exp (#set! priority 90))
 
 ; ====================
 ; lwbash_cmd_sub
