@@ -216,11 +216,12 @@ M.setup = function()
   fg('@lw_literal', blue1)
   fg('@lw_string', green2)
   any('@lw_null', { fg = blue1, bold = true })
+  any("@lw_function_declaration", { fg = c.cyanBright })
 
   -- Language: java
   any("@lwjava_comment", { fg = c.blackBright, italic = true })
   any('@lwjava_import_ref', { fg = c.cursorText })
-  any('@lwjava_field_ref', { fg = c.blueBright, bold = false })
+  any('@lwjava_field_ref', { fg = c.magentaBright, bold = false })
   any('@lwjava_annotation', { fg = c.magentaBright, italic = false })
   any('@lwjava_import_asterisk', { fg = c.yellow, bold = true })
   any('@lwjava_import_keyword', { link = '@lwjava_import_ref' })
@@ -238,6 +239,7 @@ M.setup = function()
   any("@lsp.type.class.java", { fg = c.foreground }) -- Ensures Inner class gets colored white vs a field access like System.out.
   any("@lsp.typemod.keyword.documentation.java", {fg = c.blackBright, bold = true, underline = true})
   any("@lsp.typemod.parameter.documentation.java", {fg = c.blackBright, bold = true, underline = false})
+  -- any("@lsp.typemod.method.declaration.java", { link = "@lw_literal" })
   any("LSP_CODE", {link="LINK_TO"})
   any("LSP_CODE", {link="LINK_TO"})
 

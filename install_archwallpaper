@@ -21,6 +21,9 @@ inst_help() {
     htext
     htext "Arch Linux minimal wallpapers"
     htext "https://github.com/LagrangianLad/arch-minimal-wallpapers"
+    htext
+    htext "4K Wallpapers"
+    htext "https://4kwallpapers.com/"
 }
 
 inst_is_installed() {
@@ -37,6 +40,7 @@ inst_install() {
     wallpaper_img="/usr/share/backgrounds/archlinux/conference.png"
     lockscreen_img="/usr/share/backgrounds/archlinux/split.png"
     lockscreen_img="${HOME}/Documents/lwboot/config/wallpapers/ayu-mirage.png"
+    lockscreen_img="${HOME}/Documents/lwboot/config/wallpapers/island.jpg"
     wallpaper_img="${lockscreen_img}"
 
 

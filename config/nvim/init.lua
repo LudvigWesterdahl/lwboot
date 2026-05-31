@@ -1137,7 +1137,7 @@ end
     })
     vim.keymap.set('n', '<leader>fc', function()
       require('conform').format({ async = true, timeout_ms = 10000  })
-    end)
+    end, { desc = "[F]ormat [C]ode" })
   end,
 },
 {
