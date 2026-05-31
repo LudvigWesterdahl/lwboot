@@ -16,6 +16,8 @@ inst_help() {
     htext "-"
     hseealso
     htext "${installer_link}"
+    htext
+    htext "https://github.com/sharkdp/hexyl"
 }
 
 inst_is_installed() {

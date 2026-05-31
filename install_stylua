@@ -17,6 +17,8 @@ inst_help() {
     htext "stylua --config-path stylua.toml - < file.lua"
     hseealso
     htext "${installer_link}"
+    htext
+    htext "https://github.com/JohnnyMorganz/StyLua"
 }
 
 inst_is_installed() {
