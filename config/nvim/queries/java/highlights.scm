@@ -1,3 +1,12 @@
+; ============================================================
+; lwjava
+; ============================================================
+
+; ====================
+; lwjava_import_ref
+; ====================
+(import_declaration (scoped_identifier) @lwjava_import_ref)
+
 ; ====================
 ; lwjava_field_ref
 ; ====================
@@ -13,17 +22,6 @@
 (marker_annotation) @lwjava_annotation
 
 ; ====================
-; lwjava_comment
-; ====================
-(line_comment) @lwjava_comment
-(block_comment) @lwjava_comment
-
-; ====================
-; lwjava_import_ref
-; ====================
-(import_declaration (scoped_identifier) @lwjava_import_ref)
-
-; ====================
 ; lwjava_import_asterisk
 ; ====================
 (import_declaration (asterisk) @lwjava_import_asterisk)
@@ -32,6 +30,17 @@
 ; lwjava_import_keyword
 ; ====================
 "import" @lwjava_import_keyword
+
+; ============================================================
+; lw
+; ============================================================
+
+; ====================
+; lw_literal
+; ====================
+[(true) (false)] @lw_literal
+[(decimal_integer_literal) (decimal_floating_point_literal)] @lw_literal
+(string_literal (escape_sequence) @lw_literal)
 
 ; ====================
 ; lw_string
@@ -45,17 +54,16 @@
 (null_literal) @lw_null
 
 ; ====================
-; lw_literal
-; ====================
-[(true) (false)] @lw_literal
-[(decimal_integer_literal) (decimal_floating_point_literal)] @lw_literal
-(string_literal (escape_sequence) @lw_literal)
-
-; ====================
 ; lw_function_declaration
 ; ====================
 (constructor_declaration name: (identifier) @lw_function_declaration (#set! priority 128))
 (method_declaration name: (identifier) @lw_function_declaration (#set! priority 128))
+
+; ====================
+; lw_comment
+; ====================
+(line_comment) @lw_comment
+(block_comment) @lw_comment
 
 ; ====================
 ; lw_keyword
@@ -69,7 +77,6 @@
  (floating_point_type)
  (void_type)
  ] @lw_keyword
-
 
 [
  "abstract"
@@ -90,7 +97,6 @@
  "for"
  "if"
  "implements"
- ; "import"
  "instanceof"
  "interface"
  "@interface"

@@ -30,7 +30,6 @@ readonly installer_opt_1="${2:-}"
 # ===========================================================================
 # =========================          main           =========================
 # ===========================================================================
-
 # shellcheck disable=SC1091 # SC1090 (warning): ShellCheck can't follow non-constant source. Use a directive to specify location.
 . ./installer_lib
 

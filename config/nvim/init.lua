@@ -71,6 +71,12 @@ If you want visibility of the actual colors:
 Check formatter for file
 :ConformInfo
 
+Paste in the command row of neovim
+<C-r>+
+
+Check parser for file
+:lua print(vim.treesitter.get_parser(0):lang())
+
 --]]
 
 vim.opt.guicursor = ''
@@ -360,6 +366,9 @@ local parsers_set = {}
 for _, lang in ipairs(parsers) do
   parsers_set[lang] = true
 end
+
+
+vim.treesitter.language.register('bash', { 'sh' })
 
 vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
@@ -760,7 +769,7 @@ vim.keymap.set('n', '<leader>sF', function()
   '/target/',
     },
   })
-end, { desc = '[S]earch [F]iles (all, including hidden + gitignored)' })
+end, { desc = '[S]earch [F]iles (all)' })
 
 
           vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
@@ -776,12 +785,19 @@ end, { desc = '[S]earch by [G]rep' })
 
 vim.keymap.set('n', '<leader>sG', function()
   builtin.live_grep({
-    --path_display = { filename_first = { reverse_directories = false } },
-    path_display = { "filename_first" },
-    additional_args = function() return { '--max-count=1' } end,
+    path_display = { filename_first = { reverse_directories = false } },
+    additional_args = function()
+      return {
+        '--hidden',
+        '--no-ignore',
+        '--glob', '!.git/',
+        '--glob', '!node_modules/',
+        '--glob', '!target/',
+        '--max-count=1',
+      }
+    end,
   })
-end, { desc = '[S]earch by [G]rep (files only)' })
-
+end, { desc = '[S]earch by [G]rep (all)' })
 
 vim.keymap.set('n', '<leader><leader>', function()
   builtin.buffers({
@@ -789,6 +805,12 @@ vim.keymap.set('n', '<leader><leader>', function()
     path_display = { "filename_first" },
   })
 end, { desc = '[ ] Find existing buffers' })
+
+    vim.keymap.set('n', '<leader>fc', function()
+      require('conform').format({ 
+        async = true, timeout_ms = 10000
+      })
+    end, { desc = "[F]ormat [C]ode" })
 
 
 
@@ -1135,9 +1157,6 @@ end
         },
       },
     })
-    vim.keymap.set('n', '<leader>fc', function()
-      require('conform').format({ async = true, timeout_ms = 10000  })
-    end, { desc = "[F]ormat [C]ode" })
   end,
 },
 {

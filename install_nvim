@@ -82,6 +82,31 @@ cp_parser() {
     cp -v "${arg_so_file}" "${parser_file}"
 }
 
+handle_tree_sitter_bash() {
+    repo="https://github.com/tree-sitter/tree-sitter-bash"
+    dest_dir="${HOME}/Documents/tree-sitter-bash"
+    so_file="${dest_dir}/libtree-sitter-bash.so"
+
+    if [ -f "${so_file}" ]; then
+        echo "handle_tree_sitter_bash: skipping file ${so_file} exists"
+        return 0
+    fi
+
+    git_clone_pull "${repo}" "${dest_dir}"
+    
+    make -C "${dest_dir}" 1>/dev/null
+
+
+    if [ ! -f "${so_file}" ]; then
+        echo "make failed missing ${so_file}"
+        return 0
+    fi
+
+    cp_parser "${so_file}" bash
+    
+    return 0
+}
+
 handle_tree_sitter_java() {
     repo="https://github.com/tree-sitter/tree-sitter-java"
     dest_dir="${HOME}/Documents/tree-sitter-java"
@@ -181,6 +206,10 @@ inst_install() {
     mkdir "${nvim_dst}/queries/java" 2>/dev/null
     cp -v "${nvim_src}/queries/java/highlights.scm" "${nvim_dst}/queries/java/highlights.scm"
 
+    # queries bash
+    mkdir "${nvim_dst}/queries/bash" 2>/dev/null
+    cp -v "${nvim_src}/queries/bash/highlights.scm" "${nvim_dst}/queries/bash/highlights.scm"
+
     # ftplugin
     cp -v "${nvim_src}/ftplugin/java.lua" "${nvim_dst}/ftplugin/java.lua"
 
@@ -192,6 +221,7 @@ inst_install() {
     cp -v "${nvim_src}/snippets/java.lua" "${nvim_dst}/snippets/java.lua"
 
     handle_tree_sitter_java
+    handle_tree_sitter_bash
     
     handle_java_debug
 

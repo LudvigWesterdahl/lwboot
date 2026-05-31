@@ -212,19 +212,27 @@ M.setup = function()
   any("NvimTreeGitFolderIgnoredHL", { fg = nvimTreeGitIgnoredFg })
 
   -- Language: any
-  fg('@lw_keyword', c.blue)
-  fg('@lw_literal', blue1)
-  fg('@lw_string', green2)
-  any('@lw_null', { fg = blue1, bold = true })
+  any("@lw_literal", { fg = blue1 })
+  any("@lw_string", { fg = green2 })
+  any("@lw_null", { fg = blue1, bold = true })
   any("@lw_function_declaration", { fg = c.cyanBright })
+  any("@lw_comment", { fg = c.blackBright, italic = true })
+  any("@lw_keyword", { fg = c.blue })
 
   -- Language: java
-  any("@lwjava_comment", { fg = c.blackBright, italic = true })
   any('@lwjava_import_ref', { fg = c.cursorText })
   any('@lwjava_field_ref', { fg = c.magentaBright, bold = false })
   any('@lwjava_annotation', { fg = c.magentaBright, italic = false })
   any('@lwjava_import_asterisk', { fg = c.yellow, bold = true })
   any('@lwjava_import_keyword', { link = '@lwjava_import_ref' })
+
+  -- Language: bash
+  any("@lwbash_variable", { fg = c.magentaBright})
+  any("@lwbash_cmd", { fg = c.cursor })
+  any("@lwbash_exp", { fg = c.cursor })
+  any("@lwbash_cmd_sub", { link = "@lwbash_exp" })
+  any("@lwbash_ret_success", { fg = green2, bold = false })
+  any("@lwbash_ret_failure", { fg = c.red, bold = false })
 
   -- LSP: java
   any("@lsp.mod.importDeclaration.java", {link="@lwjava_import_ref"})
@@ -236,10 +244,10 @@ M.setup = function()
   any("@lsp.typemod.method.static.java", {italic = true})
   any("@lsp.typemod.property.static.java", {italic = true})
   any("@lsp.type.method.java", {link="@lsp"})
-  any("@lsp.type.class.java", { fg = c.foreground }) -- Ensures Inner class gets colored white vs a field access like System.out.
+  -- Ensures Inner class gets colored white vs a field access like System.out.
+  any("@lsp.type.class.java", { fg = c.foreground })
   any("@lsp.typemod.keyword.documentation.java", {fg = c.blackBright, bold = true, underline = true})
   any("@lsp.typemod.parameter.documentation.java", {fg = c.blackBright, bold = true, underline = false})
-  -- any("@lsp.typemod.method.declaration.java", { link = "@lw_literal" })
   any("LSP_CODE", {link="LINK_TO"})
   any("LSP_CODE", {link="LINK_TO"})
 
