@@ -34,8 +34,9 @@ vim.list_extend(
     vim.split(vim.fn.glob(home .. "/Documents/vscode-java-test/extension/server/*.jar", true), "\n")
 )
 
-local lombok_jar =
-    vim.split(vim.fn.glob(home .. "/.m2/repository/org/projectlombok/lombok/*/lombok-*.jar", true), "\n")[1]
+-- local lombok_jar = vim.split(vim.fn.glob(home .. "/.m2/repository/org/projectlombok/lombok/*/lombok-*.jar", true), "\n")[1]
+
+local lombok_jar = home .. "/.m2/repository/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar"
 
 local config = {
     cmd = {

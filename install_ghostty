@@ -34,8 +34,16 @@ inst_install() {
     file_config="${HOME}/.config/ghostty/config"
 
     mv_bak "${file_config}"
-
     cp -v config/ghostty.config "${file_config}"
+
+    file_theme_name="ghostty-lw-light.theme"
+    # file_theme="/usr/share/ghostty/themes/${file_theme_name}"
+    dir_theme="${HOME}/.config/ghostty/themes"
+    file_theme="${dir_theme}/${file_theme_name}"
+
+    mkdir -p "${dir_theme}"
+    mv_bak "${file_theme}"
+    cp -v "config/${file_theme_name}" "${file_theme}"
 
     return 0
 }

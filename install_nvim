@@ -188,15 +188,19 @@ inst_install() {
     mkdir "${nvim_dst}/formatters" 2>/dev/null
     mkdir "${nvim_dst}/snippets" 2>/dev/null
 
-
     cp -v "${nvim_src}/init.lua" "${nvim_dst}/init.lua"
-    cp -v "${nvim_src}/stylua.toml" "${nvim_dst}/.stylua.toml"
 
     # lwcs
     mkdir "${nvim_dst}/lua/lwcs" 2>/dev/null
     cp -v "${nvim_src}/colors/lwcs.lua" "${nvim_dst}/colors/lwcs.lua"
     cp -v "${nvim_src}/lua/lwcs/groups.lua" "${nvim_dst}/lua/lwcs/groups.lua"
     cp -v "${nvim_src}/lua/lwcs/init.lua" "${nvim_dst}/lua/lwcs/init.lua"
+
+    # lwcsl
+    mkdir "${nvim_dst}/lua/lwcsl" 2>/dev/null
+    cp -v "${nvim_src}/colors/lwcsl.lua" "${nvim_dst}/colors/lwcsl.lua"
+    cp -v "${nvim_src}/lua/lwcsl/groups.lua" "${nvim_dst}/lua/lwcsl/groups.lua"
+    cp -v "${nvim_src}/lua/lwcsl/init.lua" "${nvim_dst}/lua/lwcsl/init.lua"
 
     # queries c
     mkdir "${nvim_dst}/queries/c" 2>/dev/null

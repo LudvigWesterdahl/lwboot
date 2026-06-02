@@ -1017,11 +1017,13 @@ require("lazy").setup({
             },
 
             completion = {
+                keyword = { range = "prefix" },
                 menu = {
                     border = "rounded",
                     winblend = 0,
                     scrollbar = false,
-                    direction_priority = { "n", "s" },
+                    max_height = 15,
+                    direction_priority = { "s", "n" },
                 },
                 documentation = {
                     auto_show = false,
@@ -1124,12 +1126,12 @@ require("lazy").setup({
     },
 
     {
-        dir = vim.fn.stdpath("config") .. "/lua/lwcs",
+        dir = vim.fn.stdpath("config") .. "/lua/lwcsl",
         lazy = false,
         priority = 1000, -- make sure to load this before all the other start plugins
         config = function()
-            require("lwcs").setup()
-            vim.cmd.colorscheme("lwcs")
+            require("lwcsl").setup()
+            vim.cmd.colorscheme("lwcsl")
         end,
     },
     {
