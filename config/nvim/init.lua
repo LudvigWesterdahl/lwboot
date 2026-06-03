@@ -401,31 +401,40 @@ end
 
 vim.keymap.set("n", "<F5>", function()
     require("dap").continue()
-end)
+end, { desc = "[D]ap continue" })
+
 vim.keymap.set("n", "<F10>", function()
     require("dap").step_over()
-end)
+end, { desc = "[D]ap step over" })
+
 vim.keymap.set("n", "<F11>", function()
     require("dap").step_into()
-end)
+end, { desc = "[D]ap step into" })
+
 vim.keymap.set("n", "<F12>", function()
     require("dap").step_out()
-end)
-vim.keymap.set("n", "<leader>b", function()
+end, { desc = "[D]ap step out" })
+
+vim.keymap.set("n", "<leader>db", function()
     require("dap").toggle_breakpoint()
-end)
+end, { desc = "[D]ap toggle [B]reakpoint" })
+
 vim.keymap.set("n", "<leader>dq", function()
     require("dap").disconnect()
-end, { silent = true })
-vim.keymap.set("n", "<leader>du", function()
-    require("dapui").toggle()
-end)
-vim.keymap.set("n", "<leader>dU", function()
-    require("dapui").toggle({ reset = true })
-end)
+end, { silent = true, desc = "[D]ap disconnect" })
+
 vim.keymap.set("n", "<leader>ds", function()
     require("dapui").toggle({ layout = 2 })
-end, { desc = "Toggle DAP scopes and stacks" })
+end, { desc = "[D]apui toggle [S]copes and stacks" })
+
+vim.keymap.set("n", "<leader>do", function()
+    require("dapui").open({ reset = true })
+end, { desc = "[D]apui [O]pen" })
+
+vim.keymap.set("n", "<leader>dc", function()
+    require("dapui").close()
+end, { desc = "[D]apui [C]lose" })
+
 -- vim.keymap.set('n', '<leader>dt1', function() require('dapui').toggle({ layout = 1 }) end, { desc = 'Toggle DAP layout 1' })
 -- vim.keymap.set('n', '<leader>dt2', function() require('dapui').toggle({ layout = 2 }) end, { desc = 'Toggle DAP layout 2' })
 -- vim.keymap.set('n', '<leader>dt3', function() require('dapui').toggle({ layout = 3 }) end, { desc = 'Toggle DAP layout 3' })
@@ -1100,10 +1109,9 @@ require("lazy").setup({
                 },
             })
 
-            -- auto-open on session start — open ONLY layouts 1 & 2, leave stacks (3) hidden
             dap.listeners.after.event_initialized["dapui_config"] = function()
-                -- dapui.open({ layout = 1 })
                 dapui.open({ layout = 1 })
+                dapui.open({ layout = 2 })
             end
 
             -- auto open/close UI on debug session
