@@ -1,0 +1,43 @@
+#!/bin/sh
+
+installer_name="bluetooth"
+installer_description="Starts the bluetooth service."
+installer_link="-"
+
+pacman_pkg=""
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "systemctl status bluetooth"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    enable_start_service bluetooth.service
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    return 0
+}

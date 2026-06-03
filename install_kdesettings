@@ -95,6 +95,23 @@ inst_install() {
   # systemsettings kcm_smserver
   kwriteconfig6 --file ksmserverrc --group General --key loginMode emptySession
 
+
+  # systemsettings kcm_screenlocker
+  # Lock screen automatically in minutes
+  kwriteconfig6 --file kscreenlockerrc --group Daemon --key Timeout "45"
+  # Lock after waking from sleep
+  kwriteconfig6 --file kscreenlockerrc --group Daemon --key LockOnResume "true"
+  # Delay before password required in seconds
+  kwriteconfig6 --file kscreenlockerrc --group Daemon --key LockGrace "0"
+
+  # systemsettings kcm_powerdevilprofilesconfig
+  # When inactive: sleep
+  kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key AutoSuspendAction --delete
+  # After X minutes in seconds
+  kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key AutoSuspendIdleTimeoutSec "$((60 * 30))"
+
+
+
   return 0
 }
 

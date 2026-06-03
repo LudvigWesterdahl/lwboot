@@ -119,11 +119,12 @@ M.setup = function()
     any("BlinkCmpDocBorder", { bg = c.background })
 
     -- Plugin: flash
-    local flashFg = c.blackBright
+    local flashFg = c.white
     any("FlashBackdrop", { fg = flashFg })
     any("FlashMatch", { fg = flashFg, bg = "NONE" })
     any("FlashCurrent", { fg = flashFg, bg = "NONE" })
-    any("FlashLabel", { fg = c.foreground, bg = c.yellowBright, bold = false })
+    -- any("FlashLabel", { fg = c.foreground, bg = c.yellowBright, bold = false })
+    any("FlashLabel", { fg = c.redBright, bg = "NONE", bold = true })
 
     -- Plugin: nvim-web-devicons
     local devIconWhiteFg = c.cursor

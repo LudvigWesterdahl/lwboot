@@ -177,6 +177,8 @@ run_install install_dbeaver
 run_install install_usbutils
 run_install install_calibre
 run_install install_stylua
+run_install install_bluetooth
+run_install install_shfmt
 
 if [ "${installer_arg}" = "docs" ]; then
     echo "${run_install_out_1}" | less

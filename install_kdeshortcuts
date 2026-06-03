@@ -81,7 +81,7 @@ inst_help() {
     htext "-"
     hseealso
     htext "${installer_link}"
-    htext "ANOTHER_LINK_ANOTHER_LINK"
+    htext
     htext "You can figure out the bindings by going to System Settings > Keyboard > Shortcuts > Export."
     htext "The resulting kksrc file can be inspected."
     htext "For example Window Maximize is in file kglobalshortcutsrc and group kwin, see [kwin][Global Shortcuts]."

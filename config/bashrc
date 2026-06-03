@@ -50,6 +50,30 @@ dolphind() {
     setsid -f dolphin >> "$HOME/.local/share/dolphind-dolphin.log" 2>&1 "${arg_dir}"
 }
 
+mvnh() {
+    arg_plugin="${1:-}"
+    arg_goal="${2:-}"
+
+    if [ "${arg_goal}" != "" ]; then
+        mvn help:describe -e -Dplugin="${arg_plugin}" -Dgoal="${arg_goal}" -Ddetail=true
+        return 0
+    fi
+
+    if [ "${arg_plugin}" != "" ]; then
+        mvn help:describe -e -Dplugin="${arg_plugin}"
+        return 0
+    fi
+
+    echo "USAGE"
+    echo "    mvnh PLUGIN [GOAL]"
+    echo ""
+    echo "EXAMPLES"
+    echo "    mvnh liquibase"
+    echo "    mvnh liquibase rollbackSQL"
+
+    return 0
+}
+
 
 
 
