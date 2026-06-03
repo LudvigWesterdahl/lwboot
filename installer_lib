@@ -49,12 +49,11 @@ cp_bak() {
         return 0
     fi
 
+    file_dir="$(dirname "${arg_file}")"
+    file_name="$(basename "${arg_file}")"
+    curr_dir="$(realpath .)"
 
-    file_dir=$(dirname "${arg_file}")
-    file_name=$(basename "${arg_file}") 
-    curr_dir=$(realpath .)
-
-    bak_dir="${curr_dir}/bak${file_dir}" 
+    bak_dir="${curr_dir}/bak${file_dir}"
     bak_file="${file_name}.$(date +%Y%m%d_%H%M%S).bak"
 
     mkdir -p "${bak_dir}"
@@ -70,12 +69,11 @@ mv_bak() {
         return 0
     fi
 
-
     file_dir=$(dirname "${arg_file}")
-    file_name=$(basename "${arg_file}") 
+    file_name=$(basename "${arg_file}")
     curr_dir=$(realpath .)
 
-    bak_dir="${curr_dir}/bak${file_dir}" 
+    bak_dir="${curr_dir}/bak${file_dir}"
     bak_file="${file_name}.$(date +%Y%m%d_%H%M%S).bak"
 
     mkdir -p "${bak_dir}"
@@ -160,4 +158,3 @@ pacman_uninstall() {
 
     sudo pacman --noconfirm -R "${short_pkg}"
 }
-

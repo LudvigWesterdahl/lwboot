@@ -31,88 +31,83 @@ inst_help() {
 }
 
 inst_is_installed() {
-  return 1
+    return 1
 }
 
 inst_can_install() {
-  if ! is_command libinput; then
-    echo "missing libinput"
-    return 1
-  fi
-  
-  if ! is_command udevadm; then
-    echo "missing udevadm"
-    return 1
-  fi
-   
-  return 0
+    if ! is_command libinput; then
+        echo "missing libinput"
+        return 1
+    fi
+
+    if ! is_command udevadm; then
+        echo "missing udevadm"
+        return 1
+    fi
+
+    return 0
 }
 
-
 set_inputdevice_prop() {
-  arg_dev_path="${1}"
-  arg_prop="${2}"
-  arg_type="${3}"
-  arg_val="${4}"
+    arg_dev_path="${1}"
+    arg_prop="${2}"
+    arg_type="${3}"
+    arg_val="${4}"
 
-  dev_name=$(udevadm info "${arg_dev_path}" | grep "M:" | tr -d "M: ")
-  if [ "/dev/input/${dev_name}" != "${arg_dev_path}" ]; then
-    echo "failed to find device name from ${arg_dev_path} got: ${dev_name}"
-    return 1
-  fi
+    dev_name=$(udevadm info "${arg_dev_path}" | grep "M:" | tr -d "M: ")
+    if [ "/dev/input/${dev_name}" != "${arg_dev_path}" ]; then
+        echo "failed to find device name from ${arg_dev_path} got: ${dev_name}"
+        return 1
+    fi
 
+    val_before=$(busctl --user get-property org.kde.KWin "/org/kde/KWin/InputDevice/${dev_name}" org.kde.KWin.InputDevice "${arg_prop}")
+    busctl --user set-property org.kde.KWin "/org/kde/KWin/InputDevice/${dev_name}" org.kde.KWin.InputDevice "${arg_prop}" "${arg_type}" "${arg_val}"
+    val_after=$(busctl --user get-property org.kde.KWin "/org/kde/KWin/InputDevice/${dev_name}" org.kde.KWin.InputDevice "${arg_prop}")
 
-  val_before=$(busctl --user get-property org.kde.KWin "/org/kde/KWin/InputDevice/${dev_name}" org.kde.KWin.InputDevice "${arg_prop}")
-  busctl --user set-property org.kde.KWin "/org/kde/KWin/InputDevice/${dev_name}" org.kde.KWin.InputDevice "${arg_prop}" "${arg_type}" "${arg_val}"
-  val_after=$(busctl --user get-property org.kde.KWin "/org/kde/KWin/InputDevice/${dev_name}" org.kde.KWin.InputDevice "${arg_prop}")
-  
-  echo "set input device property"
-  echo "dev path:    ${arg_dev_path}"
-  echo "dev name:    ${dev_name}"
-  echo "property:    ${arg_prop}"
-  echo "before:      ${val_before}"
-  echo "after:       ${val_after}"
+    echo "set input device property"
+    echo "dev path:    ${arg_dev_path}"
+    echo "dev name:    ${dev_name}"
+    echo "property:    ${arg_prop}"
+    echo "before:      ${val_before}"
+    echo "after:       ${val_after}"
 }
 
 config_touchpad() {
-  echo "configuring touchpad: libinput list-devices will be called with sudo"
+    echo "configuring touchpad: libinput list-devices will be called with sudo"
 
-  dev_substring="Touchpad"
-  num_substring_lines=$(sudo libinput list-devices | grep -c "${dev_substring}")
-  if [ "${num_substring_lines}" -ne "1" ]; then
-    echo "too many ${dev_substring} results expected 1 got ${num_substring_lines}"
-    return 0
-  fi
-  
-  dev_path=$(sudo libinput list-devices | grep "${dev_substring}" -A 1 | tail -n 1 | tr -s " " "\n" | tail -n 1)
+    dev_substring="Touchpad"
+    num_substring_lines=$(sudo libinput list-devices | grep -c "${dev_substring}")
+    if [ "${num_substring_lines}" -ne "1" ]; then
+        echo "too many ${dev_substring} results expected 1 got ${num_substring_lines}"
+        return 0
+    fi
 
-  set_inputdevice_prop "${dev_path}" naturalScroll b true
+    dev_path=$(sudo libinput list-devices | grep "${dev_substring}" -A 1 | tail -n 1 | tr -s " " "\n" | tail -n 1)
+
+    set_inputdevice_prop "${dev_path}" naturalScroll b true
 }
 
 inst_install() {
-  config_touchpad
+    config_touchpad
 
-  # systemsettings kcm_smserver
-  kwriteconfig6 --file ksmserverrc --group General --key loginMode emptySession
+    # systemsettings kcm_smserver
+    kwriteconfig6 --file ksmserverrc --group General --key loginMode emptySession
 
+    # systemsettings kcm_screenlocker
+    # Lock screen automatically in minutes
+    kwriteconfig6 --file kscreenlockerrc --group Daemon --key Timeout "45"
+    # Lock after waking from sleep
+    kwriteconfig6 --file kscreenlockerrc --group Daemon --key LockOnResume "true"
+    # Delay before password required in seconds
+    kwriteconfig6 --file kscreenlockerrc --group Daemon --key LockGrace "0"
 
-  # systemsettings kcm_screenlocker
-  # Lock screen automatically in minutes
-  kwriteconfig6 --file kscreenlockerrc --group Daemon --key Timeout "45"
-  # Lock after waking from sleep
-  kwriteconfig6 --file kscreenlockerrc --group Daemon --key LockOnResume "true"
-  # Delay before password required in seconds
-  kwriteconfig6 --file kscreenlockerrc --group Daemon --key LockGrace "0"
+    # systemsettings kcm_powerdevilprofilesconfig
+    # When inactive: sleep
+    kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key AutoSuspendAction --delete
+    # After X minutes in seconds
+    kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key AutoSuspendIdleTimeoutSec "$((60 * 30))"
 
-  # systemsettings kcm_powerdevilprofilesconfig
-  # When inactive: sleep
-  kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key AutoSuspendAction --delete
-  # After X minutes in seconds
-  kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key AutoSuspendIdleTimeoutSec "$((60 * 30))"
-
-
-
-  return 0
+    return 0
 }
 
 inst_can_install_manual() {

@@ -43,7 +43,6 @@ inst_install() {
     lockscreen_img="${HOME}/Documents/lwboot/config/wallpapers/island.jpg"
     wallpaper_img="${lockscreen_img}"
 
-
     plasma-apply-wallpaperimage "${wallpaper_img}"
 
     kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://${lockscreen_img}"

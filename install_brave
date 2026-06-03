@@ -61,7 +61,7 @@ inst_install() {
     kwriteconfig6 --file kdeglobals --group General --key BrowserApplication "${brave_desktop}"
     kwriteconfig6 --file kdeglobals --group General --key Http "${brave_desktop}"
     kwriteconfig6 --file kdeglobals --group General --key Https "${brave_desktop}"
-    
+
     rm -rf "${aur_build_dir}"
 
     return 0

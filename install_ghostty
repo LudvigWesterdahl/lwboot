@@ -48,7 +48,6 @@ handle_theme() {
     return 0
 }
 
-
 inst_install() {
     pacman_install "${pacman_pkg}"
 

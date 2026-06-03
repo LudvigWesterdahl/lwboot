@@ -81,7 +81,6 @@ run_install() {
         return 0
     fi
 
-
     if [ "${installer_arg}" = "uninstall" ]; then
 
         describe_installer
@@ -183,4 +182,3 @@ run_install install_shfmt
 if [ "${installer_arg}" = "docs" ]; then
     echo "${run_install_out_1}" | less
 fi
-

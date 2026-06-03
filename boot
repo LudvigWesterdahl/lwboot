@@ -49,4 +49,3 @@ sudo pacman --noconfirm -S "extra/git"
 
 echo "cloning lwboot repository into: ${req_dir_2_lwboot}"
 git clone git@github.com:LudvigWesterdahl/lwboot.git "${req_dir_2_lwboot}/lwboot"
-

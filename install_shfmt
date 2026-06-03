@@ -13,8 +13,11 @@ inst_help() {
     husage
     htext "shfmt --help"
     hexamples
-    htext "Format a file using a config file to stdout"
-    htext "shfmt --config-path shfmt.toml - < file.lua"
+    htext "Formats a sh file and writes to stdout"
+    htext "shfmt -i 4 -ci -ln posix FILE"
+    htext
+    htext "Formats a bash file and writes to stdout (long variant)"
+    htext "shfmt --indent 4 --case-indent --language-dialect bash FILE"
     hseealso
     htext "${installer_link}"
     htext

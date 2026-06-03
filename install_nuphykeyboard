@@ -47,5 +47,5 @@ inst_install_manual() {
 }
 
 inst_uninstall() {
-     return 0
+    return 0
 }

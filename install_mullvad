@@ -62,7 +62,7 @@ mullvad_login() {
         return 0
     fi
 
-    if mullvad account login < "${account_file}" 1>/dev/null; then
+    if mullvad account login <"${account_file}" 1>/dev/null; then
         echo "logged in"
         return 0
     else

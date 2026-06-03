@@ -1145,6 +1145,8 @@ require("lazy").setup({
                     c = { "clangformat" },
                     json = { "jq" },
                     lua = { "stylua" },
+                    sh = { "shfmt_sh" },
+                    bash = { "shfmt_bash" },
                 },
                 formatters = {
                     intellij = {
@@ -1180,6 +1182,28 @@ require("lazy").setup({
                             vim.fn.stdpath("config") .. "/formatters/.stylua.toml",
                             "--stdin-filepath",
                             "$FILENAME",
+                            "-",
+                        },
+                    },
+                    shfmt_sh = {
+                        command = "shfmt",
+                        args = {
+                            "-i",
+                            "4",
+                            "-ci",
+                            "-ln",
+                            "posix",
+                            "-",
+                        },
+                    },
+                    shfmt_bash = {
+                        command = "shfmt",
+                        args = {
+                            "-i",
+                            "4",
+                            "-ci",
+                            "-ln",
+                            "bash",
                             "-",
                         },
                     },
@@ -1374,9 +1398,9 @@ require("lazy").setup({
                     width = 40,
                 },
                 git = {
-                  enable = true,
-                  show_on_dirs = true,
-                  show_on_open_dirs = true,
+                    enable = true,
+                    show_on_dirs = true,
+                    show_on_open_dirs = true,
                 },
                 renderer = {
                     group_empty = true,

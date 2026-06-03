@@ -9,7 +9,6 @@ pacman_pkg="extra/neovim"
 nvim_src=config/nvim
 nvim_dst="${HOME}/.config/nvim"
 
-
 git_clone_pull() {
     arg_repo="${1}"
     arg_dest_dir="${2}"
@@ -21,7 +20,7 @@ git_clone_pull() {
             return 0
         fi
     fi
-   
+
     echo "git pull ${arg_dest_dir}"
     if ! git -C "${arg_dest_dir}" pull 1>/dev/null 2>&1; then
         echo "git pull failed"
@@ -71,7 +70,6 @@ handle_java_debug() {
     fi
 }
 
-
 cp_parser() {
     arg_so_file="${1}"
     arg_lang="${2}"
@@ -93,9 +91,8 @@ handle_tree_sitter_bash() {
     fi
 
     git_clone_pull "${repo}" "${dest_dir}"
-    
-    make -C "${dest_dir}" 1>/dev/null
 
+    make -C "${dest_dir}" 1>/dev/null
 
     if [ ! -f "${so_file}" ]; then
         echo "make failed missing ${so_file}"
@@ -103,7 +100,7 @@ handle_tree_sitter_bash() {
     fi
 
     cp_parser "${so_file}" bash
-    
+
     return 0
 }
 
@@ -118,9 +115,8 @@ handle_tree_sitter_java() {
     fi
 
     git_clone_pull "${repo}" "${dest_dir}"
-    
-    make -C "${dest_dir}" 1>/dev/null
 
+    make -C "${dest_dir}" 1>/dev/null
 
     if [ ! -f "${so_file}" ]; then
         echo "make failed missing ${so_file}"
@@ -128,7 +124,7 @@ handle_tree_sitter_java() {
     fi
 
     cp_parser "${so_file}" java
-    
+
     return 0
 }
 
@@ -172,7 +168,7 @@ inst_can_install() {
         echo "missing mvn"
         return 1
     fi
-    
+
     return 0
 }
 
@@ -233,7 +229,7 @@ inst_install() {
 
     handle_tree_sitter_java
     handle_tree_sitter_bash
-    
+
     handle_java_debug
 
     handle_vscode_test

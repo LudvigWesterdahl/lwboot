@@ -4,6 +4,7 @@ installer_name="bluetooth"
 installer_description="Starts the bluetooth service."
 installer_link="-"
 
+# shellcheck disable=SC2034 # SC2034 (warning): pacman_pkg appears unused. Verify use (or export if used externally).
 pacman_pkg=""
 
 inst_help() {
