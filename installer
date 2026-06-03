@@ -39,7 +39,8 @@ installer_description=""
 # shellcheck disable=SC2034 # SC2034 (warning): installer_link appears unused. Verify use (or export if used externally).
 installer_link=""
 describe_installer() {
-    printf '\033[1;38;2;122;166;218m%s\033[0m - %s\n' "${installer_name}" "${installer_description}"
+    # printf '\033[1;38;2;122;166;218m%s\033[0m - %s\n' "${installer_name}" "${installer_description}"
+    printf '\033[1;34m%s\033[0m - %s\n' "${installer_name}" "${installer_description}"
 }
 
 run_install_out_1=""

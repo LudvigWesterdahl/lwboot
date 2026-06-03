@@ -1126,12 +1126,12 @@ require("lazy").setup({
     },
 
     {
-        dir = vim.fn.stdpath("config") .. "/lua/lwcsl",
+        dir = vim.fn.stdpath("config") .. "/lua/lwcsmac",
         lazy = false,
         priority = 1000, -- make sure to load this before all the other start plugins
         config = function()
-            require("lwcsl").setup()
-            vim.cmd.colorscheme("lwcsl")
+            require("lwcsmac").setup()
+            vim.cmd.colorscheme("lwcsmac")
         end,
     },
     {
@@ -1372,6 +1372,11 @@ require("lazy").setup({
                 },
                 view = {
                     width = 40,
+                },
+                git = {
+                  enable = true,
+                  show_on_dirs = true,
+                  show_on_open_dirs = true,
                 },
                 renderer = {
                     group_empty = true,

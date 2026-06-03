@@ -5,7 +5,8 @@ palette = 1=#c62828
 # green
 palette = 2=#2e7d32
 # yellow
-palette = 3=#f9a825
+#palette = 3=#f9a825
+palette = 3=#ff6f00
 # blue
 palette = 4=#283593
 # magenta

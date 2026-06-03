@@ -28,22 +28,37 @@ inst_can_install() {
     return 0
 }
 
+handle_theme() {
+    arg_name="${1}"
+
+    dir_theme_dst="${HOME}/.config/ghostty/themes"
+    mkdir -p "${dir_theme_dst}"
+
+    file_theme_src="config/${arg_name}"
+
+    if [ ! -f "${file_theme_src}" ]; then
+        bold_red "missing ghostty theme file ${file_theme_src}"
+        return 1
+    fi
+
+    file_theme_dst="${dir_theme_dst}/${arg_name}"
+    mv_bak "${file_theme_dst}"
+    cp -v "${file_theme_src}" "${file_theme_dst}"
+
+    return 0
+}
+
+
 inst_install() {
     pacman_install "${pacman_pkg}"
+
+    handle_theme "ghostty-lw-light.theme"
+    handle_theme "ghostty-lw-mac.theme"
 
     file_config="${HOME}/.config/ghostty/config"
 
     mv_bak "${file_config}"
     cp -v config/ghostty.config "${file_config}"
-
-    file_theme_name="ghostty-lw-light.theme"
-    # file_theme="/usr/share/ghostty/themes/${file_theme_name}"
-    dir_theme="${HOME}/.config/ghostty/themes"
-    file_theme="${dir_theme}/${file_theme_name}"
-
-    mkdir -p "${dir_theme}"
-    mv_bak "${file_theme}"
-    cp -v "config/${file_theme_name}" "${file_theme}"
 
     return 0
 }
