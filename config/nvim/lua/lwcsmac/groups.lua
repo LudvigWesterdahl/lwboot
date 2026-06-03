@@ -47,6 +47,7 @@ M.setup = function()
     local green1 = "#067d17"
     local magenta1 = "#871094"
     local cyan1 = "#00627a"
+    local yellow1 = "#fcd47e"
 
     -- General
     any("Normal", { bg = c.background, fg = c.foreground })
@@ -59,11 +60,11 @@ M.setup = function()
     any("Function", { fg = c.cursor })
     any("Directory", { fg = c.cursor })
 
-    local searchBg = c.yellow
-    local searchFg = c.background
+    local searchBg = yellow1
+    local searchFg = c.cursor
     any("Search", { bg = searchBg, fg = searchFg, bold = false, underline = false })
     any("IncSearch", { bg = searchBg, fg = searchFg, bold = false, underline = false })
-    any("CurSearch", { bg = c.cursor, fg = searchFg, bold = false, underline = false })
+    any("CurSearch", { bg = c.cursor, fg = c.cursorText, bold = false, underline = false })
 
     -- Git
     any("gitignoreGlob", { fg = c.cursor })
@@ -111,6 +112,10 @@ M.setup = function()
 
     -- Plugin: telescope
     any("TelescopeMatching", { fg = c.yellow, bold = true })
+    any("TelescopeSelection", { bg = c.whiteBright })
+    any("TelescopeSelectionCaret", { fg = c.cursor, bold = true })
+    any("TelescopePromptPrefix", { link = "TelescopeSelectionCaret" })
+    any("TelescopePreviewLine", { bg = c.whiteBright })
 
     -- Plugin: blink
     any("BlinkCmpMenu", { bg = c.background })

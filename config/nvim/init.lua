@@ -906,7 +906,9 @@ require("lazy").setup({
                     vim.keymap.set("n", "grs", function()
                         vim.lsp.buf.signature_help({
                             border = "rounded",
+                            width = 80,
                             max_width = 80,
+                            height = 20,
                             max_height = 20,
                         })
 
