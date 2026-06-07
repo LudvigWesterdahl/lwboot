@@ -20,12 +20,20 @@ end
 
 return {
     s(
-        { trig = "functionOptional", dscr = "public Optional<TYPE> FUNCTION() {..}" },
+        { trig = "function", dscr = "Function" },
         t({
-            "public Optional<TYPE> FUNCTION() {",
-            "    ",
-            "    return Optional.ofNullable(RETURN);",
-            "}",
+            "    public void function() {",
+            "        final Object value = null;", 
+            "    }",
+        })
+    ),
+    s(
+        { trig = "functionOptional", dscr = "Function returning an optional" },
+        t({
+            "    public Optional<type> function() {",
+            "        final Object returnValue = null;",
+            "        return Optional.ofNullable(returnValue);",
+            "    }",
         })
     ),
 }

@@ -76,6 +76,13 @@ inst_help() {
     htext "JDTLS pick test"
     htext "<leader>tp"
     htext
+    htext "View the floating msg window entries like those from the LSP"
+    htext "g<"
+    htext
+    htext "Show signatures while in insert mode and then exit"
+    htext "<C-s>"
+    htext "<C-w>p"
+    htext
     hseealso
     htext "${installer_link}"
 }

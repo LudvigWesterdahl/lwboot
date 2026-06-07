@@ -74,6 +74,23 @@ mvnh() {
     return 0
 }
 
+gitra() {
+    arg_run="${1:-}"
+
+    if [ "${arg_run}" = "run" ]; then
+        git commit --amend --reset-author --no-edit
+        return 0
+    fi
+
+    echo "USAGE"
+    echo "    gitra ARGUMENT"
+    echo ""
+    echo "EXAMPLES"
+    echo "    gitra run"
+
+    return 0
+}
+
 
 
 

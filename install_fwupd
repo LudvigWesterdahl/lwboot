@@ -1,0 +1,55 @@
+#!/bin/sh
+
+installer_name="fwupd"
+installer_description="Installs fwupd."
+installer_link="https://archlinux.org/packages/extra/x86_64/fwupd/"
+
+pacman_pkg="extra/fwupd"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "To display all devices detected by fwupd"
+    htext "fwupdmgr get-devices"
+    htext
+    htext "To download the latest metadata from the Linux Vendor firmware Service (LVFS)"
+    htext "fwupdmgr refresh"
+    htext
+    htext "To list updates available for any devices on the system"
+    htext "fwupdmgr get-updates"
+    htext
+    htext "To install updates"
+    htext "fwupdmgr update"
+    hseealso
+    htext "${installer_link}"
+    htext
+    htext "https://wiki.archlinux.org/title/Fwupd"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install "${pacman_pkg}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall "${pacman_pkg}"
+}

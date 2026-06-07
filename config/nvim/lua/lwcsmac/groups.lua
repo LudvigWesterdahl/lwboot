@@ -3,20 +3,8 @@ local M = {}
 M.setup = function()
     local mappings = {}
 
-    local function bg(key, val)
-        mappings[key] = { bg = val }
-    end
-
-    local function fg(key, val)
-        mappings[key] = { fg = val }
-    end
-
     local function any(key, val)
         mappings[key] = val
-    end
-
-    local function link(key, val)
-        mappings[key] = { link = val }
     end
 
     local c = {
@@ -42,23 +30,36 @@ M.setup = function()
         whiteBright = "#e5e5e5",
     }
 
+    -- From intellij default light theme
     local blue1 = "#1750eb"
     local blue2 = "#0033b3"
     local green1 = "#067d17"
     local magenta1 = "#871094"
     local cyan1 = "#00627a"
     local yellow1 = "#fcd47e"
+    local yellow2 = "#9e880d"
+    -- Adjustments
+    blue2 = "#0030A8"
+    green1 = "#066F16"
+    magenta1 = "#790F85"
+    cyan1 = "#005e75"
+    yellow2 = "#927E0C"
 
     -- General
     any("Normal", { bg = c.background, fg = c.foreground })
     any("Cursor", { bg = c.cursor, fg = c.cursorText })
     any("FloatBorder", { bg = c.background, fg = c.cursor })
-    bg("NormalFloat", c.background)
-    bg("NormalNC", c.background)
+    any("NormalFloat", { bg = c.background })
+    any("StatusLine", { bg = c.white })
+    any("StatusLineNC", { bg = c.whiteBright })
     -- fixes cyan coloring of guifg= stuff.
     any("Special", { fg = c.cursor })
     any("Function", { fg = c.cursor })
     any("Directory", { fg = c.cursor })
+    any("MsgArea", { bg = c.background })
+    
+    -- Lsp
+    any("LspSignatureActiveParameter", { bg = c.background })
 
     local searchBg = yellow1
     local searchFg = c.cursor
@@ -94,9 +95,9 @@ M.setup = function()
     any("DiagnosticFloatingInfo", { fg = c.cursor })
 
     -- Warn
-    any("DiagnosticVirtualTextWarn", { fg = c.blackBright })
-    any("DiagnosticVirtualLinesWarn", { fg = c.blackBright })
-    any("DiagnosticUnderlineWarn", { fg = c.blackBright, undercurl = false })
+    any("DiagnosticVirtualTextWarn", { fg = c.yellow })
+    any("DiagnosticVirtualLinesWarn", { fg = c.yellow })
+    any("DiagnosticUnderlineWarn", {})
     any("DiagnosticSignWarn", { fg = c.blackBright, bold = true })
     any("DiagnosticFloatingWarn", { fg = c.cursor })
 
@@ -118,10 +119,14 @@ M.setup = function()
     any("TelescopePreviewLine", { bg = c.whiteBright })
 
     -- Plugin: blink
+    -- https://cmp.saghen.dev/configuration/appearance
     any("BlinkCmpMenu", { bg = c.background })
     any("BlinkCmpMenuBorder", { bg = c.background })
+    any("BlinkCmpMenuSelection", { bg = c.whiteBright })
     any("BlinkCmpDoc", { bg = c.background })
     any("BlinkCmpDocBorder", { bg = c.background })
+    any("BlinkCmpLabelDescription", { bg = c.background })
+    any("BlinkCmpKind", { bg = c.background })
 
     -- Plugin: flash
     local flashFg = c.white
@@ -201,6 +206,7 @@ M.setup = function()
     any("NvimTreeExecFile", { fg = c.cursor, bold = false })
     any("NvimTreeSymlink", { fg = c.cursor, underline = false })
     any("NvimTreeSymlinkFolderName", { fg = nvimTreeFolderFg, underline = false })
+    any("NvimTreeCursorLine", { bg = c.whiteBright })
 
     any("NvimTreeGitDirtyIcon", { fg = nvimTreeGitDirtyFg })
     any("NvimTreeGitFileDirtyHL", { fg = nvimTreeGitDirtyFg })
@@ -235,8 +241,8 @@ M.setup = function()
     -- Language: java
     any("@lwjava_import_ref", { fg = c.blackBright })
     any("@lwjava_field_ref", { fg = magenta1, bold = false })
-    any("@lwjava_annotation", { fg = c.yellow, italic = false })
-    any("@lwjava_import_asterisk", { fg = c.yellow, bold = true })
+    any("@lwjava_annotation", { fg = yellow2, italic = false })
+    any("@lwjava_import_asterisk", { fg = yellow2, bold = true })
     any("@lwjava_import_keyword", { link = "@lwjava_import_ref" })
 
     -- Language: bash

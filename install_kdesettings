@@ -107,6 +107,25 @@ inst_install() {
     # After X minutes in seconds
     kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key AutoSuspendIdleTimeoutSec "$((60 * 30))"
 
+    # See /etc/vconsole.conf
+    localectl --no-convert set-x11-keymap us,se pc105 "" "grp:alt_shift_toggle,compose:ralt"
+
+    # systemsettings kcm_regionandlang
+    # en_SE.UTF-8
+    # file: plasma-localerc, group Formats
+    # LANG=en_US.UTF-8
+    # LC_PAPER=C
+    kwriteconfig6 --file plasma-localerc --group Formats --key LANG en_US.UTF-8
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_NUMERIC C
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_TIME en_SE.UTF-8
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_MONETARY C
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_MEASUREMENT C
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_PAPER en_SE.UTF-8
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_ADDRESS C
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_NAME C
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_TELEPHONE C
+    kwriteconfig6 --file plasma-localerc --group Formats --key useDetailed true
+
     return 0
 }
 

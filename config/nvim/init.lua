@@ -189,6 +189,96 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
     desc = "Notify on external file change",
 })
 
+-- vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
+--   callback = function()
+--     if vim.bo.buftype == "" then
+--       print("saving")
+--       vim.w.last_view = vim.fn.winsaveview()
+--     end
+--   end,
+-- })
+--
+-- vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+--   callback = function()
+--     if vim.bo.buftype == "" and vim.w.last_view then
+--       print("restoring")
+--       vim.fn.winrestview(vim.w.last_view)
+--     end
+--   end,
+-- })
+--
+--
+
+local group_save_view = vim.api.nvim_create_augroup("SaveView", { clear = true })
+vim.api.nvim_create_autocmd("BufLeave", {
+    group = group_save_view,
+    callback = function()
+        if vim.bo.buftype ~= "" then
+            return
+        end
+        vim.b.winview = vim.fn.winsaveview()
+    end,
+})
+vim.api.nvim_create_autocmd("BufEnter", {
+    group = group_save_view,
+    callback = function()
+        if vim.bo.buftype ~= "" then
+            return
+        end
+        local v = vim.b.winview
+
+        if v then
+            vim.fn.winrestview(v)
+        end
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+    pattern = "*.java",
+    desc = "Move to type when opening java file",
+    callback = function(args)
+        if vim.bo[args.buf].buftype ~= "" then
+            return
+        end
+        local lines = vim.api.nvim_buf_get_lines(args.buf, 0, -1, false)
+        local target = -1
+        for i, line in ipairs(lines) do
+            if line:find("/**", 1, true) or line:find("@", 1, true) or line:find("{", 1, true) then
+                target = i
+                break
+            end
+        end
+        if target < 0 then
+            return
+        end
+
+        vim.schedule(function()
+            local win = vim.api.nvim_get_current_win()
+            if not vim.api.nvim_win_is_valid(win) then
+                return
+            end
+
+            -- bail if something (Telescope) already positioned the cursor
+            local pos = vim.api.nvim_win_get_cursor(win)
+            if pos[1] ~= 1 or pos[2] ~= 0 then
+                return
+            end
+
+            local last = vim.api.nvim_buf_line_count(0)
+            local height = vim.api.nvim_win_get_height(win)
+            local so = vim.api.nvim_get_option_value("scrolloff", { win = win })
+            local max_top = math.max(1, last - height + 1)
+            local topline = math.min(target, max_top)
+            vim.fn.winrestview({
+                topline = topline,
+                lnum = math.min(target + so, last),
+                col = 0,
+                leftcol = 0,
+            })
+        end)
+    end,
+})
+
 -- Diagnostic Config & Keymaps
 -- See :help vim.diagnostic.Opts
 vim.diagnostic.config({
@@ -435,49 +525,37 @@ vim.keymap.set("n", "<leader>dc", function()
     require("dapui").close()
 end, { desc = "[D]apui [C]lose" })
 
--- vim.keymap.set('n', '<leader>dt1', function() require('dapui').toggle({ layout = 1 }) end, { desc = 'Toggle DAP layout 1' })
--- vim.keymap.set('n', '<leader>dt2', function() require('dapui').toggle({ layout = 2 }) end, { desc = 'Toggle DAP layout 2' })
--- vim.keymap.set('n', '<leader>dt3', function() require('dapui').toggle({ layout = 3 }) end, { desc = 'Toggle DAP layout 3' })
--- vim.keymap.set('n', '<leader>dT1', function() require('dapui').toggle({ layout = 1, reset = true }) end, { desc = 'Toggle DAP layout 1' })
--- vim.keymap.set('n', '<leader>dT2', function() require('dapui').toggle({ layout = 2, reset = true }) end, { desc = 'Toggle DAP layout 2' })
--- vim.keymap.set('n', '<leader>dT3', function() require('dapui').toggle({ layout = 3, reset = true }) end, { desc = 'Toggle DAP layout 3' })
-
 require("vim._core.ui2").enable({
-
-    enable = true, -- Whether to enable or disable the UI.
-
-    msg = { -- Options related to the message module.
-
+    -- Whether to enable or disable the UI.
+    enable = true,
+    -- Options related to the message module.
+    msg = {
         ---@type string|table<string, 'cmd'|'msg'|'pager'> Default message target
-
         ---or table mapping |ui-messages| kinds, triggers and IDs to a target.
-
         ---Table keys are are matched as a Lua pattern to the message ID. 'default'
-
         ---mapping applies to any omitted kind: { default = 'cmd', progress = 'msg' }.
-
         targets = "cmd",
-
-        cmd = { -- Options related to messages in the cmdline window.
-
-            height = 0.5, -- Maximum height while expanded for messages beyond 'cmdheight'.
+        -- Options related to messages in the cmdline window.
+        cmd = {
+            -- Maximum height while expanded for messages beyond 'cmdheight'.
+            height = 0.5,
         },
-
-        dialog = { -- Options related to dialog window.
-
-            height = 0.5, -- Maximum height.
+        -- Options related to dialog window.
+        dialog = {
+            -- Maximum height.
+            height = 0.5,
         },
-
-        msg = { -- Options related to msg window.
-
-            height = 0.5, -- Maximum height.
-
-            timeout = 4000, -- Time a message is visible in the message window.
+        -- Options related to msg window.
+        msg = {
+            -- Maximum height.
+            height = 0.5,
+            -- Time a message is visible in the message window.
+            timeout = 2000,
         },
-
-        pager = { -- Options related to message window.
-
-            height = 1, -- Maximum height.
+        -- Options related to message window.
+        pager = {
+            -- Maximum height.
+            height = 1,
         },
     },
 })
@@ -683,6 +761,11 @@ local function snippet_picker_with_preview()
 end
 
 vim.keymap.set("n", "<leader>fs", snippet_picker_with_preview, { desc = "[F]ind [S]nippets" })
+vim.keymap.set("i", "<C-f>s", snippet_picker_with_preview, { desc = "[F]ind [S]nippets" })
+
+vim.keymap.set("i", "{<CR>", "{<CR>}<C-o>O", { noremap = true })
+vim.keymap.set("i", "[", "[]<Left>", { noremap = true })
+vim.keymap.set("i", '"', '""<Left>', { noremap = true })
 
 require("lazy").setup({
     -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
@@ -844,8 +927,13 @@ require("lazy").setup({
                 callback = function(event)
                     local buf = event.buf
 
-                    -- Find references for the word under your cursor.
-                    vim.keymap.set("n", "grr", builtin.lsp_references, { buffer = buf, desc = "[G]oto [R]eferences" })
+                    vim.keymap.set("n", "grr", function()
+                        builtin.lsp_references({
+                            path_display = { filename_first = { reverse_directories = false } },
+                            show_line = false,
+                            jump_type = "never",
+                        })
+                    end, { buffer = buf, desc = "[G]oto [R]efe[R]ences" })
 
                     -- Jump to the implementation of the word under your cursor.
                     -- Useful when your language has ways of declaring types without an actual implementation.
@@ -903,25 +991,14 @@ require("lazy").setup({
                         centered_float(vim.lsp.buf.hover, { border = "rounded", title = " LSP Hover " })
                     end, { buffer = buf, desc = "[G]oto [H]hover" })
 
-                    vim.keymap.set("n", "grs", function()
+                    vim.keymap.set("i", "<C-s>", function()
                         vim.lsp.buf.signature_help({
                             border = "rounded",
                             width = 80,
                             max_width = 80,
-                            height = 20,
-                            max_height = 20,
+                            height = 8,
+                            max_height = 8,
                         })
-
-                        -- After opening, fix the conceal in the float
-                        vim.schedule(function()
-                            for _, win in ipairs(vim.api.nvim_list_wins()) do
-                                local config = vim.api.nvim_win_get_config(win)
-                                if config.relative ~= "" then
-                                    vim.wo[win].conceallevel = 2
-                                    vim.wo[win].concealcursor = "n"
-                                end
-                            end
-                        end)
                     end, { buffer = buf, desc = "[G]oto [S]ignature help" })
                 end,
             })
@@ -1015,6 +1092,7 @@ require("lazy").setup({
                 -- See :h blink-cmp-config-keymap for defining your own keymap
                 preset = "super-tab",
                 ["<Tab>"] = { "select_and_accept", "fallback" },
+                ["<CR>"] = { "select_and_accept", "fallback" },
                 ["<S-Tab>"] = { "fallback" },
 
                 -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
@@ -1068,6 +1146,19 @@ require("lazy").setup({
             },
         },
     },
+
+    -- {
+    --     "windwp/nvim-autopairs",
+    --     event = "InsertEnter",
+    --     config = function()
+    --         local npairs = require("nvim-autopairs")
+    --         npairs.setup({
+    --           map_bs = true,
+    --           check_ts = true,
+    --         })
+    --         npairs.remove_rule("(")
+    --     end,
+    -- },
 
     {
         "mfussenegger/nvim-jdtls",
@@ -1405,7 +1496,7 @@ require("lazy").setup({
                     sorter = "case_sensitive",
                 },
                 view = {
-                    width = 40,
+                    width = 60,
                 },
                 git = {
                     enable = true,
@@ -1414,12 +1505,13 @@ require("lazy").setup({
                 },
                 renderer = {
                     group_empty = true,
+                    indent_width = 1,
                     highlight_git = "all",
                     highlight_opened_files = "none",
                     icons = {
                         show = {
                             git = true,
-                            folder_arrow = true,
+                            folder_arrow = false,
                         },
                         symlink_arrow = " \u{f061} ",
                         glyphs = {
