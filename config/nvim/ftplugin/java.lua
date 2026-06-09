@@ -14,8 +14,15 @@ end
 
 -- Workspace dir: unique per project, persistent across sessions
 local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
-print("project_name = " .. project_name)
-local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls-workspace/" .. project_name
+local project_name_suffix = vim.env.NVIM_JDTLS_PNAME_SUFFIX
+local workspace_name = project_name
+if project_name_suffix and project_name_suffix ~= "" then
+    workspace_name = project_name .. "-" .. project_name_suffix
+end
+
+print("workspace_name = " .. workspace_name)
+local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls-workspace/" .. workspace_name
+print("workspace_dir = " .. workspace_dir)
 
 local home = os.getenv("HOME")
 local bundles = {}

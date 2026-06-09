@@ -19,6 +19,9 @@ inst_help() {
     htext
     htext "View input device properties"
     htext "busctl --user introspect org.kde.KWin /org/kde/KWin/InputDevice/event11 org.kde.KWin.InputDevice"
+    htext
+    htext "View all locales"
+    htext "locale --all-locales"
     hseealso
     htext "${installer_link}"
     htext "kciminputrc file"
@@ -28,6 +31,12 @@ inst_help() {
     htext "https://discuss.kde.org/t/changing-mouse-buttonrebinds-for-extrabuttons-programmatically-kcminputrc/42174"
     htext "https://www.reddit.com/r/kde/comments/1odxxhg/any_documentation_for_editing_kcminputrc/"
     htext "https://discuss.kde.org/t/how-to-change-settings-through-command-line/41361"
+    htext
+    htext "Locale"
+    htext "https://wiki.archlinux.org/title/Locale#Generating_locales"
+    htext
+    htext "[HowTo] Use multiple languages in KDE Plasma"
+    htext "https://forum.manjaro.org/t/howto-use-multiple-languages-in-kde-plasma/150503"
 }
 
 inst_is_installed() {
@@ -107,24 +116,64 @@ inst_install() {
     # After X minutes in seconds
     kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key AutoSuspendIdleTimeoutSec "$((60 * 30))"
 
+    # see /etc/locale.gen
+    # https://wiki.archlinux.org/title/Locale#Generating_locales
+
+    en_loc_result="$(sudo sed -n "s|#en_US|en_US|p" /etc/locale.gen)"
+    if [ "${en_loc_result}" != "" ]; then
+        sudo sed -i "s|#en_US|en_US|" /etc/locale.gen
+        sudo locale-gen
+    fi
+
+    sv_loc_result="$(sudo sed -n "s|#sv_SE|sv_SE|p" /etc/locale.gen)"
+    if [ "${sv_loc_result}" != "" ]; then
+        sudo sed -i "s|#sv_SE|sv_SE|" /etc/locale.gen
+        sudo locale-gen
+    fi
+
+    dk_loc_result="$(sudo sed -n "s|#en_DK|en_DK|p" /etc/locale.gen)"
+    if [ "${dk_loc_result}" != "" ]; then
+        sudo sed -i "s|#en_DK|en_DK|" /etc/locale.gen
+        sudo locale-gen
+    fi
     # See /etc/vconsole.conf
     localectl --no-convert set-x11-keymap us,se pc105 "" "grp:alt_shift_toggle,compose:ralt"
 
     # systemsettings kcm_regionandlang
-    # en_SE.UTF-8
-    # file: plasma-localerc, group Formats
-    # LANG=en_US.UTF-8
-    # LC_PAPER=C
-    kwriteconfig6 --file plasma-localerc --group Formats --key LANG en_US.UTF-8
-    kwriteconfig6 --file plasma-localerc --group Formats --key LC_NUMERIC C
-    kwriteconfig6 --file plasma-localerc --group Formats --key LC_TIME en_SE.UTF-8
-    kwriteconfig6 --file plasma-localerc --group Formats --key LC_MONETARY C
-    kwriteconfig6 --file plasma-localerc --group Formats --key LC_MEASUREMENT C
-    kwriteconfig6 --file plasma-localerc --group Formats --key LC_PAPER en_SE.UTF-8
-    kwriteconfig6 --file plasma-localerc --group Formats --key LC_ADDRESS C
-    kwriteconfig6 --file plasma-localerc --group Formats --key LC_NAME C
-    kwriteconfig6 --file plasma-localerc --group Formats --key LC_TELEPHONE C
-    kwriteconfig6 --file plasma-localerc --group Formats --key useDetailed true
+    loc_c="C.UTF-8"
+    loc_en_us="en_US.UTF-8"
+    # loc_sv_se="sv_SE.UTF-8"
+    # loc_en_dk="en_DK.UTF-8"
+    v_lang="${loc_en_us}"
+    v_numeric="${loc_c}"
+    v_time="${loc_c}"
+    v_monetary="${loc_c}"
+    v_measurement="${loc_c}"
+    v_paper="${loc_c}"
+    v_address="${loc_c}"
+    v_name="${loc_c}"
+    v_telephone="${loc_c}"
+    sudo localectl set-locale LANG="${v_lang}"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LANG "${v_lang}"
+    sudo localectl set-locale LC_NUMERIC="${v_numeric}"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_NUMERIC "${v_numeric}"
+    # Special case which differs for KDE/Qt applications and glibc.
+    sudo localectl set-locale LC_TIME="${v_time}"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_TIME "en_SE.UTF-8"
+    sudo localectl set-locale LC_MONETARY="${v_monetary}"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_MONETARY "${v_monetary}"
+    sudo localectl set-locale LC_MEASUREMENT="${v_measurement}"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_MEASUREMENT "${v_measurement}"
+    sudo localectl set-locale LC_PAPER="${v_paper}"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_PAPER "${v_paper}"
+    sudo localectl set-locale LC_ADDRESS="${v_address}"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_ADDRESS "${v_address}"
+    sudo localectl set-locale LC_NAME="${v_name}"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_NAME "${v_name}"
+    sudo localectl set-locale LC_TELEPHONE="${v_telephone}"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_TELEPHONE "${v_telephone}"
+
+    kwriteconfig6 --file kdeglobals --group Locale --key BinaryUnitDialect "0"
 
     return 0
 }

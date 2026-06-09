@@ -18,6 +18,7 @@ alias java21doc="braved /usr/share/doc/java21-openjdk/index.html"
 alias java17spec="braved \$HOME/Documents/lwdoc/backup/docs.oracle.com.java17/javase/specs/jls/se17/html/index.html"
 alias jdebugn="java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 alias jdebugy="java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"
+alias nvim1="NVIM_JDTLS_PNAME_SUFFIX=1 nvim"
 
 #alias braved="rundisown brave"
 alias braved="setsid -f brave >>\"\$HOME/.local/share/braved-brave.log\" 2>&1"
