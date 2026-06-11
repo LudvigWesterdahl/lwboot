@@ -3,8 +3,6 @@ if vim.b.did_ftplugin_java then
 end
 vim.b.did_ftplugin_java = true
 
--- Root of the project — jdtls needs this to understand your build
--- local root_markers = { 'gradlew', 'mvnw', '.git', 'pom.xml', 'build.gradle' }
 local root_markers = { "gradlew", "mvnw", ".git" }
 local root_dir = require("jdtls.setup").find_root(root_markers)
 if root_dir == "" then
@@ -12,7 +10,6 @@ if root_dir == "" then
     return
 end
 
--- Workspace dir: unique per project, persistent across sessions
 local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
 local project_name_suffix = vim.env.NVIM_JDTLS_PNAME_SUFFIX
 local workspace_name = project_name
@@ -20,9 +17,8 @@ if project_name_suffix and project_name_suffix ~= "" then
     workspace_name = project_name .. "-" .. project_name_suffix
 end
 
-print("workspace_name = " .. workspace_name)
 local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls-workspace/" .. workspace_name
-print("workspace_dir = " .. workspace_dir)
+print("workspace_name = " .. workspace_name .. ", workspace_dir = " .. workspace_dir)
 
 local home = os.getenv("HOME")
 local bundles = {}
@@ -42,7 +38,6 @@ vim.list_extend(
 )
 
 -- local lombok_jar = vim.split(vim.fn.glob(home .. "/.m2/repository/org/projectlombok/lombok/*/lombok-*.jar", true), "\n")[1]
-
 local lombok_jar = home .. "/.m2/repository/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar"
 
 local config = {
@@ -57,12 +52,21 @@ local config = {
 
     settings = {
         java = {
-            signatureHelp = { enabled = true },
+            settings = {
+                url = vim.fn.stdpath("config") .. "/formatters/jdtls.prefs",
+            },
             completion = {
+                importOrder = {
+                    "",
+                    "java",
+                    "lombok",
+                    "#"
+                },
                 favoriteStaticMembers = {
                     "org.junit.Assert.*",
                     "org.junit.Assume.*",
                     "org.junit.jupiter.api.Assertions.*",
+                    "org.assertj.core.api.Assertions.*",
                     "org.junit.jupiter.api.Assumptions.*",
                     "org.mockito.Mockito.*",
                 },
@@ -75,7 +79,6 @@ local config = {
                 },
                 guessMethodArguments = "off",
             },
-
             codeGeneration = {
                 toString = {
                     template = "${object.className}[${member.name()}=${member.value}, ${otherMembers}]",
@@ -84,7 +87,6 @@ local config = {
                 useBlocks = true,
                 generateComments = false,
             },
-
             sources = {
                 organizeImports = {
                     starThreshold = 9999,
@@ -92,7 +94,11 @@ local config = {
                 },
             },
             -- Enables code lens, inlay hints, etc.
+            signatureHelp = { enabled = true },
+            import = { enabled = true },
+            rename = { enabled = true },
             references = { includeDecompiledSources = true },
+            maven = { downloadSources = true },
             implementationsCodeLens = { enabled = true },
             referencesCodeLens = { enabled = true },
             inlayHints = { parameterNames = { enabled = "all" } },
@@ -126,7 +132,6 @@ vim.defer_fn(function()
     end
 end, 1000)
 
--- Optional: Java-specific keymaps (only active in Java buffers)
 local opts = { buffer = true, silent = true }
 vim.keymap.set("n", "<leader>oi", "<cmd>lua require('jdtls').organize_imports()<cr>", opts)
 vim.keymap.set("n", "<leader>tc", "<cmd>lua require('jdtls').test_class()<cr>", opts)

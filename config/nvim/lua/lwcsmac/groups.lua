@@ -38,6 +38,7 @@ M.setup = function()
     local cyan1 = "#00627a"
     local yellow1 = "#fcd47e"
     local yellow2 = "#9e880d"
+    local blackBright1 = "#8c8c8c"
     -- Adjustments
     blue2 = "#0030A8"
     green1 = "#066F16"
@@ -57,7 +58,7 @@ M.setup = function()
     any("Function", { fg = c.cursor })
     any("Directory", { fg = c.cursor })
     any("MsgArea", { bg = c.background })
-    
+
     -- Lsp
     any("LspSignatureActiveParameter", { bg = c.background })
 
@@ -71,7 +72,7 @@ M.setup = function()
     any("gitignoreGlob", { fg = c.cursor })
     any("gitignorePattern", { fg = c.cursor })
     any("gitignoreNegation", { fg = c.cursor })
-    any("gitignoreComment", { fg = c.blackBright, italic = true })
+    any("gitignoreComment", { fg = blackBright1, italic = true })
 
     -- Diagnostics
     --
@@ -88,27 +89,27 @@ M.setup = function()
     -- DiagnosticDeprecated               : LSP tag: Deprecated (deprecated APIs)
 
     -- Info
-    any("DiagnosticVirtualTextInfo", { fg = c.blackBright })
-    any("DiagnosticVirtualLinesInfo", { fg = c.blackBright })
+    any("DiagnosticVirtualTextInfo", { fg = blackBright1 })
+    any("DiagnosticVirtualLinesInfo", { fg = blackBright1 })
     any("DiagnosticUnderlineInfo", {})
-    any("DiagnosticSignInfo", { fg = c.blackBright, bold = true })
+    any("DiagnosticSignInfo", { fg = blackBright1, bold = true })
     any("DiagnosticFloatingInfo", { fg = c.cursor })
 
     -- Warn
     any("DiagnosticVirtualTextWarn", { fg = c.yellow })
     any("DiagnosticVirtualLinesWarn", { fg = c.yellow })
     any("DiagnosticUnderlineWarn", {})
-    any("DiagnosticSignWarn", { fg = c.blackBright, bold = true })
+    any("DiagnosticSignWarn", { fg = blackBright1, bold = true })
     any("DiagnosticFloatingWarn", { fg = c.cursor })
 
     -- Error
-    any("DiagnosticVirtualTextError", { fg = c.blackBright })
-    any("DiagnosticVirtualLinesError", { fg = c.blackBright })
-    any("DiagnosticUnderlineError", { fg = c.blackBright, sp = c.red, undercurl = true })
+    any("DiagnosticVirtualTextError", { fg = blackBright1 })
+    any("DiagnosticVirtualLinesError", { fg = blackBright1 })
+    any("DiagnosticUnderlineError", { fg = blackBright1, sp = c.red, undercurl = true })
     any("DiagnosticSignError", { fg = c.red, bold = true })
     any("DiagnosticFloatingError", { fg = c.cursor })
 
-    any("DiagnosticUnnecessary", { fg = c.blackBright })
+    any("DiagnosticUnnecessary", { fg = blackBright1 })
     any("DiagnosticDeprecated", { strikethrough = true })
 
     -- Plugin: telescope
@@ -235,15 +236,15 @@ M.setup = function()
     any("@lw_string", { fg = green1 })
     any("@lw_null", { fg = blue1, bold = true })
     any("@lw_function_declaration", { fg = cyan1 })
-    any("@lw_comment", { fg = c.blackBright, italic = true })
+    any("@lw_comment", { fg = blackBright1, italic = true })
     any("@lw_keyword", { fg = blue2 })
 
     -- Language: java
-    any("@lwjava_import_ref", { fg = c.blackBright })
+    any("@lwjava_import_ref", { fg = c.cursor })
     any("@lwjava_field_ref", { fg = magenta1, bold = false })
     any("@lwjava_annotation", { fg = yellow2, italic = false })
     any("@lwjava_import_asterisk", { fg = yellow2, bold = true })
-    any("@lwjava_import_keyword", { link = "@lwjava_import_ref" })
+    any("@lwjava_import_keyword", { link = "@lw_keyword" })
 
     -- Language: bash
     any("@lwbash_variable", { fg = magenta1 })
@@ -254,6 +255,7 @@ M.setup = function()
     any("@lwbash_ret_failure", { fg = c.red, bold = false })
 
     -- LSP: java
+    any("@lsp.type.keyword.java", { fg = c.cursor })
     any("@lsp.mod.importDeclaration.java", { link = "@lwjava_import_ref" })
     any("@lsp.typemod.annotation.importDeclaration.java", { link = "@lwjava_annotation" })
     any("@lsp.type.annotation.java", { link = "@lwjava_annotation" })
@@ -265,8 +267,8 @@ M.setup = function()
     any("@lsp.type.method.java", { link = "@lsp" })
     -- Ensures Inner class gets colored white vs a field access like System.out.
     any("@lsp.type.class.java", { fg = c.foreground })
-    any("@lsp.typemod.keyword.documentation.java", { fg = c.blackBright, bold = true, underline = true })
-    any("@lsp.typemod.parameter.documentation.java", { fg = c.blackBright, bold = true, underline = false })
+    any("@lsp.typemod.keyword.documentation.java", { fg = blackBright1, bold = false, underline = true })
+    any("@lsp.typemod.parameter.documentation.java", { fg = c.cursor, bold = false, underline = false })
     any("@lsp.typemod.typeParameter.declaration.java", { link = "@lw_function_declaration" })
     any("@lsp.typemod.typeParameter.typeArgument.java", { link = "@lw_function_declaration" })
     any("LSP_CODE", { link = "LINK_TO" })

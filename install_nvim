@@ -223,6 +223,7 @@ inst_install() {
     cp -v "${nvim_src}/formatters/intellij-codestyle.xml" "${nvim_dst}/formatters/intellij-codestyle.xml"
     cp -v "${nvim_src}/formatters/.clang-format" "${nvim_dst}/formatters/.clang-format"
     cp -v "${nvim_src}/formatters/.stylua.toml" "${nvim_dst}/formatters/.stylua.toml"
+    cp -v "${nvim_src}/formatters/jdtls.prefs" "${nvim_dst}/formatters/jdtls.prefs"
 
     # snippets
     cp -v "${nvim_src}/snippets/java.lua" "${nvim_dst}/snippets/java.lua"
