@@ -23,6 +23,9 @@ inst_help() {
     htext "Clean up pacman cache (dry run first)"
     htext "paccache -dk1"
     htext "paccache -rk1"
+    htext
+    htext "Reset monitor configuration for KDE plasma 6"
+    htext "rm ~/.config/kwinoutputconfig.json"
     hseealso
     htext "${installer_link}"
 }
