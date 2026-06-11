@@ -159,7 +159,8 @@ inst_install() {
     kwriteconfig6 --file plasma-localerc --group Formats --key LC_NUMERIC "${v_numeric}"
     # Special case which differs for KDE/Qt applications and glibc.
     sudo localectl set-locale LC_TIME="${v_time}"
-    kwriteconfig6 --file plasma-localerc --group Formats --key LC_TIME "en_SE.UTF-8"
+    # kwriteconfig6 --file plasma-localerc --group Formats --key LC_TIME "en_SE.UTF-8"
+    kwriteconfig6 --file plasma-localerc --group Formats --key LC_TIME "${v_time}"
     sudo localectl set-locale LC_MONETARY="${v_monetary}"
     kwriteconfig6 --file plasma-localerc --group Formats --key LC_MONETARY "${v_monetary}"
     sudo localectl set-locale LC_MEASUREMENT="${v_measurement}"
