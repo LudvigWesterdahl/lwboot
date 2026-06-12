@@ -1176,6 +1176,14 @@ require("lazy").setup({
         config = function()
             local dap, dapui = require("dap"), require("dapui")
 
+            dap.listeners.on_config["java_internal_console"] = function(config)
+                if config.type == "java" then
+                    config = vim.deepcopy(config)
+                    config.console = "internalConsole"
+                end
+                return config
+            end
+
             dapui.setup({
                 layouts = {
                     -- [1]: primary
