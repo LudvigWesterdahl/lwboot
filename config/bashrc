@@ -19,8 +19,9 @@ alias java17spec="braved \$HOME/Documents/lwdoc/backup/docs.oracle.com.java17/ja
 alias jdebugn="java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 alias jdebugy="java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"
 alias nvim1="NVIM_JDTLS_PNAME_SUFFIX=1 nvim"
+alias nvimc="jdtlsclean && nvim"
+alias nvimc1="jdtlsclean && NVIM_JDTLS_PNAME_SUFFIX=1 nvim"
 
-#alias braved="rundisown brave"
 alias braved="setsid -f brave >>\"\$HOME/.local/share/braved-brave.log\" 2>&1"
 alias postmand="setsid -f postman >>\"\$HOME/.local/share/postmand-postman.log\" 2>&1"
 alias vlcd="setsid -f vlc >>\"\$HOME/.local/share/vlcd-vlc.log\" 2>&1"
@@ -48,7 +49,7 @@ dolphind() {
         return 1
     fi
 
-    setsid -f dolphin >> "$HOME/.local/share/dolphind-dolphin.log" 2>&1 "${arg_dir}"
+    setsid -f dolphin "${arg_dir}" >>"$HOME/.local/share/dolphind-dolphin.log" 2>&1
 }
 
 mvnh() {
@@ -92,9 +93,16 @@ gitra() {
     return 0
 }
 
+jdtlsclean() {
+    find . \
+        -wholename '*/.settings/org.eclipse.jdt.core.prefs' \
+        -type f \
+        -exec sed -i '/\.compiler\.problem\./d' {} ';' \
+        -exec chmod 444 {} ';' \
+        2>/dev/null
 
-
-
+    return 0
+}
 
 # ============================
 # ===   environment vars   ===
@@ -117,4 +125,3 @@ export DO_NOT_TRACK=1
 umask 0002
 # kernel stop intercepting <C-q> (0x11, ASCII XON) and <C-s> (0x13, ASCII XOFF), see stty -a, stty ixon to turn back on.
 stty -ixon
-
