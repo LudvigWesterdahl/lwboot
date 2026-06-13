@@ -26,8 +26,16 @@ inst_help() {
     htext "Open ghostty"
     htext "<A-Space>"
     htext
-    htext "DESCRIPTION"
-    htext "KEYBIND"
+    htext "Move to the left/right desktop"
+    htext "<M-C-Left>"
+    htext "<M-C-Right>"
+    htext
+    htext "Move window to left/right desktop"
+    htext "<M-C-S-Left>"
+    htext "<M-C-S-Right>"
+    htext
+    htext "Close window"
+    htext "<M-S-w>"
     htext
     hseealso
     htext "${installer_link}"

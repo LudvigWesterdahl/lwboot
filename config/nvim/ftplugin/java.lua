@@ -60,7 +60,7 @@ local config = {
                     "",
                     "java",
                     "lombok",
-                    "#"
+                    "#",
                 },
                 favoriteStaticMembers = {
                     "org.junit.Assert.*",

@@ -2,8 +2,15 @@
 # ~/.bashrc
 #
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+case $- in
+    *i*)
+        # interactive
+        ;;
+    *)
+        # non-interactive
+        return
+        ;;
+esac
 
 # =============================
 # ===   alias definitions   ===
@@ -15,24 +22,24 @@ alias grep='grep --color=tty'
 alias top="top -e m -E m -o RES"
 alias wgetmbak="wget --mirror --convert-links --adjust-extension --no-parent --random-wait -e robots=off --reject=jpg,jpeg,png,gif,webp,svg,bmp,tiff,ico,mp4,avi,mov,wmv,flv,webm,pdf,zip,rar,iso,exe"
 alias java21doc="braved /usr/share/doc/java21-openjdk/index.html"
-alias java17spec="braved \$HOME/Documents/lwdoc/backup/docs.oracle.com.java17/javase/specs/jls/se17/html/index.html"
+alias java17spec="braved \${HOME}/Documents/lwdoc/backup/docs.oracle.com.java17/javase/specs/jls/se17/html/index.html"
 alias jdebugn="java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 alias jdebugy="java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"
 alias nvim1="NVIM_JDTLS_PNAME_SUFFIX=1 nvim"
 alias nvimc="jdtlsclean && nvim"
 alias nvimc1="jdtlsclean && NVIM_JDTLS_PNAME_SUFFIX=1 nvim"
 
-alias braved="setsid -f brave >>\"\$HOME/.local/share/braved-brave.log\" 2>&1"
-alias postmand="setsid -f postman >>\"\$HOME/.local/share/postmand-postman.log\" 2>&1"
-alias vlcd="setsid -f vlc >>\"\$HOME/.local/share/vlcd-vlc.log\" 2>&1"
-alias slackd="setsid -f slack >>\"\$HOME/.local/share/slackd-slack.log\" 2>&1"
-alias dbeaverd="setsid -f dbeaver >>\"\$HOME/.local/share/dbeaverd-dbeaver.log\" 2>&1"
+alias braved="setsid -f brave >>\"\${HOME}/.local/share/braved-brave.log\" 2>&1"
+alias postmand="setsid -f postman >>\"\${HOME}/.local/share/postmand-postman.log\" 2>&1"
+alias vlcd="setsid -f vlc >>\"\${HOME}/.local/share/vlcd-vlc.log\" 2>&1"
+alias slackd="setsid -f slack >>\"\${HOME}/.local/share/slackd-slack.log\" 2>&1"
+alias dbeaverd="setsid -f dbeaver >>\"\${HOME}/.local/share/dbeaverd-dbeaver.log\" 2>&1"
 
 # ============================
 # ===   helper functions   ===
 # ============================
 fmtjava() {
-    local arg_dir_file="${1:-.}"
+    arg_dir_file="${1:-.}"
 
     /usr/share/idea/bin/format.sh \
         -s ~/.config/nvim/formatters/intellij-codestyle.xml \
@@ -42,14 +49,14 @@ fmtjava() {
 }
 
 dolphind() {
-    local arg_dir="${1:-.}"
+    arg_dir="${1:-.}"
 
     if [ ! -d "${arg_dir}" ]; then
         echo "invalid directory: ${arg_dir}" 1>&2
         return 1
     fi
 
-    setsid -f dolphin "${arg_dir}" >>"$HOME/.local/share/dolphind-dolphin.log" 2>&1
+    setsid -f dolphin "${arg_dir}" >>"${HOME}/.local/share/dolphind-dolphin.log" 2>&1
 }
 
 mvnh() {
@@ -100,6 +107,59 @@ jdtlsclean() {
         -exec sed -i '/\.compiler\.problem\./d' {} ';' \
         -exec chmod 444 {} ';' \
         2>/dev/null
+
+    return 0
+}
+
+desk() {
+    arg_cmd="${1:-}"
+
+    if [ "${arg_cmd}" = "" ]; then
+        printf "NAME\n"
+        printf "%4s%s\n" "" "desk - manage virtual desktops"
+        printf "\n"
+        printf "SYNOPSIS\n"
+        printf "%4s%s\n" "" "desk COMMAND"
+        printf "\n"
+        printf "COMMANDS\n"
+        printf "%4s%-12s%s\n" "" "mk" "Creates a new virtual desktop to the right and opens ghostty"
+        printf "%4s%-12s%s\n" "" "rm" "Removes the current desktop"
+        printf "\n"
+        printf "SEE ALSO\n"
+        printf "%4s%s\n" "" "qdbus6 org.kde.KWin /VirtualDesktopManager"
+        printf "%4s%s\n" "" "qdbus6 org.kde.KWin /KWin"
+
+        return 0
+    fi
+
+    if [ "${arg_cmd}" = "mk" ]; then
+        count_desk="$(qdbus6 org.kde.KWin /VirtualDesktopManager count)"
+        next_desk="$((count_desk + 1))"
+
+        qdbus6 org.kde.KWin /VirtualDesktopManager createDesktop "${next_desk}" "Desktop ${next_desk}" &&
+            qdbus6 org.kde.KWin /KWin setCurrentDesktop "${next_desk}" &&
+            ghostty +new-window
+
+        return 0
+    fi
+
+    if [ "${arg_cmd}" = "rm" ]; then
+        count_desk="$(qdbus6 org.kde.KWin /VirtualDesktopManager count)"
+
+        if [ "${count_desk}" -eq "1" ]; then
+            echo "cannot remove last desktop"
+            return 0
+        fi
+
+        current_desk="$(qdbus6 org.kde.KWin /VirtualDesktopManager current)"
+
+        qdbus6 org.kde.KWin /VirtualDesktopManager removeDesktop "${current_desk}"
+
+        return 0
+    fi
+
+    echo "unrecognized command '${arg_cmd}'"
+    echo "run 'desk' for more information"
 
     return 0
 }

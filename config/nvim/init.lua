@@ -765,7 +765,24 @@ vim.keymap.set("i", "<C-f>s", snippet_picker_with_preview, { desc = "[F]ind [S]n
 
 vim.keymap.set("i", "{<CR>", "{<CR>}<C-o>O", { noremap = true })
 vim.keymap.set("i", "[", "[]<Left>", { noremap = true })
-vim.keymap.set("i", '"', '""<Left>', { noremap = true })
+vim.keymap.set("i", "(", "()<Left>", { noremap = true })
+
+vim.keymap.set("i", '"', function()
+    local line = vim.api.nvim_get_current_line()
+    local odd = false
+
+    for i = 1, #line do
+        if line:byte(i) == 34 then
+            odd = not odd
+        end
+    end
+
+    if odd then
+        return '"'
+    end
+
+    return '""<Left>'
+end, { noremap = true, expr = true })
 
 require("lazy").setup({
     -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`

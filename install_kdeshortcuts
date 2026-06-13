@@ -105,6 +105,9 @@ inst_help() {
     htext "The end result being the printf solution below."
     htext
     htext "Regarding ghostty +new-window is recommended in docs, see https://ghostty.org/docs/linux/systemd"
+    htext
+    htext "Qdbus service/bus and object path help example"
+    htext "qdbus6 org.kde.KWin /VirtualDesktopManager"
 }
 
 inst_is_installed() {
@@ -117,6 +120,7 @@ inst_can_install() {
 
 inst_install() {
     wconfig1 kwin "Window Maximize" "Meta+Shift+Up,Meta+PgUp,Maximize Window"
+    wconfig1 kwin "Window Close" "Meta+Shift+W,Meta+Shift+W,Close Window"
     wconfig2 services org.kde.krunner.desktop _launch "$(printf "Alt+F2\tSearch\t")"
     create_desktop_file_shortcut "ghosttynewwindow" "ghostty +new-window" "Alt+Space"
 
