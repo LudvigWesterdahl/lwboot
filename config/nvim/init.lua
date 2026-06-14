@@ -77,6 +77,9 @@ Paste in the command row of neovim
 Check parser for file
 :lua print(vim.treesitter.get_parser(0):lang())
 
+List of window commands
+:help wincmd
+
 --]]
 
 vim.opt.guicursor = ""
@@ -156,6 +159,10 @@ vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { silent = true })
+-- vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { silent = true })
+-- vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { silent = true })
+-- vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { silent = true })
+-- vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { silent = true })
 
 -- Disables highlight when entering INSERT mode
 vim.api.nvim_create_autocmd("InsertEnter", {
@@ -391,7 +398,6 @@ end, { desc = "Prepend sequence to N lines" })
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
---  See `:help wincmd` for a list of all window commands
 -- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 -- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 -- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
@@ -446,6 +452,15 @@ local parsers_set = {}
 for _, lang in ipairs(parsers) do
     parsers_set[lang] = true
 end
+
+vim.filetype.add({
+    filename = {
+        ["bash_profile"] = "sh",
+        [".bash_profile"] = "sh",
+    },
+    pattern = {
+    },
+})
 
 vim.treesitter.language.register("bash", { "sh" })
 

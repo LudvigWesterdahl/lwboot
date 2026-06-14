@@ -9,4 +9,3 @@ fi
 
 PATH="${PATH}:${HOME}/bin"
 PATH="${PATH}:${HOME}/bin/scripts"
-
