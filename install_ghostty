@@ -51,7 +51,6 @@ handle_theme() {
 inst_install() {
     pacman_install "${pacman_pkg}"
 
-    handle_theme "ghostty-lw-light.theme"
     handle_theme "ghostty-lw-mac.theme"
 
     file_config="${HOME}/.config/ghostty/config"

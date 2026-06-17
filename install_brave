@@ -41,7 +41,7 @@ inst_can_install() {
     fi
 
     if [ ! -f "${brave_sync_code}" ]; then
-        echo "missing file ${brave_sync_code}"
+        bold_red "missing file ${brave_sync_code}"
         return 1
     fi
 
@@ -49,36 +49,22 @@ inst_can_install() {
 }
 
 inst_install() {
-    aur_build_dir="${HOME}/aur-builds/brave-bin"
-    git clone https://aur.archlinux.org/brave-bin.git "${aur_build_dir}"
+    aur_install brave-bin
 
-    makepkg --noconfirm -si --dir "${aur_build_dir}"
-
-    # TODO: replace 4 spaces with 2 across all files
-    # TODO: create helper for kwriteconfig, searrch across
-    # TODO: create helper to clone and build AUR PACKAGE
-    # TODO: make all variables lowercase
     kwriteconfig6 --file kdeglobals --group General --key BrowserApplication "${brave_desktop}"
     kwriteconfig6 --file kdeglobals --group General --key Http "${brave_desktop}"
     kwriteconfig6 --file kdeglobals --group General --key Https "${brave_desktop}"
-
-    rm -rf "${aur_build_dir}"
 
     return 0
 }
 
 inst_can_install_manual() {
-    return 0
+    inst_can_install
 }
 
 inst_install_manual() {
     echo "1. sync setup: settings > sync > I have a Sync Code (code printed next)"
-
-    if [ ! -f "${brave_sync_code}" ]; then
-        echo "missing ${brave_sync_code}"
-    else
-        cat "${brave_sync_code}"
-    fi
+    cat "${brave_sync_code}"
 
     return 0
 }

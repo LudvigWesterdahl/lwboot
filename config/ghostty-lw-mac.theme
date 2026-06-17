@@ -22,6 +22,7 @@ palette = 14=#00e5e5
 # white
 palette = 7=#bfbfbf
 palette = 15=#e5e5e5
+# misc
 background = #ffffff
 foreground = #000000
 cursor-color = #000000

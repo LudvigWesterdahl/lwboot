@@ -18,7 +18,6 @@ inst_help() {
     htext "${installer_link}"
 }
 
-# TODO: how to re-install AUR packages? Create arg to inst_install OPT_2. Also remove check here then for is_command
 inst_is_installed() {
     is_command slack
 }
@@ -32,14 +31,8 @@ inst_can_install() {
     return 0
 }
 
-# TODO: create AUR helper
 inst_install() {
-    aur_build_dir="${HOME}/aur-builds/slack-desktop"
-    git clone https://aur.archlinux.org/slack-desktop.git "${aur_build_dir}"
-
-    makepkg --noconfirm -si --dir "${aur_build_dir}"
-
-    rm -rf "${aur_build_dir}"
+    aur_install slack-desktop
 
     return 0
 }

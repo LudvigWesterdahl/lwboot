@@ -192,12 +192,6 @@ inst_install() {
     cp -v "${nvim_src}/lua/lwcs/groups.lua" "${nvim_dst}/lua/lwcs/groups.lua"
     cp -v "${nvim_src}/lua/lwcs/init.lua" "${nvim_dst}/lua/lwcs/init.lua"
 
-    # lwcsl
-    mkdir "${nvim_dst}/lua/lwcsl" 2>/dev/null
-    cp -v "${nvim_src}/colors/lwcsl.lua" "${nvim_dst}/colors/lwcsl.lua"
-    cp -v "${nvim_src}/lua/lwcsl/groups.lua" "${nvim_dst}/lua/lwcsl/groups.lua"
-    cp -v "${nvim_src}/lua/lwcsl/init.lua" "${nvim_dst}/lua/lwcsl/init.lua"
-
     # lwcsmac
     mkdir "${nvim_dst}/lua/lwcsmac" 2>/dev/null
     cp -v "${nvim_src}/colors/lwcsmac.lua" "${nvim_dst}/colors/lwcsmac.lua"

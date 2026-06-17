@@ -4,73 +4,6 @@ installer_name="kdeshortcuts"
 installer_description="Configures shortcuts for KDE Plasma 6"
 installer_link="-"
 
-wconfig1() {
-    arggroup1="${1}"
-    argkey="${2}"
-    argval="${3}"
-
-    before_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}")
-    kwriteconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}" "${argval}"
-    after_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --key "${argkey}")
-
-    echo "wrote to config"
-    echo "file      : kglobalshortcutsrc"
-    echo "group     : ${arggroup1}"
-    echo "key       : ${argkey}"
-    echo "value     : ${argval}"
-    echo "before    : ${before_write}"
-    echo "after     : ${after_write}"
-
-    return 0
-}
-
-wconfig2() {
-    arggroup1="${1}"
-    arggroup2="${2}"
-    argkey="${3}"
-    argval="${4}"
-
-    before_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}")
-    kwriteconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}" "${argval}"
-    after_write=$(kreadconfig6 --file kglobalshortcutsrc --group "${arggroup1}" --group "${arggroup2}" --key "${argkey}")
-
-    echo "wrote to config"
-    echo "file      : kglobalshortcutsrc"
-    echo "group     : ${arggroup1}"
-    echo "group     : ${arggroup2}"
-    echo "key       : ${argkey}"
-    echo "value     : ${argval}"
-    echo "before    : ${before_write}"
-    echo "after     : ${after_write}"
-
-    return 0
-}
-
-create_desktop_file_shortcut() {
-    argname="${1}"
-    argexec="${2}"
-    argshortcut="${3}"
-
-    desktopfile="net.local.${argname}.desktop"
-    outfile="${HOME}/.local/share/applications/${desktopfile}"
-
-    mv_bak "${outfile}"
-
-    {
-        echo "[Desktop Entry]"
-        echo "Exec=${argexec}"
-        echo "Name=${argname}"
-        echo "NoDisplay=true"
-        echo "StartupNotify=false"
-        echo "Type=Application"
-        echo "X-KDE-GlobalAccel-CommandShortcut=true"
-    } >>"${outfile}"
-
-    wconfig2 services "${desktopfile}" _launch "${argshortcut}"
-
-    return 0
-}
-
 inst_help() {
     htitle "${installer_name}"
     hdesc
@@ -118,10 +51,36 @@ inst_can_install() {
     return 0
 }
 
+create_desktop_file_shortcut() {
+    arg_name="${1}"
+    arg_exec="${2}"
+    arg_shortcut="${3}"
+
+    file_desktop="net.local.${arg_name}.desktop"
+    file_desktop_path="${HOME}/.local/share/applications/${file_desktop}"
+
+    mv_bak "${file_desktop_path}"
+
+    {
+        echo "[Desktop Entry]"
+        echo "Exec=${arg_exec}"
+        echo "Name=${arg_name}"
+        echo "NoDisplay=true"
+        echo "StartupNotify=false"
+        echo "Type=Application"
+        echo "X-KDE-GlobalAccel-CommandShortcut=true"
+    } >>"${file_desktop_path}"
+
+    kwriteconfig6 --file kglobalshortcutsrc --group services --group "${file_desktop}" --key _launch "${arg_shortcut}"
+
+    return 0
+}
+
 inst_install() {
-    wconfig1 kwin "Window Maximize" "Meta+Shift+Up,Meta+PgUp,Maximize Window"
-    wconfig1 kwin "Window Close" "Meta+Shift+W,Meta+Shift+W,Close Window"
-    wconfig2 services org.kde.krunner.desktop _launch "$(printf "Alt+F2\tSearch\t")"
+    kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "Window Maximize" "Meta+Shift+Up,Meta+PgUp,Maximize Window"
+    kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "Window Close" "Meta+Shift+W,Meta+Shift+W,Close Window"
+    kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.krunner.desktop --key _launch "$(printf "Alt+F2\tSearch\t")"
+
     create_desktop_file_shortcut "ghosttynewwindow" "ghostty +new-window" "Alt+Space"
 
     echo "log out and back in for changes to take effect (run slogout)!"

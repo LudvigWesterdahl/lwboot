@@ -26,6 +26,16 @@ inst_help() {
     htext
     htext "Reset monitor configuration for KDE plasma 6"
     htext "rm ~/.config/kwinoutputconfig.json"
+    htext
+    htext "Search for WiFi using NetworkManager"
+    htext "nmcli device wifi list --rescan yes"
+    htext
+    htext "Connect to Wifi using NetworkManager"
+    htext "nmcli device wifi connect SSID password <PASSWORD>"
+    htext
+    htext "Open WiFi captive portal"
+    htext "http://neverssl.com"
+    htext
     hseealso
     htext "${installer_link}"
 }

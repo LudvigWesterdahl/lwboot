@@ -158,3 +158,30 @@ pacman_uninstall() {
 
     sudo pacman --noconfirm -R "${short_pkg}"
 }
+
+aur_install() {
+    arg_pkg="${1}"
+
+    aur_build_dir="${HOME}/aur-builds/${arg_pkg}"
+
+    if [ -e "${aur_build_dir}" ]; then
+        if [ ! -d "${aur_build_dir}" ]; then
+            bold_red "aborting, not a directory '${aur_build_dir}'"
+            return 1
+        fi
+
+        if [ ! -d "${aur_build_dir}/.git" ]; then
+            bold_red "aborting, not a git repository '${aur_build_dir}'"
+            return 1
+        fi
+
+        echo "rm -rf \"${aur_build_dir}\""
+        rm -rf "${aur_build_dir}"
+    fi
+
+    git clone "https://aur.archlinux.org/${arg_pkg}.git" "${aur_build_dir}"
+
+    makepkg --noconfirm -si --dir "${aur_build_dir}"
+
+    return 0
+}
