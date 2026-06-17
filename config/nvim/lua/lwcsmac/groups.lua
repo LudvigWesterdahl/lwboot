@@ -121,13 +121,22 @@ M.setup = function()
 
     -- Plugin: blink
     -- https://cmp.saghen.dev/configuration/appearance
-    any("BlinkCmpMenu", { bg = c.background })
-    any("BlinkCmpMenuBorder", { bg = c.background })
-    any("BlinkCmpMenuSelection", { bg = c.whiteBright })
-    any("BlinkCmpDoc", { bg = c.background })
+    local blinkBg = c.whiteBright
+    local blinkFg = c.white
+    any("BlinkCmpMenu", { bg = blinkBg })
+    any("BlinkCmpMenuBorder", { bg = blinkBg })
+    any("BlinkCmpMenuSelection", { bg = blinkFg })
+    any("BlinkCmpDoc", { bg = blinkBg })
     any("BlinkCmpDocBorder", { bg = c.background })
-    any("BlinkCmpLabelDescription", { bg = c.background })
-    any("BlinkCmpKind", { bg = c.background })
+    any("BlinkCmpLabelDescription", { bg = blinkBg })
+    any("BlinkCmpKind", { bg = blinkBg })
+    any("BlinkCmpLabelDetail", { bg = blinkBg })
+    any("BlinkCmpSignatureHelp", { bg = blinkBg })
+    any("BlinkCmpSignatureHelpActiveParameter", { bg = blinkBg })
+    any("BlinkCmpSource", { bg = c.cyan })
+    any("BlinkCmpScrollBarGutter", { bg = c.cyan })
+    any("BlinkCmpLabelDeprecated", { bg = c.cyan })
+    any("TMPTMP", { bg = c.cyan })
 
     -- Plugin: flash
     local flashFg = c.white

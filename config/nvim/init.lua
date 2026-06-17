@@ -138,6 +138,8 @@ vim.o.splitbelow = true
 vim.o.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
+vim.o.autoread = true
+
 -- Preview substitutions live, as you type!
 vim.o.inccommand = "split"
 
@@ -159,10 +161,10 @@ vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { silent = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { silent = true })
--- vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { silent = true })
--- vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { silent = true })
--- vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { silent = true })
--- vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { silent = true })
+vim.keymap.set("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 
 -- Disables highlight when entering INSERT mode
 vim.api.nvim_create_autocmd("InsertEnter", {
@@ -172,8 +174,6 @@ vim.api.nvim_create_autocmd("InsertEnter", {
         end)
     end,
 })
-
-vim.o.autoread = true
 
 -- Actually trigger the disk check on common events
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
@@ -196,28 +196,9 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
     desc = "Notify on external file change",
 })
 
--- vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
---   callback = function()
---     if vim.bo.buftype == "" then
---       print("saving")
---       vim.w.last_view = vim.fn.winsaveview()
---     end
---   end,
--- })
---
--- vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
---   callback = function()
---     if vim.bo.buftype == "" and vim.w.last_view then
---       print("restoring")
---       vim.fn.winrestview(vim.w.last_view)
---     end
---   end,
--- })
---
---
-
 local group_save_view = vim.api.nvim_create_augroup("SaveView", { clear = true })
 vim.api.nvim_create_autocmd("BufLeave", {
+    desc = "Saves window view",
     group = group_save_view,
     callback = function()
         if vim.bo.buftype ~= "" then
@@ -227,6 +208,7 @@ vim.api.nvim_create_autocmd("BufLeave", {
     end,
 })
 vim.api.nvim_create_autocmd("BufEnter", {
+    desc = "Restores window view",
     group = group_save_view,
     callback = function()
         if vim.bo.buftype ~= "" then
@@ -377,7 +359,6 @@ vim.keymap.set("n", "<leader>hello", function()
         return
     end
 
-    -- Escape special regex chars in the replacement
     local escaped = vim.fn.escape(seq, [[/\&~]])
 
     local start_line = vim.fn.line(".")
@@ -385,31 +366,7 @@ vim.keymap.set("n", "<leader>hello", function()
     local command = string.format("%d,%ds/^/%s/", start_line, end_line, escaped)
     print("will execute: " .. command)
     vim.cmd(command)
-
-    -- vim.cmd()
 end, { desc = "Prepend sequence to N lines" })
-
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
--- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
--- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
--- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
--- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
--- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
-
--- [[ Basic Autocommands ]]
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
@@ -442,7 +399,6 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
--- Attach parsers
 local parsers = {
     "bash",
     "c",
@@ -457,8 +413,6 @@ vim.filetype.add({
     filename = {
         ["bash_profile"] = "sh",
         [".bash_profile"] = "sh",
-    },
-    pattern = {
     },
 })
 
@@ -816,13 +770,6 @@ require("lazy").setup({
     -- Then, because we use the `opts` key (recommended), the configuration runs
     -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-    -- NOTE: Plugins can specify dependencies.
-    --
-    -- The dependencies are proper plugin specifications as well - anything
-    -- you do for a plugin at the top level, you can do for a dependency.
-    --
-    -- Use the `dependencies` key to specify the dependencies of a particular plugin
-
     { -- Fuzzy Finder (files, lsp, etc)
         "nvim-telescope/telescope.nvim",
         -- By default, Telescope is included and acts as your picker for everything.
@@ -1060,7 +1007,6 @@ require("lazy").setup({
             end, { desc = "[S]earch [N]eovim files" })
         end,
     },
-
     {
         "L3MON4D3/LuaSnip",
         version = "v2.*",
@@ -1087,10 +1033,10 @@ require("lazy").setup({
             })
         end,
     },
-
     {
         -- Autocompletion
         -- See https://cmp.saghen.dev/configuration/general.html
+        -- See https://cmp.saghen.dev/configuration/reference.html
         "saghen/blink.cmp",
         event = "VimEnter",
         version = "1.*",
@@ -1132,17 +1078,35 @@ require("lazy").setup({
             },
 
             appearance = {
-                -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-                -- Adjusts spacing to ensure icons are aligned
+                -- mono: for nerd font mono (default)
+                -- normal: for nerd font
                 nerd_font_variant = "mono",
             },
-
             completion = {
+                -- prefix
+                -- full
                 keyword = { range = "prefix" },
                 menu = {
-                    border = "rounded",
+                    draw = {
+                        padding = 1,
+                        columns = {
+                            { "kind_icon" },
+                            { "label", "label_description", gap = 8 },
+                        },
+                        components = {
+                            label = {
+                                width = { fill = true },
+                            },
+                            label_description = {
+                                width = { max = 120 },
+                            },
+                        },
+                    },
+                    -- border = "rounded",
+                    border = nil,
                     winblend = 0,
                     scrollbar = false,
+                    min_width = 40,
                     max_height = 15,
                     direction_priority = { "s", "n" },
                 },
@@ -1150,7 +1114,8 @@ require("lazy").setup({
                     auto_show = false,
                     auto_show_delay_ms = 500,
                     window = {
-                        border = "rounded",
+                        -- border = "rounded",
+                        border = nil,
                         winblend = 0,
                         scrollbar = false,
                         direction_priority = {
@@ -1160,38 +1125,25 @@ require("lazy").setup({
                     },
                 },
             },
-
             sources = {
                 default = { "lsp", "path", "snippets" },
             },
-
             snippets = { preset = "luasnip" },
             fuzzy = { implementation = "rust" },
             signature = {
                 enabled = true,
                 window = {
-                    border = "rounded",
+                    -- border = "rounded",
+                    border = nil,
                     winblend = 0,
                     scrollbar = false,
+                    min_width = 40,
+                    max_height = 15,
                     direction_priority = { "s", "n" },
                 },
             },
         },
     },
-
-    -- {
-    --     "windwp/nvim-autopairs",
-    --     event = "InsertEnter",
-    --     config = function()
-    --         local npairs = require("nvim-autopairs")
-    --         npairs.setup({
-    --           map_bs = true,
-    --           check_ts = true,
-    --         })
-    --         npairs.remove_rule("(")
-    --     end,
-    -- },
-
     {
         "mfussenegger/nvim-jdtls",
         ft = "java", -- lazy-load on java filetype
@@ -1265,7 +1217,6 @@ require("lazy").setup({
             })
         end,
     },
-
     {
         dir = vim.fn.stdpath("config") .. "/lua/lwcsmac",
         lazy = false,
@@ -1403,10 +1354,9 @@ require("lazy").setup({
             },
         },
     },
-
-    -- See: https://www.nerdfonts.com/cheat-sheet
-    -- https://github.com/nvim-tree/nvim-web-devicons
     {
+        -- See: https://www.nerdfonts.com/cheat-sheet
+        -- https://github.com/nvim-tree/nvim-web-devicons
         "nvim-tree/nvim-web-devicons",
         lazy = false,
         config = function()
@@ -1467,7 +1417,6 @@ require("lazy").setup({
             })
         end,
     },
-
     {
         "nvim-tree/nvim-tree.lua",
         version = "*",
