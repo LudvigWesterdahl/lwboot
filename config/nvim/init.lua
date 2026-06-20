@@ -347,26 +347,26 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Example how to get input from user and execute arbitrary command.
-vim.keymap.set("n", "<leader>hello", function()
-    local count = tonumber(vim.fn.input("Num lines (including current): "))
-    if not count or count < 1 then
-        print("\nInvalid count")
-        return
-    end
-    local seq = vim.fn.input("Sequence to insert: ")
-    if seq == "" then
-        print("\nAborted")
-        return
-    end
-
-    local escaped = vim.fn.escape(seq, [[/\&~]])
-
-    local start_line = vim.fn.line(".")
-    local end_line = start_line + count - 1
-    local command = string.format("%d,%ds/^/%s/", start_line, end_line, escaped)
-    print("will execute: " .. command)
-    vim.cmd(command)
-end, { desc = "Prepend sequence to N lines" })
+-- vim.keymap.set("n", "<leader>hello", function()
+--     local count = tonumber(vim.fn.input("Num lines (including current): "))
+--     if not count or count < 1 then
+--         print("\nInvalid count")
+--         return
+--     end
+--     local seq = vim.fn.input("Sequence to insert: ")
+--     if seq == "" then
+--         print("\nAborted")
+--         return
+--     end
+--
+--     local escaped = vim.fn.escape(seq, [[/\&~]])
+--
+--     local start_line = vim.fn.line(".")
+--     local end_line = start_line + count - 1
+--     local command = string.format("%d,%ds/^/%s/", start_line, end_line, escaped)
+--     print("will execute: " .. command)
+--     vim.cmd(command)
+-- end, { desc = "Prepend sequence to N lines" })
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
@@ -1526,6 +1526,104 @@ require("lazy").setup({
                     git_ignored = false,
                 },
             })
+        end,
+    },
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            local harpoon = require("harpoon")
+
+            -- REQUIRED
+            harpoon:setup()
+            -- REQUIRED
+
+            -- Keymap to add a file to Harpoon
+            vim.keymap.set("n", "<leader>ha", function()
+                harpoon:list():add()
+            end, { desc = "[H]arpoon [A]dd file" })
+
+            vim.keymap.set("n", "<leader>hc", function()
+                harpoon:list():clear()
+            end, { desc = "[H]arpoon [C]lear files" })
+
+            vim.keymap.set("n", "<leader>hr", function()
+                harpoon:list():remove()
+            end, { desc = "[H]arpoon [R]remove file" })
+
+            local conf = require("telescope.config").values
+
+            local function toggle_telescope(harpoon_files)
+                local file_paths = {}
+                local items = harpoon_files.items
+
+                local max_index = 0
+                for k, _ in pairs(items) do
+                    if type(k) == "number" and k > max_index then
+                        max_index = k
+                    end
+                end
+
+                for i = 1, max_index do
+                    local item = items[i]
+                    if item ~= nil then
+                        table.insert(file_paths, { index = i, path = item.value })
+                    end
+                end
+
+                require("telescope.pickers")
+                    .new({}, {
+                        prompt_title = "Harpoon",
+                        finder = require("telescope.finders").new_table({
+                            results = file_paths,
+                            entry_maker = function(entry)
+                                return {
+                                    value = entry.path,
+                                    display = string.format(
+                                        "%d. %s",
+                                        entry.index,
+                                        vim.fn.fnamemodify(entry.path, ":t")
+                                    ),
+                                    ordinal = vim.fn.fnamemodify(entry.path, ":t"),
+                                    path = entry.path,
+                                }
+                            end,
+                        }),
+                        previewer = conf.file_previewer({}),
+                        sorter = conf.generic_sorter({}),
+                    })
+                    :find()
+            end
+
+            vim.keymap.set("n", "<leader>hf", function()
+                toggle_telescope(harpoon:list())
+            end, { desc = "Open [H]arpooned [F]iles" })
+
+            -- Select specific files from Harpoon
+            vim.keymap.set("n", "<C-1>", function()
+                harpoon:list():select(1)
+            end, { desc = "Open [H]arpooned file [1]" })
+
+            vim.keymap.set("n", "<C-2>", function()
+                harpoon:list():select(2)
+            end, { desc = "Open [H]arpooned file [2]" })
+
+            vim.keymap.set("n", "<C-3>", function()
+                harpoon:list():select(3)
+            end, { desc = "Open [H]arpooned file [3]" })
+
+            vim.keymap.set("n", "<C-4>", function()
+                harpoon:list():select(4)
+            end, { desc = "Open [H]arpooned file [4]" })
+
+            -- Toggle previous & next buffers stored within Harpoon list
+            -- vim.keymap.set("n", "<C-S-P>", function()
+            --     harpoon:list():prev()
+            -- end)
+            -- vim.keymap.set("n", "<C-S-N>", function()
+            --     harpoon:list():next()
+            -- end)
         end,
     },
 })
