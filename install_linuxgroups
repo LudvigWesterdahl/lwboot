@@ -1,10 +1,11 @@
 #!/bin/sh
 
-installer_name="docker"
-installer_description="Installs docker."
-installer_link="https://archlinux.org/packages/extra/x86_64/docker/"
+installer_name="linuxgroups"
+installer_description="Adds the current user to necessary linux groups."
+installer_link=""
 
-pacman_pkg="extra/docker"
+# shellcheck disable=SC2034 # SC2034 (warning): pacman_pkg appears unused. Verify use (or export if used externally).
+pacman_pkg=""
 
 inst_help() {
     htitle "${installer_name}"
@@ -27,21 +28,17 @@ inst_can_install() {
 }
 
 inst_install() {
-    pacman_install "${pacman_pkg}"
-
-    enable_start_service docker.service
-
-    ensure_group docker
+    return 0
 }
 
 inst_can_install_manual() {
-    return 0
+    return 1
 }
 
 inst_install_manual() {
-    return 0
+    return 1
 }
 
 inst_uninstall() {
-    pacman_uninstall "${pacman_pkg}"
+    return 0
 }

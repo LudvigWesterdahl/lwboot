@@ -86,6 +86,7 @@ vim.opt.guicursor = ""
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- for nvim-tree: disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1

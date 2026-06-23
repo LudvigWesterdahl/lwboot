@@ -101,6 +101,30 @@ enable_start_service() {
     return 0
 }
 
+ensure_group() {
+    arg_group="${1}"
+
+    # TODO: fix the coloring between removing quotes
+    group_exist="$(cat /etc/group | awk -F ":" '{print $1}' | grep "${arg_group}")"
+    # group_exist=$(cat /etc/group | awk -F ":" '{print $1}' | grep "${arg_group}")
+
+    if [ "${group_exist}" = "" ]; then
+        bold_red "group '${arg_group}' does not exist"
+        return 1
+    fi
+
+    group_member="$(groups | tr " " "\n" | grep "${arg_group}")"
+
+    if [ "${group_member}" != "" ]; then
+        echo "user ${USER} already belongs to ${arg_group}"
+    fi
+
+    echo "adding ${USER} to ${arg_group}"
+    sudo usermod -aG "${arg_group}" "${USER}"
+
+    echo "remember to log out or reboot for changes to take effect!"
+}
+
 long_to_short_pkg() {
     arg_string="${1}"
     split_last=$(echo "${arg_string}" | tr "/" "\n" | tail -n 1)
