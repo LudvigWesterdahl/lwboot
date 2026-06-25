@@ -74,7 +74,7 @@ install_calibre_config_db() {
     fi
 
     database_path="${HOME}/.local/share/calibre/library1.db"
-    library_path="${HOME}/.local/.share/calibre/lib"
+    library_path="${HOME}/.local/share/calibre/lib"
 
     mkdir -p "${library_path}"
 
