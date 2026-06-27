@@ -36,6 +36,9 @@ inst_help() {
     htext "Open WiFi captive portal"
     htext "http://neverssl.com"
     htext
+    htext "See what is using a mountpoint"
+    htext "sudo fuser -vm /mnt/usb1"
+    htext
     hseealso
     htext "${installer_link}"
 }
