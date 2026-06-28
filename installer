@@ -179,6 +179,7 @@ run_install install_bluetooth
 run_install install_shfmt
 run_install install_fwupd
 run_install install_dosfstools
+run_install install_rsync
 run_install install_linuxgroups
 
 if [ "${installer_arg}" = "docs" ]; then

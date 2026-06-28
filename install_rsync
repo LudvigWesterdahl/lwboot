@@ -1,10 +1,10 @@
 #!/bin/sh
 
-installer_name="gzip"
-installer_description="installs gzip"
-installer_link="https://archlinux.org/packages/core/x86_64/gzip/"
+installer_name="rsync"
+installer_description="Installs rsync."
+installer_link="https://archlinux.org/packages/extra/x86_64/rsync/"
 
-pacman_pkg="core/gzip"
+pacman_pkg="extra/rsync"
 
 inst_help() {
     htitle "${installer_name}"
@@ -13,15 +13,10 @@ inst_help() {
     husage
     htext "-"
     hexamples
-    htext "Compress a file"
-    htext "gzip --keep file.tar"
-    htext
-    htext "Uncompress a file"
-    htext "gzip --keep -d file.tar.gz"
+    htext "Sync between two directories on the local machine"
+    htext "rsync -av dir1/ dir2/"
     hseealso
     htext "${installer_link}"
-    htext
-    htext "Gzip preserves permissions and timestamps."
 }
 
 inst_is_installed() {
@@ -41,7 +36,7 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 0
+    return 1
 }
 
 inst_uninstall() {
