@@ -264,7 +264,7 @@ M.setup = function()
     any("@lwbash_ret_failure", { fg = c.red, bold = false })
 
     -- LSP: java
-    any("@lsp.type.keyword.java", { fg = c.cursor })
+    any("@lsp.type.keyword.java", { link = "@lw_keyword" })
     any("@lsp.mod.importDeclaration.java", { link = "@lwjava_import_ref" })
     any("@lsp.typemod.annotation.importDeclaration.java", { link = "@lwjava_annotation" })
     any("@lsp.type.annotation.java", { link = "@lwjava_annotation" })
