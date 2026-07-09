@@ -1217,6 +1217,22 @@ require("lazy").setup({
                 name = "Attach to localhost:5005",
                 hostName = "localhost",
                 port = 5005,
+                projectName = function()
+                    local names = {}
+                    for _, c in ipairs(require("dap").configurations.java or {}) do
+                        if c.projectName and not vim.tbl_contains(names, c.projectName) then
+                            table.insert(names, c.projectName)
+                        end
+                    end
+                    if #names == 1 then
+                        return names[1]
+                    end
+                    local co = coroutine.running()
+                    vim.ui.select(names, { prompt = "Project:" }, function(choice)
+                        coroutine.resume(co, choice)
+                    end)
+                    return coroutine.yield()
+                end,
             })
         end,
     },
