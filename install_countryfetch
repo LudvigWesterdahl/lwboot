@@ -1,0 +1,44 @@
+#!/bin/sh
+
+installer_name="countryfetch"
+installer_description="Installs countryfetch. Used to display country information."
+installer_link="https://archlinux.org/packages/extra/x86_64/countryfetch/"
+
+pacman_pkg="extra/countryfetch"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "countryfetch [OPTIONS] [COUNTRY]..."
+    hexamples
+    htext "countryfetch se ma"
+    hseealso
+    htext "${installer_link}"
+    htext "https://github.com/nik-rev/countryfetch"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install "${pacman_pkg}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 0
+}
+
+inst_uninstall() {
+    pacman_uninstall "${pacman_pkg}"
+}

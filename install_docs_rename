@@ -1,0 +1,46 @@
+#!/bin/sh
+
+installer_name="docs_rename"
+installer_description="Command rename documentation."
+installer_link="-"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "rename --help"
+    hexamples
+    htext "Rename all files ending with 0.txt with -X.txt"
+    htext "rename \"0.txt\" \"0-X.txt\" *"
+    htext
+    htext "Replacing all underscores in the filenames with hyphens"
+    htext "rename _ - *"
+    htext
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    return 0
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    return 0
+}

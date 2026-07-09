@@ -123,6 +123,7 @@ run_install install_docs
 run_install install_docs_keybinds_arch
 run_install install_docs_keybinds_ghostty
 run_install install_docs_keybinds_nvim
+run_install install_docs_rename
 run_install install_nuphykeyboard
 run_install install_less
 run_install install_gzip
@@ -180,6 +181,9 @@ run_install install_shfmt
 run_install install_fwupd
 run_install install_dosfstools
 run_install install_rsync
+run_install install_fastfetch
+run_install install_countryfetch
+run_install install_figlet
 run_install install_linuxgroups
 
 if [ "${installer_arg}" = "docs" ]; then
