@@ -28,6 +28,8 @@ alias jdebugy="java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,addres
 alias nvim1="NVIM_JDTLS_PNAME_SUFFIX=1 nvim"
 alias nvimc="jdtlsclean && nvim"
 alias nvimc1="jdtlsclean && NVIM_JDTLS_PNAME_SUFFIX=1 nvim"
+# Pipe output of a command: command | nocolor
+alias nocolor="sed \"s/\x1b\[[0-9;]*[a-zA-Z]//g\""
 
 alias braved="setsid -f brave >>\"\${HOME}/.local/share/braved-brave.log\" 2>&1"
 alias postmand="setsid -f postman >>\"\${HOME}/.local/share/postmand-postman.log\" 2>&1"
