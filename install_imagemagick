@@ -1,0 +1,44 @@
+#!/bin/sh
+
+installer_name="imagemagick"
+installer_description="Installs imagemagick."
+installer_link="https://archlinux.org/packages/extra/x86_64/imagemagick/"
+
+pacman_pkg="extra/imagemagick"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "convert --help"
+    hexamples
+    htext "Create pdf from two images"
+    htext "magick img1.png img2.png out.pdf"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install "${pacman_pkg}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall "${pacman_pkg}"
+}

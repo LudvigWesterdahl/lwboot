@@ -1,0 +1,42 @@
+#!/bin/sh
+
+installer_name="docs_cmp"
+installer_description="Compares two files byte by byte."
+installer_link="-"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "cmp --help"
+    hexamples
+    htext "Compare two files skipping 3 and 2 bytes in first and second file, respectively"
+    htext "cmp file1 file2 3 2"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    return 0
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    return 0
+}

@@ -17,7 +17,16 @@ inst_help() {
     htext "tar -c -v -f filedir.tar filedir"
     htext
     htext "Extract a tar archive"
-    htext "tar -x -v -f filedir.tar filedir "
+    htext "tar -x -v -f filedir.tar filedir"
+    htext
+    htext "Create a tar but use numbers for user/group names (anonymous mode)"
+    htext "tar --numeric-owner -cvf filedir.tar filedir"
+    htext
+    htext "Set specific owner and group when creating archive (can be combined with --numeric-owner)"
+    htext "tar --owner=0 --group=0 -cvf file.tar file"
+    htext
+    htext "List contents inside tar file"
+    htext "tar -tvf file.tar"
     hseealso
     htext "${installer_link}"
 }

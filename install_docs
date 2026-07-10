@@ -39,6 +39,8 @@ inst_help() {
     htext "See what is using a mountpoint"
     htext "sudo fuser -vm /mnt/usb1"
     htext
+    htext "Release notes and news related to systemd"
+    htext "less /usr/share/doc/systemd/NEWS"
     hseealso
     htext "${installer_link}"
 }
