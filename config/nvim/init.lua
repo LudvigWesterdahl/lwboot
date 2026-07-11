@@ -735,25 +735,46 @@ end
 vim.keymap.set("n", "<leader>fs", snippet_picker_with_preview, { desc = "[F]ind [S]nippets" })
 vim.keymap.set("i", "<C-f>s", snippet_picker_with_preview, { desc = "[F]ind [S]nippets" })
 
+-- keymaps for brackets, paranthesis and quotes
 vim.keymap.set("i", "{<CR>", "{<CR>}<C-o>O", { noremap = true })
-vim.keymap.set("i", "[", "[]<Left>", { noremap = true })
-vim.keymap.set("i", "(", "()<Left>", { noremap = true })
 
-vim.keymap.set("i", '"', function()
+local function insert_matching(open, close)
     local line = vim.api.nvim_get_current_line()
-    local odd = false
-
+    local num_open = 0
+    local num_close = 0
     for i = 1, #line do
-        if line:byte(i) == 34 then
-            odd = not odd
+        local curr = line:sub(i, i)
+        if curr == open then
+            num_open = num_open + 1
+        elseif curr == close then
+            num_close = num_close + 1
         end
     end
 
-    if odd then
-        return '"'
+    if open == close and num_open % 2 == 1 then
+        return open
     end
 
-    return '""<Left>'
+    if num_close > num_open then
+        return open
+    end
+    local col = vim.api.nvim_win_get_cursor(0)[2]
+    if line:sub(col, col) == "\\" then
+        return open .. "\\" .. close .. "<Left><Left>"
+    end
+    return open .. close .. "<Left>"
+end
+
+vim.keymap.set("i", "[", function()
+    return insert_matching("[", "]")
+end, { noremap = true, expr = true })
+
+vim.keymap.set("i", "(", function()
+    return insert_matching("(", ")")
+end, { noremap = true, expr = true })
+
+vim.keymap.set("i", '"', function()
+  return insert_matching('"', '"')
 end, { noremap = true, expr = true })
 
 require("lazy").setup({
@@ -831,6 +852,13 @@ require("lazy").setup({
                 })
             end, { desc = "[S]earch [F]iles" })
 
+            vim.keymap.set("n", "<leader>Sf", function()
+                builtin.find_files({
+                    cwd = vim.fn.expand("%:p:h"),
+                    path_display = { filename_first = { reverse_directories = false } },
+                })
+            end, { desc = "[S]earch (current dir) [F]iles" })
+
             vim.keymap.set("n", "<leader>sF", function()
                 builtin.find_files({
                     path_display = { filename_first = { reverse_directories = false } },
@@ -848,6 +876,24 @@ require("lazy").setup({
                 })
             end, { desc = "[S]earch [F]iles (all)" })
 
+            vim.keymap.set("n", "<leader>SF", function()
+                builtin.find_files({
+                    cwd = vim.fn.expand("%:p:h"),
+                    path_display = { filename_first = { reverse_directories = false } },
+                    hidden = true,
+                    no_ignore = true,
+                    no_ignore_parent = true,
+                    file_ignore_patterns = {
+                        "^%.git/",
+                        "/%.git/",
+                        "^node_modules/",
+                        "/node_modules/",
+                        "^target/",
+                        "/target/",
+                    },
+                })
+            end, { desc = "[S]earch (current dir) [F]iles (all)" })
+
             vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
             vim.keymap.set({ "n", "v" }, "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
             --vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -857,6 +903,13 @@ require("lazy").setup({
                     path_display = { filename_first = { reverse_directories = false } },
                 })
             end, { desc = "[S]earch by [G]rep" })
+
+            vim.keymap.set("n", "<leader>Sg", function()
+                builtin.live_grep({
+                    cwd = vim.fn.expand("%:p:h"),
+                    path_display = { filename_first = { reverse_directories = false } },
+                })
+            end, { desc = "[S]earch by (current dir) [G]rep" })
 
             vim.keymap.set("n", "<leader>sG", function()
                 builtin.live_grep({
@@ -876,6 +929,26 @@ require("lazy").setup({
                     end,
                 })
             end, { desc = "[S]earch by [G]rep (all)" })
+
+            vim.keymap.set("n", "<leader>SG", function()
+                builtin.live_grep({
+                    cwd = vim.fn.expand("%:p:h"),
+                    path_display = { filename_first = { reverse_directories = false } },
+                    additional_args = function()
+                        return {
+                            "--hidden",
+                            "--no-ignore",
+                            "--glob",
+                            "!.git/",
+                            "--glob",
+                            "!node_modules/",
+                            "--glob",
+                            "!target/",
+                            "--max-count=1",
+                        }
+                    end,
+                })
+            end, { desc = "[S]earch by (current dir) [G]rep (all)" })
 
             vim.keymap.set("n", "<leader><leader>", function()
                 builtin.buffers({

@@ -13,6 +13,11 @@
 (command name: (command_name) @lwbash_cmd)
 
 ; ====================
+; lwbash_word
+; ====================
+(word) @lwbash_word
+
+; ====================
 ; lwbash_exp
 ; ====================
 ; ((expansion) @lwbash_exp (#set! priority 90))

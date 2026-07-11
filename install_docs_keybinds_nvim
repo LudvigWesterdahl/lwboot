@@ -83,6 +83,8 @@ inst_help() {
     htext "<C-s>"
     htext "<C-w>p"
     htext
+    htext "Show command history"
+    htext "q:"
     hseealso
     htext "${installer_link}"
 }

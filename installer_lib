@@ -69,9 +69,9 @@ mv_bak() {
         return 0
     fi
 
-    file_dir=$(dirname "${arg_file}")
-    file_name=$(basename "${arg_file}")
-    curr_dir=$(realpath .)
+    file_dir="$(dirname "${arg_file}")"
+    file_name="$(basename "${arg_file}")"
+    curr_dir="$(realpath .)"
 
     bak_dir="${curr_dir}/bak${file_dir}"
     bak_file="${file_name}.$(date +%Y%m%d_%H%M%S).bak"
@@ -85,14 +85,14 @@ mv_bak() {
 enable_start_service() {
     arg_service="${1}"
 
-    enabled_status=$(systemctl is-enabled "${arg_service}")
+    enabled_status="$(systemctl is-enabled "${arg_service}")"
     if [ "${enabled_status}" = "disabled" ]; then
         echo "sudo systemctl enable ${arg_service}"
         sudo systemctl enable "${arg_service}"
     fi
 
     # active | inactive
-    active_status=$(systemctl is-active "${arg_service}")
+    active_status="$(systemctl is-active "${arg_service}")"
     if [ "${active_status}" = "inactive" ]; then
         echo "sudo systemctl start ${arg_service}"
         sudo systemctl start "${arg_service}"
@@ -104,9 +104,7 @@ enable_start_service() {
 ensure_group() {
     arg_group="${1}"
 
-    # TODO: fix the coloring between removing quotes
-    group_exist="$(cat /etc/group | awk -F ":" '{print $1}' | grep "${arg_group}")"
-    # group_exist=$(cat /etc/group | awk -F ":" '{print $1}' | grep "${arg_group}")
+    group_exist="$(awk -F ":" '{print $1}' /etc/group | grep -x "${arg_group}")"
 
     if [ "${group_exist}" = "" ]; then
         bold_red "group '${arg_group}' does not exist"
@@ -117,6 +115,7 @@ ensure_group() {
 
     if [ "${group_member}" != "" ]; then
         echo "user ${USER} already belongs to ${arg_group}"
+        return 0
     fi
 
     echo "adding ${USER} to ${arg_group}"
@@ -127,14 +126,14 @@ ensure_group() {
 
 long_to_short_pkg() {
     arg_string="${1}"
-    split_last=$(echo "${arg_string}" | tr "/" "\n" | tail -n 1)
+    split_last="$(echo "${arg_string}" | tr "/" "\n" | tail -n 1)"
     echo "${split_last}"
 }
 
 is_pacman_installed() {
     arg_pkg="${1}"
 
-    short_pkg=$(long_to_short_pkg "${arg_pkg}")
+    short_pkg="$(long_to_short_pkg "${arg_pkg}")"
     if pacman -Qe "${short_pkg}" >/dev/null 2>&1; then
         return 0
     else
@@ -151,7 +150,7 @@ pacman_install() {
         exit 1
     fi
 
-    short_pkg=$(long_to_short_pkg "${arg_pkg}")
+    short_pkg="$(long_to_short_pkg "${arg_pkg}")"
 
     if pacman -Qd "${short_pkg}" 1>/dev/null 2>&1; then
         echo "marking dependency as explicitly installed: ${arg_pkg} - ${short_pkg}"
@@ -178,7 +177,7 @@ pacman_uninstall() {
         exit 1
     fi
 
-    short_pkg=$(long_to_short_pkg "${arg_pkg}")
+    short_pkg="$(long_to_short_pkg "${arg_pkg}")"
 
     sudo pacman --noconfirm -R "${short_pkg}"
 }

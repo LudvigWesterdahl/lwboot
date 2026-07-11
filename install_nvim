@@ -37,7 +37,7 @@ handle_vscode_test() {
     dest_file_gz="${dest_dir}/vscodetest.vsix.gz"
     dest_file_zip="${dest_dir}/vscodetest.vsix"
 
-    jar_file=$(ls "${dest_dir}"/extension/server/*.jar 2>/dev/null)
+    jar_file="$(ls "${dest_dir}"/extension/server/*.jar 2>/dev/null)"
     if [ "${jar_file}" != "" ]; then
         echo "handle_vscode_test: skipping found vscode test ${version} jar files"
         return 0
@@ -60,7 +60,7 @@ handle_java_debug() {
     dest_dir="${HOME}/Documents/java-debug"
 
     c1="com.microsoft.java.debug.plugin"
-    jar_file=$(ls "${dest_dir}/${c1}/target/${c1}"-*.jar 2>/dev/null)
+    jar_file="$(ls "${dest_dir}/${c1}/target/${c1}"-*.jar 2>/dev/null)"
 
     if [ "${jar_file}" = "" ]; then
         git_clone_pull "${repo}" "${dest_dir}"

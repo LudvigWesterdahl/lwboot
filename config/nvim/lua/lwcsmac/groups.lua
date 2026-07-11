@@ -258,6 +258,7 @@ M.setup = function()
     -- Language: bash
     any("@lwbash_variable", { fg = magenta1 })
     any("@lwbash_cmd", { fg = c.cursor })
+    any("@lwbash_word", { link = "@lwbash_cmd" })
     any("@lwbash_exp", { fg = magenta1 })
     any("@lwbash_cmd_sub", { link = "@lwbash_exp" })
     any("@lwbash_ret_success", { fg = green1, bold = false })

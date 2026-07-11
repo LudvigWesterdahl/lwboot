@@ -16,6 +16,10 @@ inst_help() {
     htext
     htext "Create backup file for -i"
     htext "sed -i.bak OPTIONS"
+    htext
+    htext "Print the outcome of sed then execute the substitution"
+    htext "sed -n 's/pattern/replacement/p' file"
+    htext "sed -i 's/pattern/replacement/' file"
     hseealso
     htext "${installer_link}"
 }
