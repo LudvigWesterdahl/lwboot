@@ -8,7 +8,7 @@ pacman_pkg="extra/git"
 
 git_mail="ludvig.westerdahl.tech.v1@protonmail.com"
 git_name="ludvig"
-git_editor="vim"
+git_editor="nvim"
 
 handle_repository() {
     arg_repo="${1}"
@@ -43,8 +43,8 @@ inst_is_installed() {
 }
 
 inst_can_install() {
-    if ! is_command vim; then
-        echo "missing vim"
+    if ! is_command nvim; then
+        echo "missing nvim"
         return 1
     fi
 

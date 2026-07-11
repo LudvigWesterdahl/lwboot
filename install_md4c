@@ -1,10 +1,10 @@
 #!/bin/sh
 
-installer_name="vim"
-installer_description="Installs vim."
-installer_link="https://archlinux.org/packages/extra/x86_64/vim/"
+installer_name="md4c"
+installer_description="Installs md4c."
+installer_link="https://archlinux.org/packages/extra/x86_64/md4c/"
 
-pacman_pkg="extra/vim"
+pacman_pkg="extra/md4c"
 
 inst_help() {
     htitle "${installer_name}"
@@ -13,12 +13,11 @@ inst_help() {
     husage
     htext "-"
     hexamples
-    htext "Show binary content of a compiled binary excluding NULL rows"
-    htext "xxd -a a.out"
+    htext "Convert md to html"
+    htext "md2html -f -o file.html file.md"
     hseealso
     htext "${installer_link}"
-    htext
-    htext "It also provides xxd command."
+    htext "https://github.com/mity/md4c"
 }
 
 inst_is_installed() {
@@ -31,12 +30,6 @@ inst_can_install() {
 
 inst_install() {
     pacman_install "${pacman_pkg}"
-
-    file_vimrc="${HOME}/.vimrc"
-
-    mv_bak "${file_vimrc}"
-
-    cp -v config/vimrc "${file_vimrc}"
 }
 
 inst_can_install_manual() {
@@ -44,7 +37,7 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 0
+    return 1
 }
 
 inst_uninstall() {

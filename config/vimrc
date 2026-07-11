@@ -1,0 +1,8 @@
+
+" show current line number and relative to it
+set number
+set relativenumber
+
+" disable mouse to allow right click through terminal for copy/paste
+set mouse=
+

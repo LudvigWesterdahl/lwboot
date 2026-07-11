@@ -41,6 +41,9 @@ inst_help() {
     htext
     htext "Release notes and news related to systemd"
     htext "less /usr/share/doc/systemd/NEWS"
+    htext
+    htext "Send a desktop notification"
+    htext "notify-send \"Title\" \"Hello World\!\" -a \"my-application\" -t 5000"
     hseealso
     htext "${installer_link}"
 }

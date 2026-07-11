@@ -187,6 +187,8 @@ run_install install_countryfetch
 run_install install_figlet
 run_install install_strace
 run_install install_imagemagick
+run_install install_entr
+run_install install_md4c
 run_install install_linuxgroups
 
 if [ "${installer_arg}" = "docs" ]; then
