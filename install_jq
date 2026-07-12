@@ -13,7 +13,12 @@ inst_help() {
     husage
     htext "-"
     hexamples
-    htext "-"
+    htext "Delete id and items.id (two alternatives)"
+    htext "jq 'del(.id) | .items |= map(del(.id))' JSON"
+    htext "jq 'del(.id) | .items[] |= del(.id)' JSON"
+    htext
+    htext "Rename items.name to items.year"
+    htext "jq '.items |= map(.year = .name | del(.name))' JSON"
     hseealso
     htext "${installer_link}"
     htext "https://jqlang.org/manual/"
