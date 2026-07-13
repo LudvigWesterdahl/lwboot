@@ -1,7 +1,7 @@
 #!/bin/sh
 
 installer_name="docs_cmp"
-installer_description="Compares two files byte by byte."
+installer_description="Documentation for cmp. Compares two files byte by byte."
 installer_link="-"
 
 inst_help() {

@@ -125,6 +125,7 @@ run_install install_docs_keybinds_ghostty
 run_install install_docs_keybinds_nvim
 run_install install_docs_rename
 run_install install_docs_cmp
+run_install install_docs_grep
 run_install install_nuphykeyboard
 run_install install_less
 run_install install_gzip

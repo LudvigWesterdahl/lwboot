@@ -1,7 +1,7 @@
 #!/bin/sh
 
-installer_name="docs_rename"
-installer_description="Documentation for rename."
+installer_name="docs_grep"
+installer_description="Documentation for grep."
 installer_link="-"
 
 inst_help() {
@@ -9,14 +9,10 @@ inst_help() {
     hdesc
     htext "${installer_description}"
     husage
-    htext "rename --help"
+    htext "-"
     hexamples
-    htext "Rename all files ending with 0.txt with -X.txt"
-    htext "rename \"0.txt\" \"0-X.txt\" *"
-    htext
-    htext "Replacing all underscores in the filenames with hyphens"
-    htext "rename _ - *"
-    htext
+    htext "Find recursively files matching extension"
+    htext "grep -rn --include='*.java' 'new ArrayList<>()' ."
     hseealso
     htext "${installer_link}"
 }
