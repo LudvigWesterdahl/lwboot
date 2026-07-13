@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+set -u
+
+wallpaper_dir="${HOME}/.local/share/lwboot/wallpapers"
+if [ ! -d "${wallpaper_dir}" ]; then
+    exit 1
+fi
+
+wallpaper_files=$(find "${wallpaper_dir}" -regextype posix-basic -type f -regex '\(.*\.jpeg\|.*\.png\)')
+if [ "${wallpaper_files}" = "" ]; then
+    exit 1
+fi
+
+wallpaper_img="$(printf '%s\n' "${wallpaper_files}" | shuf -n 1)"
+
+plasma-apply-wallpaperimage "${wallpaper_img}"
+
+kwriteconfig6 --file kscreenlockerrc \
+    --group Greeter \
+    --group Wallpaper \
+    --group org.kde.image \
+    --group General \
+    --key Image "file://${wallpaper_img}"

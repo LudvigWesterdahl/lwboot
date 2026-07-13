@@ -101,6 +101,25 @@ enable_start_service() {
     return 0
 }
 
+enable_start_user_service() {
+    arg_service="${1}"
+
+    enabled_status="$(systemctl --user is-enabled "${arg_service}")"
+    if [ "${enabled_status}" = "disabled" ]; then
+        echo "systemctl enable ${arg_service}"
+        systemctl --user enable "${arg_service}"
+    fi
+
+    # active | inactive
+    active_status="$(systemctl --user is-active "${arg_service}")"
+    if [ "${active_status}" = "inactive" ]; then
+        echo "systemctl start ${arg_service}"
+        systemctl --user start "${arg_service}"
+    fi
+
+    return 0
+}
+
 ensure_group() {
     arg_group="${1}"
 

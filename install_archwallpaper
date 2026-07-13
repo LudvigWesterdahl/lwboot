@@ -37,15 +37,54 @@ inst_can_install() {
 inst_install() {
     pacman_install "${pacman_pkg}"
 
-    wallpaper_img="/usr/share/backgrounds/archlinux/conference.png"
-    lockscreen_img="/usr/share/backgrounds/archlinux/split.png"
-    lockscreen_img="${HOME}/Documents/lwboot/config/wallpapers/ayu-mirage.png"
-    lockscreen_img="${HOME}/Documents/lwboot/config/wallpapers/island.jpg"
-    wallpaper_img="${lockscreen_img}"
+    wallpaper_dir="${HOME}/.local/share/lwboot/wallpapers"
 
-    plasma-apply-wallpaperimage "${wallpaper_img}"
+    if [ ! -d "${wallpaper_dir}" ]; then
+        bold_yellow "missing ${wallpaper_dir}"
+        return 0
+    fi
 
-    kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://${lockscreen_img}"
+    wallpaper_files="$(find "${wallpaper_dir}" -regextype posix-basic -type f -regex '\(.*\.jpeg\|.*\.png\)')"
+
+    if [ "${wallpaper_files}" = "" ]; then
+        bold_yellow "add some jpeg or png files to ${wallpaper_dir}"
+        return 0
+    fi
+
+
+    if ! is_command systemctl; then
+        bold_red "missing systemctl"
+        return 0
+    fi
+
+    service_name="setwallpaper.service"
+    service_dir="${HOME}/.config/systemd/user"
+    service_file="${service_dir}/${service_name}"
+
+    mkdir -p "${service_dir}"
+
+    setwallpaper_file="${PROG_DIR}/config/install_archwallpaper/setwallpaper"
+
+    {
+        echo "[Unit]"
+        echo "Description=Set wallpaper at login"
+        echo "PartOf=graphical-session.target"
+        echo "After=plasma-workspace.target"
+        echo ""
+        echo "[Service]"
+        echo "Type=oneshot"
+        echo "ExecStart=${setwallpaper_file}"
+        echo ""
+        echo "[Install]"
+        echo "WantedBy=plasma-workspace.target"
+    } >"${service_file}" || return 1
+
+    sudo chmod 755 "${setwallpaper_file}"
+
+
+    enable_start_user_service "${service_name}"
+
+   return 0
 }
 
 inst_can_install_manual() {
