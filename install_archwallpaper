@@ -51,7 +51,6 @@ inst_install() {
         return 0
     fi
 
-
     if ! is_command systemctl; then
         bold_red "missing systemctl"
         return 0
@@ -67,7 +66,7 @@ inst_install() {
 
     {
         echo "[Unit]"
-        echo "Description=Set wallpaper at login"
+        echo "Description=lwboot set random wallpaper at login"
         echo "PartOf=graphical-session.target"
         echo "After=plasma-workspace.target"
         echo ""
@@ -79,12 +78,12 @@ inst_install() {
         echo "WantedBy=plasma-workspace.target"
     } >"${service_file}" || return 1
 
-    sudo chmod 755 "${setwallpaper_file}"
+    chmod 755 "${setwallpaper_file}"
 
-
+    reload_user_services
     enable_start_user_service "${service_name}"
 
-   return 0
+    return 0
 }
 
 inst_can_install_manual() {

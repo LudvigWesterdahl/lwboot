@@ -12,14 +12,38 @@ case $- in
         ;;
 esac
 
+# ============================
+# ===   environment vars   ===
+# ============================
+# skips history if same command
+export HISTCONTROL=ignoredups
+# increase history size
+export HISTSIZE=5000
+# command prompt
+PS1='[\u:\w]$ '
+# export java_home
+export JAVA_HOME=/usr/lib/jvm/default
+# https://donottrack.sh/
+export DO_NOT_TRACK=1
+
+# ================
+# ===   misc   ===
+# ================
+# modify the umask from the 0022 default
+umask 0002
+# kernel stop intercepting <C-q> (0x11, ASCII XON) and <C-s> (0x13, ASCII XOFF), see stty -a, stty ixon to turn back on.
+stty -ixon
+
 # =============================
 # ===   alias definitions   ===
 # =============================
-alias slock="loginctl lock-session"
-alias slogout="qdbus6 org.kde.Shutdown /Shutdown logout"
 alias ls="ls --color=tty"
 alias grep='grep --color=tty'
-alias top="top -e m -E m -o RES"
+
+alias slock="loginctl lock-session"
+alias slogout="qdbus6 org.kde.Shutdown /Shutdown logout"
+alias stop="top -e m -E m -o RES"
+
 alias wgetmbak="wget --mirror --convert-links --adjust-extension --no-parent --random-wait -e robots=off --reject=jpg,jpeg,png,gif,webp,svg,bmp,tiff,ico,mp4,avi,mov,wmv,flv,webm,pdf,zip,rar,iso,exe"
 alias java21doc="braved /usr/share/doc/java21-openjdk/index.html"
 alias java17spec="braved \${HOME}/Documents/lwdoc/backup/docs.oracle.com.java17/javase/specs/jls/se17/html/index.html"
@@ -166,24 +190,69 @@ desk() {
     return 0
 }
 
-# ============================
-# ===   environment vars   ===
-# ============================
-# skips history if same command
-export HISTCONTROL=ignoredups
-# increase history size
-export HISTSIZE=5000
-# command prompt
-PS1='[\u:\w]$ '
-# export java_home
-export JAVA_HOME=/usr/lib/jvm/default
-# https://donottrack.sh/
-export DO_NOT_TRACK=1
+sfeh() {
+    arg_file=""
+    opt_s=""
+    opt_h=""
 
-# ================
-# ===   misc   ===
-# ================
-# modify the umask from the 0022 default
-umask 0002
-# kernel stop intercepting <C-q> (0x11, ASCII XON) and <C-s> (0x13, ASCII XOFF), see stty -a, stty ixon to turn back on.
-stty -ixon
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -s)
+                opt_s="true"
+                shift 1
+                ;;
+            -h)
+                opt_h="true"
+                shift 1
+                ;;
+            -*)
+                echo "unknown option: ${1}, -h for help" 1>&2
+                return 1
+                ;;
+            *)
+                arg_file="${1}"
+                shift 1
+                ;;
+        esac
+    done
+
+    if [ "${opt_h}" = "true" ]; then
+        printf "NAME\n"
+        printf "%4s%s\n" "" "sfeh - feh wrapper"
+        printf "\n"
+        printf "SYNOPSIS\n"
+        printf "%4s%s\n" "" "sfeh [options...] [file | dir]"
+        printf "\n"
+        printf "OPTIONS\n"
+        printf "%4s%-12s%s\n" "" "-s" "Shows image statistics"
+        printf "%4s%-12s%s\n" "" "-h" "Shows this help text"
+        printf "\n"
+        printf "SEE ALSO\n"
+        printf "%4s%s\n" "" "man feh"
+
+        return 0
+    fi
+
+    if [ "${opt_s}" = "true" ]; then
+        if [ "${arg_file}" = "" ]; then
+            feh --geometry 1280x720+320+180 --scale-down \
+                --info "printf '%%s | %%sx%%s px' '%S' '%w' '%h'"
+
+            return 0
+        fi
+
+        feh --geometry 1280x720+320+180 --scale-down \
+            --info "printf '%%s | %%sx%%s px' '%S' '%w' '%h'" \
+            "${arg_file}"
+
+        return 0
+    fi
+    if [ "${arg_file}" = "" ]; then
+
+        feh --geometry 1280x720+320+180 --scale-down
+        return 0
+    fi
+
+    feh --geometry 1280x720+320+180 --scale-down "${arg_file}"
+    return 0
+}

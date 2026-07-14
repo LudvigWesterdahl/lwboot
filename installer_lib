@@ -91,6 +91,11 @@ enable_start_service() {
         sudo systemctl enable "${arg_service}"
     fi
 
+    service_type="$(systemctl show -p Type --value "${arg_service}")"
+    if [ "${service_type}" = "oneshot" ]; then
+        return 0
+    fi
+
     # active | inactive
     active_status="$(systemctl is-active "${arg_service}")"
     if [ "${active_status}" = "inactive" ]; then
@@ -106,18 +111,28 @@ enable_start_user_service() {
 
     enabled_status="$(systemctl --user is-enabled "${arg_service}")"
     if [ "${enabled_status}" = "disabled" ]; then
-        echo "systemctl enable ${arg_service}"
+        echo "systemctl --user enable ${arg_service}"
         systemctl --user enable "${arg_service}"
+    fi
+
+    service_type="$(systemctl --user show -p Type --value "${arg_service}")"
+    if [ "${service_type}" = "oneshot" ]; then
+        return 0
     fi
 
     # active | inactive
     active_status="$(systemctl --user is-active "${arg_service}")"
     if [ "${active_status}" = "inactive" ]; then
-        echo "systemctl start ${arg_service}"
+        echo "systemctl --user start ${arg_service}"
         systemctl --user start "${arg_service}"
     fi
 
     return 0
+}
+
+reload_user_services() {
+    echo "systemctl --user daemon-reload"
+    systemctl --user daemon-reload
 }
 
 ensure_group() {
