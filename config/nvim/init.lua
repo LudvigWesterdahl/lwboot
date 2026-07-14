@@ -82,6 +82,8 @@ List of window commands
 
 --]]
 
+require("abbreviations")
+
 vim.opt.guicursor = ""
 
 vim.g.mapleader = " "
@@ -158,6 +160,7 @@ vim.o.confirm = true
 -- Escape to disable highlights in NORMAL mode
 vim.o.hlsearch = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
 
 -- Navigating between windows without C-w prefix.
 vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true })
