@@ -44,6 +44,9 @@ inst_help() {
     htext
     htext "Send a desktop notification"
     htext "notify-send \"Title\" \"Hello World\!\" -a \"my-application\" -t 5000"
+    htext
+    htext "POSIX man pages for a utility"
+    htext "man 1p grep"
     hseealso
     htext "${installer_link}"
 }
