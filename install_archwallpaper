@@ -56,6 +56,12 @@ inst_install() {
         return 0
     fi
 
+    # shellcheck disable=SC2154 # SC2154 (warning): PROG_DIR is referenced but not assigned.
+    if [ "${PROG_DIR}" = "" ]; then
+        bold_red "missing PROG_DIR"
+        return 1
+    fi
+
     service_name="setwallpaper.service"
     service_dir="${HOME}/.config/systemd/user"
     service_file="${service_dir}/${service_name}"

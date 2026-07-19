@@ -20,11 +20,19 @@ readonly PROG_NAME
 # ===========================================================================
 
 # Argument 1: install | manual | uninstall | docs
+# Default: ""
+# Invalid arguments are ignored and nothing is executed.
 readonly installer_arg="${1:-}"
 
-# Argument 2: false | true, defaults to true
-# If installer_arg is install and this is false skips upgrading pacman.
+# Argument 2: false | true
+# Default: true
+# If installer_arg is install and this is false skips pacman_upgrade.
 readonly installer_opt_1="${2:-}"
+
+# Argument 3: false | true
+# Default: false
+# If set to true, will re-install AUR packages.
+readonly installer_opt_2="${3:-}"
 
 # ===========================================================================
 # =========================          main           =========================
@@ -191,6 +199,7 @@ run_install install_strace
 run_install install_imagemagick
 run_install install_entr
 run_install install_md4c
+run_install install_testdisk
 run_install install_linuxgroups
 
 if [ "${installer_arg}" = "docs" ]; then

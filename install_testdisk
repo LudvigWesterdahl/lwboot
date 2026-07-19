@@ -1,0 +1,44 @@
+#!/bin/sh
+
+installer_name="testdisk"
+installer_description="Installs testdisk. Used to recover data such as deleted files."
+installer_link="https://archlinux.org/packages/extra/x86_64/testdisk/"
+
+pacman_pkg="extra/testdisk"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "photorec --help"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+    htext "https://www.cgsecurity.org/wiki/TestDisk"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install "${pacman_pkg}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall "${pacman_pkg}"
+}
