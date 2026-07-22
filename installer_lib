@@ -187,7 +187,7 @@ pacman_install() {
     short_pkg="$(long_to_short_pkg "${arg_pkg}")"
 
     if pacman -Qd "${short_pkg}" 1>/dev/null 2>&1; then
-        echo "marking dependency as explicitly installed: ${arg_pkg} - ${short_pkg}"
+        echo "marking package as explicitly installed: ${arg_pkg} - ${short_pkg}"
         sudo pacman -D --asexplicit "${short_pkg}"
         return 0
     fi
@@ -198,8 +198,8 @@ pacman_install() {
     fi
 
     echo "installing: ${arg_pkg} - ${short_pkg}"
-
     sudo pacman --noconfirm -S "${arg_pkg}"
+    return 0
 }
 
 pacman_uninstall() {
@@ -213,7 +213,28 @@ pacman_uninstall() {
 
     short_pkg="$(long_to_short_pkg "${arg_pkg}")"
 
+    if ! is_pacman_installed "${short_pkg}"; then
+        return 0
+    fi
+
+    required_by="$(pacman -Qi "${short_pkg}" | grep "Required By" | awk -F " : " '{print $2}')"
+    if [ "${required_by}" != "None" ]; then
+        echo "marking package as dependency: ${arg_pkg} - ${short_pkg}"
+        sudo pacman -D --asdeps "${short_pkg}"
+        return 0
+    fi
+
+    echo "uninstalling: ${arg_pkg} - ${short_pkg}"
     sudo pacman --noconfirm -R "${short_pkg}"
+    return 0
+}
+
+is_aur_reinstall() {
+    if [ "${installer_opt_2}" = "${installer_name}" ]; then
+        return 0
+    fi
+
+    return 1
 }
 
 aur_install() {

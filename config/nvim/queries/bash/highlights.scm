@@ -18,6 +18,11 @@
 (word) @lwbash_word
 
 ; ====================
+; lwbash_pipe
+; ====================
+(pipeline ["|"] @lwbash_pipe)
+
+; ====================
 ; lwbash_exp
 ; ====================
 ; ((expansion) @lwbash_exp (#set! priority 90))

@@ -29,9 +29,9 @@ readonly installer_arg="${1:-}"
 # If installer_arg is install and this is false skips pacman_upgrade.
 readonly installer_opt_1="${2:-}"
 
-# Argument 3: false | true
-# Default: false
-# If set to true, will re-install AUR packages.
+# Argument 3: brave | jdtls | postman | slack
+# Default: ""
+# If installer_arg is install and this is set to a valid value will re-install that package.
 readonly installer_opt_2="${3:-}"
 
 # ===========================================================================
@@ -200,6 +200,7 @@ run_install install_imagemagick
 run_install install_entr
 run_install install_md4c
 run_install install_testdisk
+run_install install_espeakng
 run_install install_linuxgroups
 
 if [ "${installer_arg}" = "docs" ]; then

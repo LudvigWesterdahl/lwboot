@@ -19,6 +19,10 @@ inst_help() {
 }
 
 inst_is_installed() {
+    if is_aur_reinstall; then
+        return 1
+    fi
+
     is_command jdtls
 }
 

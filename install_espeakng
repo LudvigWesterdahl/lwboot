@@ -1,44 +1,34 @@
 #!/bin/sh
 
-installer_name="postman"
-installer_description="Installs postman desktop."
-installer_link="https://aur.archlinux.org/packages/postman-bin"
+installer_name="espeakng"
+installer_description="Installs espeakng."
+installer_link="https://archlinux.org/packages/extra/x86_64/espeak-ng/"
 
-pacman_pkg="postman-bin"
+pacman_pkg="extra/espeak-ng"
 
 inst_help() {
     htitle "${installer_name}"
     hdesc
     htext "${installer_description}"
     husage
-    htext "postman"
+    htext "speak-ng TEXT"
     hexamples
     htext "-"
     hseealso
     htext "${installer_link}"
+    htext "https://github.com/espeak-ng/espeak-ng"
 }
 
 inst_is_installed() {
-    if is_aur_reinstall; then
-        return 1
-    fi
-
-    is_command postman
+    return 1
 }
 
 inst_can_install() {
-    if ! is_command git; then
-        echo "missing git"
-        return 1
-    fi
-
     return 0
 }
 
 inst_install() {
-    aur_install postman-bin
-
-    return 0
+    pacman_install "${pacman_pkg}"
 }
 
 inst_can_install_manual() {
@@ -46,7 +36,7 @@ inst_can_install_manual() {
 }
 
 inst_install_manual() {
-    return 0
+    return 1
 }
 
 inst_uninstall() {
