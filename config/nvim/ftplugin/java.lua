@@ -59,6 +59,7 @@ local config = {
                 importOrder = {
                     "",
                     "java",
+                    "javax",
                     "lombok",
                     "#",
                 },
