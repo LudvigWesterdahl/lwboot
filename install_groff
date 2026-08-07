@@ -1,0 +1,44 @@
+#!/bin/sh
+
+installer_name="groff"
+installer_description="Installs groff."
+installer_link="https://archlinux.org/packages/core/x86_64/groff/"
+
+pacman_pkg="core/groff"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "man groff"
+    hexamples
+    htext "groff docs/groff/simple-example.ms -ms -T pdf > out.pdf"
+    hseealso
+    htext "${installer_link}"
+    htext "https://wiki.archlinux.org/title/Groff"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install "${pacman_pkg}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall "${pacman_pkg}"
+}

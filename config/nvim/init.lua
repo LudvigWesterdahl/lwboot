@@ -104,6 +104,7 @@ vim.schedule(function()
 end)
 
 vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
 vim.opt.smartindent = true
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
@@ -343,14 +344,6 @@ vim.keymap.set("n", "<leader>fr", function()
     local cmd = string.format(".,$s/%s/%s/gc", old, new)
     vim.cmd(cmd)
 end, { desc = "Substitute in range (prompt with / as separator)" })
-
--- Run: :set filetype? to see which filetype the current file is.
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "c",
-    callback = function()
-        vim.bo.commentstring = "/* %s */"
-    end,
-})
 
 -- Example how to get input from user and execute arbitrary command.
 -- vim.keymap.set("n", "<leader>hello", function()

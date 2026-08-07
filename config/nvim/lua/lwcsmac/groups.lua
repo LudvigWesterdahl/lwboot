@@ -275,7 +275,7 @@ M.setup = function()
     any("@lsp.type.property.java", { link = "@lwjava_field_ref" })
     any("@lsp.typemod.method.static.java", { italic = true })
     any("@lsp.typemod.property.static.java", { italic = true })
-    any("@lsp.type.method.java", { link = "@lsp" })
+    any("@lsp.type.method.java", {})
     -- Ensures Inner class gets colored white vs a field access like System.out.
     any("@lsp.type.class.java", { fg = c.foreground })
     any("@lsp.typemod.keyword.documentation.java", { fg = blackBright1, bold = false, underline = true })

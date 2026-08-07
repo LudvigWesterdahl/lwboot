@@ -6,20 +6,24 @@
 ; lwjava_import_ref
 ; ====================
 (import_declaration (scoped_identifier) @lwjava_import_ref)
+(import_declaration (identifier) @lwjava_import_ref)
 
 ; ====================
 ; lwjava_field_ref
 ; ====================
-(field_access object: (identifier) field: (identifier) @lwjava_field_ref)
-(enum_constant) @lwjava_field_ref
+(field_access field: (identifier) @lwjava_field_ref)
+(enum_constant name: (identifier) @lwjava_field_ref)
 
 ; ====================
 ; lwjava_annotation
 ; ====================
-(annotation name: (identifier) @lwjava_annotation)
-(annotation_type_declaration name: (identifier) @lwjava_annotation)
 (annotation "@" @lwjava_annotation)
-(marker_annotation) @lwjava_annotation
+(annotation name: (identifier) @lwjava_annotation)
+(annotation name: (scoped_identifier) @lwjava_annotation)
+(marker_annotation "@" @lwjava_annotation)
+(marker_annotation name: (identifier) @lwjava_annotation)
+(marker_annotation name: (scoped_identifier) @lwjava_annotation)
+(annotation_type_declaration name: (identifier) @lwjava_annotation)
 
 ; ====================
 ; lwjava_import_asterisk
@@ -39,7 +43,14 @@
 ; lw_literal
 ; ====================
 [(true) (false)] @lw_literal
-[(decimal_integer_literal) (decimal_floating_point_literal)] @lw_literal
+[
+ (decimal_integer_literal)
+ (decimal_floating_point_literal)
+ (hex_integer_literal)
+ (octal_integer_literal)
+ (binary_integer_literal)
+ (hex_floating_point_literal)
+] @lw_literal
 (string_literal (escape_sequence) @lw_literal)
 
 ; ====================
@@ -100,7 +111,6 @@
  "instanceof"
  "interface"
  "@interface"
- "long"
  "module"
  "native"
  "new"
@@ -120,5 +130,16 @@
  "try"
  "volatile"
  "while"
+ "yield"
+ "record"
+ "sealed"
+ "permits"
+ "non-sealed"
+ "open"
+ "opens"
+ "provides"
+ "to"
+ "transitive"
+ "uses"
  ] @lw_keyword
 

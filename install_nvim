@@ -181,6 +181,7 @@ inst_install() {
     mkdir "${nvim_dst}/parser" 2>/dev/null
     mkdir "${nvim_dst}/queries" 2>/dev/null
     mkdir "${nvim_dst}/ftplugin" 2>/dev/null
+    mkdir -p "${nvim_dst}/after/ftplugin" 2>/dev/null
     mkdir "${nvim_dst}/formatters" 2>/dev/null
     mkdir "${nvim_dst}/snippets" 2>/dev/null
 
@@ -213,8 +214,8 @@ inst_install() {
     mkdir "${nvim_dst}/queries/bash" 2>/dev/null
     cp -v "${nvim_src}/queries/bash/highlights.scm" "${nvim_dst}/queries/bash/highlights.scm"
 
-    # ftplugin
-    cp -v "${nvim_src}/ftplugin/java.lua" "${nvim_dst}/ftplugin/java.lua"
+    # ftplugin(s)
+    cp -v "${nvim_src}/after/ftplugin/"* "${nvim_dst}/after/ftplugin"
 
     # formatters
     cp -v "${nvim_src}/formatters/intellij-codestyle.xml" "${nvim_dst}/formatters/intellij-codestyle.xml"

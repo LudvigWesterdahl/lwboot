@@ -230,6 +230,7 @@ pacman_uninstall() {
 }
 
 is_aur_reinstall() {
+    # shellcheck disable=SC2154 # SC2154 (warning): installer_opt_2 is referenced but not assigned.
     if [ "${installer_opt_2}" = "${installer_name}" ]; then
         return 0
     fi

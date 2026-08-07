@@ -201,6 +201,8 @@ run_install install_entr
 run_install install_md4c
 run_install install_testdisk
 run_install install_espeakng
+run_install install_groff
+run_install install_ytdlp
 run_install install_linuxgroups
 
 if [ "${installer_arg}" = "docs" ]; then
