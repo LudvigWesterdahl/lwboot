@@ -54,6 +54,7 @@ alias nvimc="jdtlsclean && nvim"
 alias nvimc1="jdtlsclean && NVIM_JDTLS_PNAME_SUFFIX=1 nvim"
 # Pipe output of a command: command | nocolor
 alias nocolor="sed \"s/\x1b\[[0-9;]*[a-zA-Z]//g\""
+alias gittmp="git add -A && git commit -m \"TMP\" && git push"
 
 alias braved="setsid -f brave >>\"\${HOME}/.local/share/braved-brave.log\" 2>&1"
 alias postmand="setsid -f postman >>\"\${HOME}/.local/share/postmand-postman.log\" 2>&1"
