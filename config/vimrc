@@ -1,3 +1,4 @@
+" .vimrc
 
 " show current line number and relative to it
 set number
@@ -5,4 +6,16 @@ set relativenumber
 
 " disable mouse to allow right click through terminal for copy/paste
 set mouse=
+
+set hlsearch
+
+"This unsets the last search pattern register by hitting return
+nnoremap <CR> :noh<CR><CR>
+
+set tabstop=4
+set softtabstop=4
+set smartindent
+set shiftwidth=4
+set cmdheight=1
+set breakindent
 
