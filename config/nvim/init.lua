@@ -773,6 +773,10 @@ vim.keymap.set("i", '"', function()
   return insert_matching('"', '"')
 end, { noremap = true, expr = true })
 
+vim.keymap.set("i", '`', function()
+  return insert_matching('`', '`')
+end, { noremap = true, expr = true })
+
 require("lazy").setup({
     -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
 
