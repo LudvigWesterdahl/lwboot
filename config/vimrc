@@ -21,3 +21,7 @@ set nowrap
 " ignore file specific vim config
 set nomodeline
 
+" center next search match
+nnoremap n nzz
+nnoremap N Nzz
+

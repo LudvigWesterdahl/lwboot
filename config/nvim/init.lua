@@ -174,6 +174,8 @@ vim.keymap.set("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
 vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
 vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set("n", "n", "nzz", { desc = "nzz" })
+vim.keymap.set("n", "N", "Nzz", { desc = "Nzz" })
 
 -- Disables highlight when entering INSERT mode
 vim.api.nvim_create_autocmd("InsertEnter", {
@@ -765,19 +767,19 @@ end
 
 vim.keymap.set("i", "[", function()
     return insert_matching("[", "]")
-end, { noremap = true, expr = true })
+end, { desc = "Inserts matching [] on line", expr = true })
 
 vim.keymap.set("i", "(", function()
     return insert_matching("(", ")")
-end, { noremap = true, expr = true })
+end, { desc = "Inserts matching () on line", expr = true })
 
 vim.keymap.set("i", '"', function()
   return insert_matching('"', '"')
-end, { noremap = true, expr = true })
+end, { desc = "Inserts matching \"\" on line", expr = true })
 
 vim.keymap.set("i", '`', function()
   return insert_matching('`', '`')
-end, { noremap = true, expr = true })
+end, { desc = "Inserts matching `` on line", expr = true })
 
 require("lazy").setup({
     -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
