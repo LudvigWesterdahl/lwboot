@@ -12,3 +12,9 @@ Start with:
 s - camel2snake
 vi":s/\%V\(\l\)\(\u\)/\1_\l\2/gI
 
+### 2. brightness command
+See qdbus6 org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl
+
+### 3. delete TMP and empty lines
+Keymap to quickly delete all blank lines and lines matching ^TMP$.
+
