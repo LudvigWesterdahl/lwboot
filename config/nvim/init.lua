@@ -84,7 +84,7 @@ List of window commands
 
 require("abbreviations")
 
-vim.opt.guicursor = ""
+vim.o.guicursor = ""
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -98,20 +98,22 @@ vim.o.number = true
 vim.o.relativenumber = true
 vim.o.mouse = "a"
 vim.o.showmode = true
+vim.o.modeline = false
 
 vim.schedule(function()
     vim.o.clipboard = "unnamedplus"
 end)
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.smartindent = true
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-vim.opt.cmdheight = 1
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.smartindent = true
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
+vim.o.cmdheight = 1
 vim.o.breakindent = true
-vim.opt.title = true
-vim.opt.titlestring = "nvim%{$NVIM_JDTLS_PNAME_SUFFIX} - %{fnamemodify(getcwd(), ':t')}"
+vim.o.wrap = false
+vim.o.title = true
+vim.o.titlestring = "nvim%{$NVIM_JDTLS_PNAME_SUFFIX} - %{fnamemodify(getcwd(), ':t')}"
 
 -- Enable undo/redo changes even after closing and reopening a file
 vim.o.undofile = true
