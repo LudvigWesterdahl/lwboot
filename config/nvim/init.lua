@@ -115,6 +115,11 @@ vim.o.wrap = false
 vim.o.title = true
 vim.o.titlestring = "nvim%{$NVIM_JDTLS_PNAME_SUFFIX} - %{fnamemodify(getcwd(), ':t')}"
 
+vim.o.foldenable = true
+vim.o.foldmethod = "manual"
+vim.o.foldlevelstart = 10
+vim.o.foldcolumn = "1"
+
 -- Enable undo/redo changes even after closing and reopening a file
 vim.o.undofile = true
 
@@ -176,6 +181,8 @@ vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
 vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 vim.keymap.set("n", "n", "nzz", { desc = "nzz" })
 vim.keymap.set("n", "N", "Nzz", { desc = "Nzz" })
+vim.keymap.set("n", "zk", "zkzz", { desc = "zkzz" })
+vim.keymap.set("n", "zj", "zjzz", { desc = "zjzz" })
 
 -- Disables highlight when entering INSERT mode
 vim.api.nvim_create_autocmd("InsertEnter", {

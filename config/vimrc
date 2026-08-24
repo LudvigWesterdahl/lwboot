@@ -21,6 +21,14 @@ set nowrap
 " ignore file specific vim config
 set nomodeline
 
+" configures folding
+set foldenable
+set foldmethod=manual
+set foldlevelstart=10
+set foldcolumn=1
+nnoremap zk zkzz
+nnoremap zj zjzz
+
 " center next search match
 nnoremap n nzz
 nnoremap N Nzz
