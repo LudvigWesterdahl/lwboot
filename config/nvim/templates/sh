@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+set -u
+
+# ===========================================================================
+# =========================        constants        =========================
+# ===========================================================================
+
+PROG_PATH="$(realpath "${0}")"
+readonly PROG_PATH
+PROG_DIR="$(dirname "${PROG_PATH}")"
+# shellcheck disable=SC2034 # SC2034 (warning): PROG_DIR appears unused. Verify use (or export if used externally).
+readonly PROG_DIR
+PROG_NAME="$(basename "${PROG_PATH}")"
+# shellcheck disable=SC2034 # SC2034 (warning): PROG_NAME appears unused. Verify use (or export if used externally).
+readonly PROG_NAME
+

@@ -169,7 +169,6 @@ vim.o.confirm = true
 vim.o.hlsearch = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
-
 -- Navigating between windows without C-w prefix.
 vim.keymap.set("n", "<C-h>", "<C-w>h", { silent = true })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { silent = true })
@@ -283,6 +282,36 @@ vim.api.nvim_create_autocmd("BufReadPost", {
                 leftcol = 0,
             })
         end)
+    end,
+})
+
+-- Load templates when creating a new file
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufReadPost" }, {
+    pattern = "*",
+    callback = function(args)
+        -- Ensures file is new or empty before reading the template.
+        -- It makes nvim-tree which creates files on disk first also work properly.
+        if vim.fn.getfsize(args.file) > 0 then
+            return
+        end
+
+        local name = vim.fn.fnamemodify(args.file, ":t")
+        -- local basename = vim.fn.fnamemodify(args.file, ":t:r")
+        local ext = vim.fn.fnamemodify(args.file, ":e")
+        local dir = vim.fn.stdpath("config") .. "/templates/"
+
+        local template_file = nil
+        if vim.fn.filereadable(dir .. name) == 1 then
+            template_file = dir .. name
+        elseif ext == "" and vim.fn.filereadable(dir .. "sh") == 1 then
+            template_file = dir .. "sh"
+        elseif ext ~= "" and vim.fn.filereadable(dir .. "template." .. ext) == 1 then
+            template_file = dir .. "template." .. ext
+        end
+
+        if template_file then
+            vim.cmd("0read " .. vim.fn.fnameescape(template_file))
+        end
     end,
 })
 
@@ -781,11 +810,11 @@ vim.keymap.set("i", "(", function()
 end, { desc = "Inserts matching () on line", expr = true })
 
 vim.keymap.set("i", '"', function()
-  return insert_matching('"', '"')
-end, { desc = "Inserts matching \"\" on line", expr = true })
+    return insert_matching('"', '"')
+end, { desc = 'Inserts matching "" on line', expr = true })
 
-vim.keymap.set("i", '`', function()
-  return insert_matching('`', '`')
+vim.keymap.set("i", "`", function()
+    return insert_matching("`", "`")
 end, { desc = "Inserts matching `` on line", expr = true })
 
 require("lazy").setup({

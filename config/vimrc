@@ -33,3 +33,6 @@ nnoremap zj zjzz
 nnoremap n nzz
 nnoremap N Nzz
 
+" load template when creating a new file
+:autocmd BufNewFile * silent! execute '0r ~/.config/nvim/templates/' . expand('<afile>:e')
+

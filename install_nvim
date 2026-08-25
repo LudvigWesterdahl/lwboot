@@ -184,6 +184,7 @@ inst_install() {
     mkdir -p "${nvim_dst}/after/ftplugin" 2>/dev/null
     mkdir "${nvim_dst}/formatters" 2>/dev/null
     mkdir "${nvim_dst}/snippets" 2>/dev/null
+    mkdir "${nvim_dst}/templates" 2>/dev/null
 
     cp -v "${nvim_src}/init.lua" "${nvim_dst}/init.lua"
 
@@ -224,7 +225,10 @@ inst_install() {
     cp -v "${nvim_src}/formatters/jdtls.prefs" "${nvim_dst}/formatters/jdtls.prefs"
 
     # snippets
-    cp -v "${nvim_src}/snippets/java.lua" "${nvim_dst}/snippets/java.lua"
+    cp -v "${nvim_src}/snippets/"* "${nvim_dst}/snippets"
+
+    # templates
+    cp -v "${nvim_src}/templates/"* "${nvim_dst}/templates"
 
     handle_tree_sitter_java
     handle_tree_sitter_bash
