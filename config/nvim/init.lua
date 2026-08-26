@@ -80,6 +80,9 @@ Check parser for file
 List of window commands
 :help wincmd
 
+Check filesize in an autocommand
+if vim.fn.getfsize(args.file) > 0 then
+
 --]]
 
 require("abbreviations")
@@ -286,32 +289,66 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 })
 
 -- Load templates when creating a new file
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufReadPost" }, {
+local function java_package_for(file)
+    local dir = vim.fn.fnamemodify(file, ":p:h")
+    local descended = {}
+
+    while true do
+        for _, sibling in ipairs(vim.fn.glob(dir .. "/*.java", false, true)) do
+            if vim.fn.fnamemodify(sibling, ":p") ~= vim.fn.fnamemodify(file, ":p") then
+                local first = vim.fn.readfile(sibling, "", 1)[1] or ""
+                local pkg = first:match("^%s*package%s+([%w%.%_]+)%s*;")
+                if pkg then
+                    if #descended > 0 then
+                        pkg = pkg .. "." .. table.concat(descended, ".")
+                    end
+                    return pkg
+                end
+            end
+        end
+
+        local parent = vim.fn.fnamemodify(dir, ":h")
+        if parent == dir then
+            return nil
+        end
+        table.insert(descended, 1, vim.fn.fnamemodify(dir, ":t"))
+        dir = parent
+    end
+end
+
+local function apply_template_new_file(file)
+    local name = vim.fn.fnamemodify(file, ":t")
+    -- local basename = vim.fn.fnamemodify(file, ":t:r")
+    local ext = vim.fn.fnamemodify(file, ":e")
+    local dir = vim.fn.stdpath("config") .. "/templates/"
+
+    local template_file = nil
+    if vim.fn.filereadable(dir .. name) == 1 then
+        template_file = dir .. name
+    elseif ext == "" and vim.fn.filereadable(dir .. "sh") == 1 then
+        template_file = dir .. "sh"
+    elseif ext ~= "" and vim.fn.filereadable(dir .. "template." .. ext) == 1 then
+        template_file = dir .. "template." .. ext
+    end
+
+    if template_file then
+        vim.cmd("0read " .. vim.fn.fnameescape(template_file))
+
+        if ext == "java" then
+            local basename = vim.fn.fnamemodify(file, ":t:r")
+            vim.cmd("silent! %s/\\<Placeholder\\>/" .. basename .. "/g")
+
+            local pkg = java_package_for(file)
+            if pkg then
+                vim.fn.append(0, { "package " .. pkg .. ";", "" })
+            end
+        end
+    end
+end
+vim.api.nvim_create_autocmd("BufNewFile", {
     pattern = "*",
     callback = function(args)
-        -- Ensures file is new or empty before reading the template.
-        -- It makes nvim-tree which creates files on disk first also work properly.
-        if vim.fn.getfsize(args.file) > 0 then
-            return
-        end
-
-        local name = vim.fn.fnamemodify(args.file, ":t")
-        -- local basename = vim.fn.fnamemodify(args.file, ":t:r")
-        local ext = vim.fn.fnamemodify(args.file, ":e")
-        local dir = vim.fn.stdpath("config") .. "/templates/"
-
-        local template_file = nil
-        if vim.fn.filereadable(dir .. name) == 1 then
-            template_file = dir .. name
-        elseif ext == "" and vim.fn.filereadable(dir .. "sh") == 1 then
-            template_file = dir .. "sh"
-        elseif ext ~= "" and vim.fn.filereadable(dir .. "template." .. ext) == 1 then
-            template_file = dir .. "template." .. ext
-        end
-
-        if template_file then
-            vim.cmd("0read " .. vim.fn.fnameescape(template_file))
-        end
+        apply_template_new_file(args.file)
     end,
 })
 
@@ -1557,9 +1594,9 @@ require("lazy").setup({
             "nvim-tree/nvim-web-devicons",
         },
         config = function()
-            local function on_attach(bufnr)
-                local api = require("nvim-tree.api")
+            local api = require("nvim-tree.api")
 
+            local function on_attach(bufnr)
                 -- load defaults first so you keep all the built-in keybinds
                 api.config.mappings.default_on_attach(bufnr)
 
@@ -1591,6 +1628,17 @@ require("lazy").setup({
                 -- then remove "s" so flash can use it
                 pcall(vim.keymap.del, "n", "s", { buffer = bufnr })
             end
+
+            api.events.subscribe(api.events.Event.FileCreated, function(data)
+                local file_name = data.fname
+                vim.schedule(function()
+                    vim.cmd.wincmd("p")
+                    vim.cmd.edit(vim.fn.fnameescape(file_name))
+                    apply_template_new_file(file_name)
+                    vim.cmd.write()
+                    vim.cmd.edit()
+                end)
+            end)
 
             local glyphsGit1 = {
                 unstaged = "[u]",

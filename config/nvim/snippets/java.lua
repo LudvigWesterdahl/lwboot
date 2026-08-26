@@ -2,6 +2,7 @@ local ls = require("luasnip")
 local s = ls.snippet
 local i = ls.insert_node
 local f = ls.function_node
+local t = ls.text_node
 local fmt = require("luasnip.extras.fmt").fmt
 
 -- Helper: capitalize first letter of the value typed in another node
@@ -20,7 +21,7 @@ end
 
 return {
     s(
-        { trig = "function", dscr = "Function" },
+        { trig = "snipFunction", dscr = "Function" },
         t({
             "    public void function() {",
             "        final Object value = null;", 
@@ -28,11 +29,19 @@ return {
         })
     ),
     s(
-        { trig = "functionOptional", dscr = "Function returning an optional" },
+        { trig = "snipFunctionOptional", dscr = "Function returning an optional" },
         t({
             "    public Optional<type> function() {",
             "        final Object returnValue = null;",
             "        return Optional.ofNullable(returnValue);",
+            "    }",
+        })
+    ),
+    s(
+        { trig = "snipPrivateConstructorThrows", dscr = "Private constructor throwing" },
+        t({
+            "    private className() {",
+            "        throw new AssertionError(\"this private constructor is suppressed\");",
             "    }",
         })
     ),
