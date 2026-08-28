@@ -79,6 +79,7 @@ local config = {
                     "sun.*",
                 },
                 guessMethodArguments = "off",
+                postfix = { enabled = false },
             },
             codeGeneration = {
                 toString = {
