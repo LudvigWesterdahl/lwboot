@@ -18,3 +18,14 @@ See qdbus6 org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/
 ### 3. delete TMP and empty lines
 Keymap to quickly delete all blank lines and lines matching ^TMP$.
 
+### 4. Ollama chat over text file
+Add integration with nvim.
+- Keymap to start a message and open up the text file in a new buffer.
+- Keymap to quickly analyze a file for bugs
+
+Additional keymap needed for nvim to paste contents of a register and prefix all lines with a line number :'[,']!nl -s ': '
+Maybe nnoremap <leader>p ...
+
+Other features:
+- Append instructions in the beginning
+- Prefix all lines with a number to prevent model from counting
