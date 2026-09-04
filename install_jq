@@ -19,6 +19,9 @@ inst_help() {
     htext
     htext "Rename items.name to items.year"
     htext "jq '.items |= map(.year = .name | del(.name))' JSON"
+    htext
+    htext "Encode as json string and the reverse"
+    htext "echo '{\"month\": \"Jan\", \"year\": 1996}' | jq 'tojson | tojson' | jq 'fromjson | fromjson'"
     hseealso
     htext "${installer_link}"
     htext "https://jqlang.org/manual/"

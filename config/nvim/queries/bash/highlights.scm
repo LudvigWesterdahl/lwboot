@@ -27,15 +27,15 @@
 ; ====================
 ; ((expansion) @lwbash_exp (#set! priority 90))
 ; Only works for certain anonymous tokens, see command under lw_keyword
-(expansion ["${" ":-" "}"] @lwbash_exp (#set! priority 90))
-(simple_expansion ["$"] @lwbash_exp (#set! priority 90))
+(expansion ["${" ":-" "}"] @lwbash_exp (#set! priority 99))
+(simple_expansion ["$"] @lwbash_exp (#set! priority 99))
 
 ; ====================
 ; lwbash_cmd_sub
 ; ====================
 ; ((command_substitution) @lwbash_cmd_sub (#set! priority 85))
 ; Only works for certain anonymous tokens, see command under lw_keyword
-(command_substitution ["$(" ")"] @lwbash_cmd_sub (#set! priority 85))
+(command_substitution ["$(" ")"] @lwbash_cmd_sub (#set! priority 98))
 
 ; ====================
 ; lwbash_ret_success
@@ -45,7 +45,7 @@
    argument: (number) @lwbash_ret_success)
  (#any-of? @_n "return" "exit")
  (#match? @lwbash_ret_success "^0+$")
- (#set! priority 110))
+ (#set! priority 103))
 
 ; ====================
 ; lwbash_ret_failure
@@ -54,7 +54,7 @@
    name: (command_name) @_n
    argument: (number) @lwbash_ret_failure)
  (#any-of? @_n "return" "exit")
- (#set! priority 109))
+ (#set! priority 102))
 
 ; ============================================================
 ; lw
@@ -68,8 +68,8 @@
 ; ====================
 ; lw_string
 ; ====================
-((string) @lw_string (#set! priority 80))
-((raw_string) @lw_string (#set! priority 80))
+((string) @lw_string (#set! priority 97))
+((raw_string) @lw_string (#set! priority 97))
 
 ; ====================
 ; lw_null
@@ -95,7 +95,7 @@
    "continue"
    "exit"
    "shift")
- (#set! priority 105))
+ (#set! priority 101))
 
 ; nvim --headless -c "lua print(vim.inspect(vim.treesitter.language.inspect('bash')))" -c "q" 2>&1 | grep -o '"[^"]*"' | sort -u
 [
