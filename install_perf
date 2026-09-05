@@ -1,0 +1,47 @@
+#!/bin/sh
+
+installer_name="perf"
+installer_description="Installs perf."
+installer_link="https://archlinux.org/packages/extra/x86_64/perf/"
+
+pacman_pkg="extra/perf"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "Run a program and report on some stats"
+    htext "perf stat -e \"cycles,instructions,branches,branch-misses,cache-misses\" -r 100 ./a.out"
+    htext
+    htext "List all available stats"
+    htext "perf list"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install "${pacman_pkg}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    pacman_uninstall "${pacman_pkg}"
+}
