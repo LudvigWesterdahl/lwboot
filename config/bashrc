@@ -258,3 +258,67 @@ sfeh() {
     feh --geometry 1280x720+320+180 --scale-down "${arg_file}"
     return 0
 }
+
+chinfo() {
+    arg_char="${1:-}"
+
+    if [ -z "${arg_char}" ]; then
+        echo "missing char argument"
+        echo "example: chinfo ö"
+        return 1
+    fi
+
+    unicode_name="$(echo -n "${arg_char}" | uconv -x "any-name")"
+    unicode_codepoint="$(echo -n "${arg_char}" | uconv -x "any-hex/unicode")"
+    unicode_link="https://unicodeplus.com/${unicode_codepoint}"
+    unicode_java="$(echo -n "${arg_char}" | uconv -x "any-hex/java")"
+    unicode_c="$(echo -n "${arg_char}" | uconv -x "any-hex/c")"
+    unicode_xml="$(echo -n "${arg_char}" | uconv -x "any-hex/xml")"
+    unicode_xml10="$(echo -n "${arg_char}" | uconv -x "any-hex/xml10")"
+    utf8="$(echo -n "${arg_char}" | uconv -t utf-8 | xxd -p | sed 's/\(.\{2\}\B\)/\1 /g')"
+    utf16="$(echo -n "${arg_char}" | uconv -t utf-16 | xxd -p | sed 's/\(.\{2\}\B\)/\1 /g')"
+    utf16le="$(echo -n "${arg_char}" | uconv -t utf-16le | xxd -p | sed 's/\(.\{2\}\B\)/\1 /g')"
+    utf16be="$(echo -n "${arg_char}" | uconv -t utf-16be | xxd -p | sed 's/\(.\{2\}\B\)/\1 /g')"
+    utf32="$(echo -n "${arg_char}" | uconv -t utf-32 | xxd -p | sed 's/\(.\{2\}\B\)/\1 /g')"
+    utf32le="$(echo -n "${arg_char}" | uconv -t utf-32le | xxd -p | sed 's/\(.\{2\}\B\)/\1 /g')"
+    utf32be="$(echo -n "${arg_char}" | uconv -t utf-32be | xxd -p | sed 's/\(.\{2\}\B\)/\1 /g')"
+    printf "%-16s%-s\n" "Char" "${arg_char}"
+    printf "%-16s%-s\n" "Name" "${unicode_name}"
+    printf "%-16s%-s\n" "Unicode" "${unicode_codepoint}"
+    printf "%-16s%-s\n" "Link" "${unicode_link}"
+    printf "%-16s%-s\n" "Java" "${unicode_java}"
+    printf "%-16s%-s\n" "C" "${unicode_c}"
+    printf "%-16s%-s\n" "XML" "${unicode_xml}"
+    printf "%-16s%-s\n" "XML10" "${unicode_xml10}"
+    printf "%-16s%-s\n" "UTF-8" "${utf8}"
+    printf "%-16s%-s\n" "UTF-16" "${utf16}"
+    printf "%-16s%-s\n" "UTF-16LE" "${utf16le}"
+    printf "%-16s%-s\n" "UTF-16BE" "${utf16be}"
+    printf "%-16s%-s\n" "UTF-32" "${utf32}"
+    printf "%-16s%-s\n" "UTF-32LE" "${utf32le}"
+    printf "%-16s%-s\n" "UTF-32BE" "${utf32be}"
+
+    return 0
+}
+
+chfind() {
+    arg_cp="${1:-}"
+
+    if [ -z "${arg_cp}" ]; then
+        echo "missing unicode codepoint argument"
+        echo "example: chfind 1f923"
+        return 1
+    fi
+
+    arg_cp_upper="$(echo "${arg_cp}" | tr "a-z" "A-Z")"
+    unicode_codepoint="U+${arg_cp_upper}"
+    result="$(echo -n "${unicode_codepoint}" | uconv -x "hex-any/unicode")"
+    if [ "${result}" == "${unicode_codepoint}" ] || [ -z "${result}" ]; then
+        echo "invalid unicode codepoint ${unicode_codepoint}"
+        return 1
+    fi
+
+    chinfo "${result}"
+
+    return 0
+}
