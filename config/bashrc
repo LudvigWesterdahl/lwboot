@@ -25,6 +25,9 @@ PS1='[\u:\w]$ '
 export JAVA_HOME=/usr/lib/jvm/default
 # https://donottrack.sh/
 export DO_NOT_TRACK=1
+# set nvim as preferred editor
+export EDITOR=nvim
+export VISUAL=nvim
 
 # ================
 # ===   misc   ===
@@ -319,6 +322,22 @@ chfind() {
     fi
 
     chinfo "${result}"
+
+    return 0
+}
+
+lsblkdiff() {
+    lsblk_file_1="$(mktemp)"
+    lsblk_file_2="$(mktemp)"
+
+    lsblk >"${lsblk_file_1}"
+    echo "Press enter to record second lsblk..."
+    read -r _
+    lsblk >"${lsblk_file_2}"
+
+    diff -U 99999 "${lsblk_file_1}" "${lsblk_file_2}"
+
+    rm -f "${lsblk_file_1}" "${lsblk_file_2}" 1>/dev/null 2>&1
 
     return 0
 }
