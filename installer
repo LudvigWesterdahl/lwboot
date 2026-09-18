@@ -207,6 +207,7 @@ run_install install_ollama
 run_install install_perf
 run_install install_icu
 run_install install_gucharmap
+run_install install_d2
 run_install install_linuxgroups
 
 if [ "${installer_arg}" = "docs" ]; then

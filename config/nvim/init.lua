@@ -318,6 +318,9 @@ end
 
 local function apply_template_new_file(file)
     local name = vim.fn.fnamemodify(file, ":t")
+    if name == "D2_ASCII_PREVIEW" then
+        return
+    end
     -- local basename = vim.fn.fnamemodify(file, ":t:r")
     local ext = vim.fn.fnamemodify(file, ":e")
     local dir = vim.fn.stdpath("config") .. "/templates/"
@@ -1804,6 +1807,15 @@ require("lazy").setup({
             -- vim.keymap.set("n", "<C-S-N>", function()
             --     harpoon:list():next()
             -- end)
+        end,
+    },
+    {
+        -- See: https://github.com/d2lang/d2-vim
+        "d2lang/d2-vim",
+        ft = { "d2" },
+        init = function()
+            -- vim.g.d2_ascii_mode = "standard"
+            vim.g.d2_ascii_mode = "extended"
         end,
     },
 })
