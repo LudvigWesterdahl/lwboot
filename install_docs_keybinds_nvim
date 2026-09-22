@@ -85,6 +85,12 @@ inst_help() {
     htext
     htext "Show command history"
     htext "q:"
+    htext
+    htext "Replace arglist with nested txt files at most 100 levels deep"
+    htext ":args path/to/**/*.txt"
+    htext
+    htext "Run a macro on all files in arglist"
+    htext ":argdo silent! exe 'norm! @q' | update"
     hseealso
     htext "${installer_link}"
 }

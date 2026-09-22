@@ -405,7 +405,8 @@ end, { desc = "Delete buffer" })
 vim.keymap.set("n", "<leader>bD", function()
     local cur = vim.api.nvim_get_current_buf()
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-        if buf ~= cur and vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buflisted and not vim.bo[buf].modified then
+        -- Removed vim.api.nvim_buf_is_loaded(buf) since modifying arglist lists them.
+        if buf ~= cur and vim.bo[buf].buflisted and not vim.bo[buf].modified then
             vim.api.nvim_buf_delete(buf, { force = false })
         end
     end
