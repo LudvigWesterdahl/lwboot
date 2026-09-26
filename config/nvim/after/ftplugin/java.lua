@@ -1,3 +1,11 @@
+--
+-- Safe to run twice
+--
+vim.bo.commentstring = "// %s"
+
+--
+-- Guard
+--
 if vim.b.did_ftplugin_java then
     return
 end
@@ -24,18 +32,9 @@ local home = os.getenv("HOME")
 local bundles = {}
 vim.list_extend(
     bundles,
-    vim.split(
-        vim.fn.glob(
-            home .. "/Documents/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar",
-            true
-        ),
-        "\n"
-    )
+    vim.split(vim.fn.glob(home .. "/Documents/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar", true), "\n")
 )
-vim.list_extend(
-    bundles,
-    vim.split(vim.fn.glob(home .. "/Documents/vscode-java-test/extension/server/*.jar", true), "\n")
-)
+vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/Documents/vscode-java-test/extension/server/*.jar", true), "\n"))
 
 -- local lombok_jar = vim.split(vim.fn.glob(home .. "/.m2/repository/org/projectlombok/lombok/*/lombok-*.jar", true), "\n")[1]
 local lombok_jar = home .. "/.m2/repository/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar"

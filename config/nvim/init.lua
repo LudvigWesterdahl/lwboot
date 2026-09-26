@@ -1077,12 +1077,7 @@ require("lazy").setup({
 
                     -- Jump to the implementation of the word under your cursor.
                     -- Useful when your language has ways of declaring types without an actual implementation.
-                    vim.keymap.set(
-                        "n",
-                        "gri",
-                        builtin.lsp_implementations,
-                        { buffer = buf, desc = "[G]oto [I]mplementation" }
-                    )
+                    vim.keymap.set("n", "gri", builtin.lsp_implementations, { buffer = buf, desc = "[G]oto [I]mplementation" })
 
                     -- Jump to the definition of the word under your cursor.
                     -- This is where a variable was first declared, or where a function is defined, etc.
@@ -1091,41 +1086,21 @@ require("lazy").setup({
 
                     -- Fuzzy find all the symbols in your current document.
                     -- Symbols are things like variables, functions, types, etc.
-                    vim.keymap.set(
-                        "n",
-                        "gO",
-                        builtin.lsp_document_symbols,
-                        { buffer = buf, desc = "Open Document Symbols" }
-                    )
+                    vim.keymap.set("n", "gO", builtin.lsp_document_symbols, { buffer = buf, desc = "Open Document Symbols" })
 
                     -- Fuzzy find all the symbols in your current workspace.
                     -- Similar to document symbols, except searches over your entire project.
-                    vim.keymap.set(
-                        "n",
-                        "gW",
-                        builtin.lsp_dynamic_workspace_symbols,
-                        { buffer = buf, desc = "Open Workspace Symbols" }
-                    )
+                    vim.keymap.set("n", "gW", builtin.lsp_dynamic_workspace_symbols, { buffer = buf, desc = "Open Workspace Symbols" })
 
                     -- Jump to the type of the word under your cursor.
                     -- Useful when you're not sure what type a variable is and you want to see
                     -- the definition of its *type*, not where it was *defined*.
-                    vim.keymap.set(
-                        "n",
-                        "grt",
-                        builtin.lsp_type_definitions,
-                        { buffer = buf, desc = "[G]oto [T]ype Definition" }
-                    )
+                    vim.keymap.set("n", "grt", builtin.lsp_type_definitions, { buffer = buf, desc = "[G]oto [T]ype Definition" })
 
                     -- Rename the symbol under your cursor across the workspace.
                     vim.keymap.set("n", "grn", vim.lsp.buf.rename, { buffer = buf, desc = "[R]e[n]ame Symbol" })
                     -- Show code actions available at the cursor (quick fixes, refactors, etc.).
-                    vim.keymap.set(
-                        { "n", "x" },
-                        "gra",
-                        vim.lsp.buf.code_action,
-                        { buffer = buf, desc = "[G]oto Code [A]ction" }
-                    )
+                    vim.keymap.set({ "n", "x" }, "gra", vim.lsp.buf.code_action, { buffer = buf, desc = "[G]oto Code [A]ction" })
 
                     vim.keymap.set("n", "grh", function()
                         centered_float(vim.lsp.buf.hover, { border = "rounded", title = " LSP Hover " })
@@ -1416,6 +1391,7 @@ require("lazy").setup({
                     lua = { "stylua" },
                     sh = { "shfmt_sh" },
                     bash = { "shfmt_bash" },
+                    d2 = { "d2_fmt" },
                 },
                 formatters = {
                     intellij = {
@@ -1456,25 +1432,17 @@ require("lazy").setup({
                     },
                     shfmt_sh = {
                         command = "shfmt",
-                        args = {
-                            "-i",
-                            "4",
-                            "-ci",
-                            "-ln",
-                            "posix",
-                            "-",
-                        },
+                        args = { "-i", "4", "-ci", "-ln", "posix", "-" },
                     },
                     shfmt_bash = {
                         command = "shfmt",
-                        args = {
-                            "-i",
-                            "4",
-                            "-ci",
-                            "-ln",
-                            "bash",
-                            "-",
-                        },
+                        args = { "-i", "4", "-ci", "-ln", "bash", "-" },
+                    },
+                    d2_fmt = {
+                        command = "d2",
+                        args = { "fmt", "$FILENAME" },
+                        stdin = false,
+                        tmpfile_format = ".conform.$RANDOM.$FILENAME",
                     },
                 },
             })
@@ -1608,12 +1576,7 @@ require("lazy").setup({
                 -- load defaults first so you keep all the built-in keybinds
                 api.config.mappings.default_on_attach(bufnr)
 
-                vim.keymap.set(
-                    "n",
-                    "<leader><CR>",
-                    api.tree.change_root_to_node,
-                    { desc = "CD", buffer = bufnr, silent = true }
-                )
+                vim.keymap.set("n", "<leader><CR>", api.tree.change_root_to_node, { desc = "CD", buffer = bufnr, silent = true })
                 vim.keymap.set("n", "<leader>cd", function()
                     local node = api.tree.get_node_under_cursor()
                     local path = node.absolute_path
@@ -1768,11 +1731,7 @@ require("lazy").setup({
                             entry_maker = function(entry)
                                 return {
                                     value = entry.path,
-                                    display = string.format(
-                                        "%d. %s",
-                                        entry.index,
-                                        vim.fn.fnamemodify(entry.path, ":t")
-                                    ),
+                                    display = string.format("%d. %s", entry.index, vim.fn.fnamemodify(entry.path, ":t")),
                                     ordinal = vim.fn.fnamemodify(entry.path, ":t"),
                                     path = entry.path,
                                 }
@@ -1818,9 +1777,56 @@ require("lazy").setup({
         -- See: https://github.com/d2lang/d2-vim
         "d2lang/d2-vim",
         ft = { "d2" },
+        -- Ensures they exist without opening a d2 file.
+        cmd = { "D2PreviewSelection", "D2ReplaceSelection", "D2PreviewCopy" },
         init = function()
-            -- vim.g.d2_ascii_mode = "standard"
             vim.g.d2_ascii_mode = "extended"
+            vim.g.d2_fmt_autosave = 0
+        end,
+        config = function()
+            pcall(vim.keymap.del, "x", "<Leader>d2")
+            pcall(vim.keymap.del, "x", "<Leader>rd2")
+            pcall(vim.keymap.del, "n", "<Leader>yd2")
+        end,
+        keys = function()
+            local function d2_preview(mode, visual)
+                return function()
+                    vim.g.d2_ascii_mode = mode
+                    if visual then
+                        vim.cmd("normal! " .. vim.keycode("<Esc>"))
+                        vim.cmd("'<,'>D2PreviewSelection")
+                        return
+                    end
+                    vim.cmd("D2Preview")
+                end
+            end
+
+            local function d2_substitute(mode)
+                return function()
+                    vim.g.d2_ascii_mode = mode
+                    vim.cmd("normal! " .. vim.keycode("<Esc>"))
+                    vim.cmd("'<,'>D2ReplaceSelection")
+                end
+            end
+
+            local function d2_yank(mode)
+                return function()
+                    vim.g.d2_ascii_mode = mode
+                    vim.cmd("normal! " .. vim.keycode("<Esc>"))
+                    vim.cmd("'<,'>D2PreviewCopy")
+                end
+            end
+
+            return {
+                { "<Leader>d2pe", d2_preview("extended", false), mode = "n", ft = "d2", desc = "[D2] [P]review [E]xtended" },
+                { "<Leader>d2ps", d2_preview("standard", false), mode = "n", ft = "d2", desc = "[D2] [P]review [S]tandard" },
+                { "<Leader>d2pe", d2_preview("extended", true), mode = "x", desc = "[D2] [P]review [E]xtended" },
+                { "<Leader>d2ps", d2_preview("standard", true), mode = "x", desc = "[D2] [P]review [S]tandard" },
+                { "<Leader>d2se", d2_substitute("extended"), mode = "x", desc = "[D2] [S]ubstitute [E]xtended" },
+                { "<Leader>d2ss", d2_substitute("standard"), mode = "x", desc = "[D2] [S]ubstitute [S]tandard" },
+                { "<Leader>d2ye", d2_yank("extended"), mode = "n", desc = "[D2] [Y]ank [E]xtended" },
+                { "<Leader>d2ys", d2_yank("standard"), mode = "n", desc = "[D2] [Y]ank [S]tandard" },
+            }
         end,
     },
 })
