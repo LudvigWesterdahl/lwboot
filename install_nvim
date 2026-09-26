@@ -177,7 +177,7 @@ inst_install() {
 
     mkdir "${nvim_dst}" 2>/dev/null
     mkdir "${nvim_dst}/colors" 2>/dev/null
-    mkdir "${nvim_dst}/lua" 2>/dev/null
+    mkdir -p "${nvim_dst}/lua" 2>/dev/null
     mkdir "${nvim_dst}/parser" 2>/dev/null
     mkdir "${nvim_dst}/queries" 2>/dev/null
     mkdir "${nvim_dst}/ftplugin" 2>/dev/null
@@ -188,20 +188,8 @@ inst_install() {
 
     cp -v "${nvim_src}/init.lua" "${nvim_dst}/init.lua"
 
-    # lwcs
-    mkdir "${nvim_dst}/lua/lwcs" 2>/dev/null
-    cp -v "${nvim_src}/colors/lwcs.lua" "${nvim_dst}/colors/lwcs.lua"
-    cp -v "${nvim_src}/lua/lwcs/groups.lua" "${nvim_dst}/lua/lwcs/groups.lua"
-    cp -v "${nvim_src}/lua/lwcs/init.lua" "${nvim_dst}/lua/lwcs/init.lua"
-
-    # lwcsmac
-    mkdir "${nvim_dst}/lua/lwcsmac" 2>/dev/null
-    cp -v "${nvim_src}/colors/lwcsmac.lua" "${nvim_dst}/colors/lwcsmac.lua"
-    cp -v "${nvim_src}/lua/lwcsmac/groups.lua" "${nvim_dst}/lua/lwcsmac/groups.lua"
-    cp -v "${nvim_src}/lua/lwcsmac/init.lua" "${nvim_dst}/lua/lwcsmac/init.lua"
-
-    # abbreviations
-    cp -v "${nvim_src}/lua/abbreviations.lua" "${nvim_dst}/lua/abbreviations.lua"
+    # lua
+    cp -vr "${nvim_src}/lua/"* "${nvim_dst}/lua"
 
     # queries c
     mkdir "${nvim_dst}/queries/c" 2>/dev/null

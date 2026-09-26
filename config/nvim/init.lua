@@ -922,6 +922,7 @@ require("lazy").setup({
             -- Enable Telescope extensions if they are installed
             pcall(require("telescope").load_extension, "fzf")
             pcall(require("telescope").load_extension, "ui-select")
+            pcall(require("telescope").load_extension, "telescope_registers")
 
             local builtin = require("telescope.builtin")
             vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
@@ -1052,6 +1053,9 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
             vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
             vim.keymap.set("n", "<leader>sc", builtin.commands, { desc = "[S]earch [C]ommands" })
+            vim.keymap.set("n", "<leader>sq", function()
+                require("telescope").extensions.telescope_registers.telescope_registers()
+            end, { desc = "[S]earch macro registers" })
             -- vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
             -- :JdtShowLogs

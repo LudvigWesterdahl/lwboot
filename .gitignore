@@ -16,3 +16,5 @@ a.out
 # backup dir
 bak/
 
+# nvim
+nvim.log
