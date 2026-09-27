@@ -133,6 +133,54 @@ vim.defer_fn(function()
     end
 end, 1000)
 
+vim.api.nvim_create_user_command("JdtlsOrganizeImportsAll", function(a)
+    local pattern, timeout = a.fargs[1], tonumber(a.fargs[2]) or 10000
+    local files = pattern and vim.fn.glob(pattern, true, true) or vim.fn.argv()
+
+    local choose = "java.action.organizeImports.chooseImports"
+    local prev = vim.lsp.commands[choose]
+    vim.lsp.commands[choose] = function()
+        return {}
+    end
+
+    local applied = false
+    local au = vim.api.nvim_create_autocmd("LspRequest", {
+        callback = function(ev)
+            local req = ev.data.request
+            if req.method == "java/organizeImports" and req.type ~= "pending" then
+                vim.schedule(function()
+                    applied = true
+                end)
+            end
+        end,
+    })
+
+    local failed = {}
+    for i, f in ipairs(files) do
+        vim.api.nvim_echo({ { ("[%d/%d] %s"):format(i, #files, f) } }, false, {})
+        vim.cmd.redraw()
+        vim.cmd.edit(vim.fn.fnameescape(f))
+        vim.wait(timeout, function()
+            return vim.lsp.get_clients({ bufnr = 0, name = "jdtls" })[1] ~= nil
+        end, 50)
+
+        applied = false
+        require("jdtls").organize_imports() -- <- the stock call
+        if not vim.wait(timeout, function()
+            return applied
+        end, 10) then
+            table.insert(failed, f .. ": timeout")
+        end
+
+        vim.cmd.update()
+        vim.cmd.bwipeout({ bang = true })
+    end
+
+    vim.api.nvim_del_autocmd(au)
+    vim.lsp.commands[choose] = prev
+    print(("optimized %d files, %d failed"):format(#files - #failed, #failed))
+end, { nargs = "*", complete = "file" })
+
 local opts = { buffer = true, silent = true }
 vim.keymap.set("n", "<leader>oi", "<cmd>lua require('jdtls').organize_imports()<cr>", opts)
 vim.keymap.set("n", "<leader>tc", "<cmd>lua require('jdtls').test_class()<cr>", opts)

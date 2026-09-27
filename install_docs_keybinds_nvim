@@ -69,6 +69,10 @@ inst_help() {
     htext
     htext "JDTLS organize imports"
     htext "<leader>oi"
+    htext "JDTLS organize imports in many files"
+    htext ":argdo lua require('jdtls').organize_imports()"
+    htext "JDTLS organize imports in many files"
+    htext ":JdtlsOrganizeImportsAll */**/*.java 800"
     htext "JDTLS test class"
     htext "<leader>tc"
     htext "JDTLS test method"
