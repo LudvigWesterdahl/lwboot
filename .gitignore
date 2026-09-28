@@ -18,3 +18,9 @@ bak/
 
 # nvim
 nvim.log
+
+# generated docs files
+out.pdf
+docs/groff/simple-example.pdf
+docs/groff/tutorial.pdf
+

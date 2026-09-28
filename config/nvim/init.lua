@@ -1055,7 +1055,7 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>sc", builtin.commands, { desc = "[S]earch [C]ommands" })
             vim.keymap.set("n", "<leader>sq", function()
                 require("telescope").extensions.telescope_registers.telescope_registers()
-            end, { desc = "[S]earch macro registers" })
+            end, { desc = "[S]earch registers" })
             -- vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
             -- :JdtShowLogs

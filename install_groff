@@ -13,10 +13,20 @@ inst_help() {
     husage
     htext "man groff"
     hexamples
+    htext "Compile using ms macro to pdf"
     htext "groff docs/groff/simple-example.ms -ms -T pdf > out.pdf"
+    htext
+    htext "Compile using mom macro to pdf"
+    htext "groff docs/groff/tutorial.mom -mom -T pdf > out.pdf"
+    htext
+    htext "Compile using mom macro to pdf with entr"
+    htext "echo docs/groff/tutorial.mom | entr -s 'groff \"\${0}\" -mom -T pdf > \"\${0%.mom}.pdf\"'"
     hseealso
     htext "${installer_link}"
     htext "https://wiki.archlinux.org/title/Groff"
+    htext
+    htext "Macro mom documentation"
+    htext "https://www.schaffter.ca/mom/momdoc/intro.html#intro-intro"
 }
 
 inst_is_installed() {

@@ -1,0 +1,26 @@
+\# This is a comment
+
+.nr age 29 1
+.ds name Ludvig Karl Wilhelm Westerdahl
+
+\# Style as normal
+.PRINTSTYLE TYPESET
+
+\# Style as typewritten, double-spaced
+\# .PRINTSTYLE TYPEWRITE
+
+.START
+.PP
+Hello, World!
+
+.PP
+\*[name] is \n[age] years old and soon \n+[age].
+
+.PP
+So after \n[age] in november, the
+next year he will be \n+[age] and then \n+[age] which is one year greater than \n-[age].
+
+.PP
+.nr age -10
+
+However, 10 years before that he was \n[age].
