@@ -7,6 +7,12 @@
 -- A literal `<` must be written as <lt>, handled by keytrans
 --
 -- See :help '< or :help `< for the suffix.
+--
+-- If you pasted using keytrans, to reverse it (under development)
+-- 1. escape backslash: s/\\/\\\\/gI
+-- 2. escape keycodes: s/</\\</gI
+-- 3. copy the line
+-- 4. set the register: :let @q="<line here>"
 return {
     {
         reg = "s",
@@ -37,5 +43,22 @@ return {
         name = "format remove trailing space",
         desc = "Removes trailing spaces at the end of lines.",
         value = [=[:%s/\s\+$//<CR>]=],
+    },
+    {
+        reg = "r",
+        name = "java requireNonNull for all parameters",
+        desc = "Java requireNonNull for all parameters.\n\n"
+        .. "Cursor position: such that a yank inside parentheses yi( captures the function parameters.\n\n"
+        .. "BEFORE:\n"
+        .. "public void myFunction(final Object param1, final Object param2) {\n"
+        .. "    // empty\n"
+        .. "}\n\n"
+        .. "AFTER:\n"
+        .. "public void myFunction(final Object param1, final Object param2) {\n"
+        .. "    Objects.requireNonNull(param1);\n"
+        .. "    Objects.requireNonNull(param2);\n"
+        .. "    // empty\n"
+        .. "}",
+        value = [=[yi(/{<CR>o<Space><Esc>maO<C-O>p<Esc>mb'akA,<Esc>:'b,'as/final<Space>//gIe<CR>:'b,'as/@\S\+(\(\n\|[^)]\)\+)//gIe<CR>:'b,'as/@\S\+//gIe<CR>:'b,'as/\[\(\n\|[^\]]\)*\]//gIe<CR>:for<Space>i<Space>in<Space>range(10)<Space>|<Space>'b,'as/<\(\n\|[^<>]\)*>/<Space>/gIe<Space>|<Space>endfor<CR>:'b,'as/,/;\r/gI<CR>:'b,'ag/^\s\?$/d<CR>:'b,'as/\(\S\+\)\(\s\|\n\)\+\([^;]\+\);/Objects.requireNonNull(\3);/<CR>'a]=],
     },
 }
