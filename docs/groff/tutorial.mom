@@ -1,26 +1,47 @@
 \# This is a comment
 
-.nr age 29 1
-.ds name Ludvig Karl Wilhelm Westerdahl
-
 \# Style as normal
 .PRINTSTYLE TYPESET
-
 \# Style as typewritten, double-spaced
 \# .PRINTSTYLE TYPEWRITE
 
 .START
-.PP
-Hello, World!
 
-.PP
-\*[name] is \n[age] years old and soon \n+[age].
+.TITLE "The mom Tutorial"
+The macro package for groff called mom is primarily used to generate PDF and PostScript files.
 
-.PP
-So after \n[age] in november, the
-next year he will be \n+[age] and then \n+[age] which is one year greater than \n-[age].
+\# Number variable that is incremented by 3
+.nr age 29 3
+\# String variable
+.ds name Ludvig Westerdahl
 
-.PP
-.nr age -10
+Hello \*[name]! You are \n[age] years old.
 
-However, 10 years before that he was \n[age].
+\# Increments the variable keeps the state.
+\n+[age] is \n[age] which is greater than \n-[age].
+
+\# Manipulating the number variable
+.nr age 5
+The age is now \n[age].
+
+.nr age +13
+But we can increase it to \n[age].
+
+\# We can even break up longer macros using \<CR>, but
+\# be careful for numeric expressions since the spaces otherwise
+\# would result in multiple arguments to the macro .nr
+.nr age \
+    ( \
+    \n+[age]*0 \
+    + \
+    \n+[age] \
+    )
+And then incrementing twice it to \n[age] respecting the variables increment using the trick of multiplying by zero.
+
+.QUOTE
+This is how we write quotes. To toggle it off, give the .QUOTE macro any argument.
+In this example we gave it OFF, but we could have used any other non-empty string.
+.QUOTE OFF
+
+\# next up: https://www.schaffter.ca/mom/momdoc/typesetting.html#top
+

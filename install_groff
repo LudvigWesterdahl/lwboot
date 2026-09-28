@@ -21,12 +21,19 @@ inst_help() {
     htext
     htext "Compile using mom macro to pdf with entr"
     htext "echo docs/groff/tutorial.mom | entr -s 'groff \"\${0}\" -mom -T pdf > \"\${0%.mom}.pdf\"'"
+    htext
+    htext "Recommended way to compile mom files"
+    htext "pdfmom docs/groff/tutorial.mom > out.pdf"
     hseealso
     htext "${installer_link}"
     htext "https://wiki.archlinux.org/title/Groff"
     htext
-    htext "Macro mom documentation"
+    htext "Macro package mom documentation"
     htext "https://www.schaffter.ca/mom/momdoc/intro.html#intro-intro"
+    htext
+    htext "Macro package mom definition of terms"
+    htext "https://www.schaffter.ca/mom/momdoc/definitions.html#top"
+
 }
 
 inst_is_installed() {
