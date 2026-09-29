@@ -817,6 +817,10 @@ vim.keymap.set("i", "<C-f>s", snippet_picker_with_preview, { desc = "[F]ind [S]n
 vim.keymap.set("i", "{<CR>", "{<CR>}<C-o>O", { noremap = true })
 
 local function insert_matching(open, close)
+    if vim.fn.reg_recording() ~= "" or vim.fn.reg_executing() ~= "" then
+        return open
+    end
+
     local line = vim.api.nvim_get_current_line()
     local num_open = 0
     local num_close = 0
