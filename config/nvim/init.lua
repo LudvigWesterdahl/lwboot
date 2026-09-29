@@ -1604,10 +1604,10 @@ require("lazy").setup({
                 local file_name = data.fname
                 vim.schedule(function()
                     vim.cmd.wincmd("p")
-                    vim.cmd.edit(vim.fn.fnameescape(file_name))
+                    vim.cmd("noautocmd edit " .. vim.fn.fnameescape(file_name))
                     apply_template_new_file(file_name)
-                    vim.cmd.write()
-                    vim.cmd.edit()
+                    vim.cmd("noautocmd write")
+                    vim.cmd("filetype detect")
                 end)
             end)
 
