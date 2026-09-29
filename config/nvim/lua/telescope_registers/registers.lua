@@ -47,18 +47,23 @@ return {
     {
         reg = "r",
         name = "java requireNonNull for all parameters",
-        desc = "Java requireNonNull for all parameters.\n\n"
-        .. "Cursor position: such that a yank inside parentheses yi( captures the function parameters.\n\n"
-        .. "BEFORE:\n"
-        .. "public void myFunction(final Object param1, final Object param2) {\n"
-        .. "    // empty\n"
-        .. "}\n\n"
-        .. "AFTER:\n"
-        .. "public void myFunction(final Object param1, final Object param2) {\n"
-        .. "    Objects.requireNonNull(param1);\n"
-        .. "    Objects.requireNonNull(param2);\n"
-        .. "    // empty\n"
-        .. "}",
+        desc = "Java requireNonNull for all parameters.\n"
+            .. "\n"
+            .. "BEFORE:\n"
+            .. "public void myFunction(final Object param1, final Object param2) {\n"
+            .. "    // empty\n"
+            .. "}\n"
+            .. "\n"
+            .. "AFTER:\n"
+            .. "public void myFunction(final Object param1, final Object param2) {\n"
+            .. "    Objects.requireNonNull(param1);\n"
+            .. "    Objects.requireNonNull(param2);\n"
+            .. "    // empty\n"
+            .. "}\n"
+            .. "\n"
+            .. "CURSOR POSITION: such that a yank inside parentheses yi( captures the function parameters.\n"
+            .. "CLOBBERS MARKS: a, b\n"
+            .. "",
         value = [=[yi(/{<CR>o<Space><Esc>maO<C-O>p<Esc>mb'akA,<Esc>:'b,'as/final<Space>//gIe<CR>:'b,'as/@\S\+(\(\n\|[^)]\)\+)//gIe<CR>:'b,'as/@\S\+//gIe<CR>:'b,'as/\[\(\n\|[^\]]\)*\]//gIe<CR>:for<Space>i<Space>in<Space>range(10)<Space>|<Space>'b,'as/<\(\n\|[^<>]\)*>/<Space>/gIe<Space>|<Space>endfor<CR>:'b,'as/,/;\r/gI<CR>:'b,'ag/^\s\?$/d<CR>:'b,'as/\(\S\+\)\(\s\|\n\)\+\([^;]\+\);/Objects.requireNonNull(\3);/<CR>'a]=],
     },
 }

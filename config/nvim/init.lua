@@ -122,6 +122,7 @@ vim.o.foldenable = true
 vim.o.foldmethod = "manual"
 vim.o.foldlevelstart = 10
 vim.o.foldcolumn = "1"
+vim.opt.matchpairs:append("<:>")
 
 -- Enable undo/redo changes even after closing and reopening a file
 vim.o.undofile = true
