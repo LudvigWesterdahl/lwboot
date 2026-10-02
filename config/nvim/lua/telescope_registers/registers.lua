@@ -130,4 +130,37 @@ return {
             .. "",
         value = [=[:let<Space>savea<Space>=<Space>getreginfo('a')<CR>f<lt><Ignore>"ay%%wyiwofor<Space>(final<Space>Map.Entry<C-O>"ap<Space>entry<Space>:<Space><C-O>p.entrySet())<C-O>a<Space>{}<Esc>0f{<Ignore>a<CR><Esc>k$<Esc>:call<Space>setreg('a',<Space>savea)<CR>]=],
     },
+    {
+
+        reg = "m",
+        name = "java map all elements",
+        desc = "Java create a function below a single function that maps all elements. \n"
+            .. "\n"
+            .. "BEFORE:\n"
+            .. "public String toString(final Object element) {\n"
+            .. "    return element.toString();\n"
+            .. "}\n"
+            .. "\n"
+            .. "AFTER:\n"
+            .. "public String toString(final Object element) {\n"
+            .. "    return element.toString();\n"
+            .. "}\n"
+            .. "public List< String> toStrings(final Collection<? extends Object> elements) {\n"
+            .. "    Objects.requireNonNull(elements);\n"
+            .. "\n"
+            .. "    final List<String> result = new ArrayList<>(elements.size());\n"
+            .. "    for (final Object element : elements) {\n"
+            .. "        Objects.requireNonNull(element);\n"
+            .. "\n"
+            .. "        result.add(toString(element));\n"
+            .. "    }\n"
+            .. "\n"
+            .. "    return result;\n"
+            .. "}\n"
+            .. "\n"
+            .. "CURSOR POSITION: on the function definition line.\n"
+            .. "CLOBBERS MARKS: a, b, c"
+            .. "",
+        value = [=[0ma/{<CR>%mb:'a,'bt<Space>.<CR>'bj0yi(/{<CR>o<Space><Esc>maO<C-O>p<Esc>mb'akA,<Esc>:'b,'as/final<Space>//gIe<CR>:'b,'as/@\S\+(\(\n\|[^)]\)\+)//gIe<CR>:'b,'as/@\S\+//gIe<CR>:'b,'as/\[\(\n\|[^\]]\)*\]//gIe<CR>:let<Space>savea<Space>=<Space>getreginfo('a')<CR>:let<Space>saveb<Space>=<Space>getreginfo('b')<CR>:let<Space>savec<Space>=<Space>getreginfo('c')<CR>:let<Space>saved<Space>=<Space>getreginfo('d')<CR>'bkmc'a?,<CR>xb"bdiw:'b,'ad<Space>a<CR>'c/(<CR>bb"cyiWW"dyiw:call<Space>setreg('a',<Space>getreg('a',<Space>1,<Space>1),<Space>'v')<CR>:call<Space>setreg('b',<Space>getreg('b',<Space>1,<Space>1),<Space>'v')<CR>:call<Space>setreg('a',<Space>substitute(getreg('a'),<Space>'\_s\+$',<Space>'',<Space>''),<Space>'v')<CR>:call<Space>setreg('b',<Space>substitute(getreg('b'),<Space>'\_s\+$',<Space>'',<Space>''),<Space>'v')<CR>'c/(<CR>geas<Esc>/(<CR>ci(final<Space>Collection<lt>?<Space>extends<Space><C-O>"aP<Esc>/)<CR>i><Space><C-O>"bPs<Esc>'coObjects.requireNonNull(<C-O>"bps);<CR><CR>final<Space>List<lt><C-O>"cp><Space>result<Space>=<Space>new<Space>ArrayList<lt>>(<C-O>"bps.size());<Esc>ma'aofor<Space>(final<Space><C-O>"ap<Space><C-O>"bp<Space>:<Space><C-O>"bps)<Space>{}<Esc>i<CR><C-O>OObjects.requireNonNull(<C-O>"bp);<CR><Esc>'a3ji<CR>result.add(<C-O>"dp(<C-O>"bp));<Esc>'a/return<CR>cc<CR>return<Space>result;<Esc>'c/(<CR>bbciWList<lt><C-O>"cp><Space><Esc>:call<Space>setreg('a',<Space>savea)<CR>:call<Space>setreg('b',<Space>saveb)<CR>:call<Space>setreg('c',<Space>savec)<CR>:call<Space>setreg('d',<Space>saved)<CR>]=],
+    },
 }
