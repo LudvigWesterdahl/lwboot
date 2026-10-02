@@ -291,6 +291,20 @@ M.setup = function()
     -- Language: c
     -- TODO
 
+    -- Language: json
+    any("jsonNoise", { fg = c.cursor })
+    any("jsonBraces", { fg = c.cursor })
+    any("jsonNull", { link = "@lw_null" })
+    any("jsonKeyword", { link = "@lw_keyword" })
+    any("jsonKeyQuote", { link = "@lw_keyword" })
+    any("jsonKeyword", { fg = magenta1, bold = true })
+    any("jsonKeyQuote", { fg = magenta1, bold = true })
+    any("jsonString", { link = "@lw_string" })
+    any("jsonQuote", { link = "@lw_string" })
+    any("jsonEscape", { link = "@lw_literal" })
+    any("jsonNumber", { link = "@lw_literal" })
+    any("jsonBoolean", { link = "@lw_literal" })
+
     return mappings
 end
 

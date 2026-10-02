@@ -182,6 +182,7 @@ inst_install() {
     mkdir "${nvim_dst}/queries" 2>/dev/null
     mkdir "${nvim_dst}/ftplugin" 2>/dev/null
     mkdir -p "${nvim_dst}/after/ftplugin" 2>/dev/null
+    mkdir -p "${nvim_dst}/after/syntax" 2>/dev/null
     mkdir "${nvim_dst}/formatters" 2>/dev/null
     mkdir "${nvim_dst}/snippets" 2>/dev/null
     mkdir "${nvim_dst}/templates" 2>/dev/null
@@ -205,6 +206,9 @@ inst_install() {
 
     # ftplugin(s)
     cp -v "${nvim_src}/after/ftplugin/"* "${nvim_dst}/after/ftplugin"
+
+    # syntax(s)
+    cp -v "${nvim_src}/after/syntax/"* "${nvim_dst}/after/syntax"
 
     # formatters
     cp -v "${nvim_src}/formatters/intellij-codestyle.xml" "${nvim_dst}/formatters/intellij-codestyle.xml"
