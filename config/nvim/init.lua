@@ -340,12 +340,17 @@ local function apply_template_new_file(file)
 
         if ext == "java" then
             local basename = vim.fn.fnamemodify(file, ":t:r")
-            vim.cmd("silent! %s/\\<Placeholder\\>/" .. basename .. "/g")
+            vim.cmd("silent! %s/\\<Placeholder\\>/" .. basename .. "/gIe")
 
             local pkg = java_package_for(file)
             if pkg then
                 vim.fn.append(0, { "package " .. pkg .. ";", "" })
             end
+        end
+
+        if ext == "s" then
+            local basename = vim.fn.fnamemodify(file, ":t:r")
+            vim.cmd("silent! %s/\\<TEMPLATE\\>/" .. basename .. "/gIe")
         end
     end
 end
