@@ -28,6 +28,10 @@ inst_can_install() {
 
 inst_install() {
     pacman_install "${pacman_pkg}"
+
+    file_gdbinit="${HOME}/.gdbinit"
+    mv_bak "${file_gdbinit}"
+    cp -v config/gdbinit "${file_gdbinit}"
 }
 
 inst_can_install_manual() {
