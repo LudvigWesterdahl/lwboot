@@ -3,4 +3,6 @@
 ---
 Language: C
 BasedOnStyle: LLVM
+# Prevents line wrapping comments
+ReflowComments: false
 ...
