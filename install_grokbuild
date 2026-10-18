@@ -1,0 +1,63 @@
+#!/bin/sh
+
+installer_name="grokbuild"
+installer_description="Installs grok build."
+installer_link="https://aur.archlinux.org/packages/grok-build-bin"
+
+pacman_pkg="grok-build-bin"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "grok"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    if ! is_command git; then
+        echo "missing git"
+        return 1
+    fi
+
+    return 0
+}
+
+inst_install() {
+    if ! is_command grok || is_aur_reinstall; then
+        aur_install "${pacman_pkg}"
+    fi
+
+    dir_src="config/grok"
+    dir_dst="${HOME}/.grok"
+
+    file_src="${dir_src}/config.toml"
+    file_dst="${dir_dst}/config.toml"
+
+    mv_bak "${file_dst}"
+    cp -v "${file_src}" "${file_dst}"
+
+    return 0
+}
+
+inst_can_install_manual() {
+    inst_can_install
+}
+
+inst_install_manual() {
+    echo "1. grok login"
+
+    return 0
+}
+
+inst_uninstall() {
+    pacman_uninstall "${pacman_pkg}"
+}

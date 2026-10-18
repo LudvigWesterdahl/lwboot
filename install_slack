@@ -36,7 +36,7 @@ inst_can_install() {
 }
 
 inst_install() {
-    aur_install slack-desktop
+    aur_install "${pacman_pkg}"
 
     return 0
 }
