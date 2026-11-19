@@ -39,11 +39,13 @@ inst_install() {
     dir_src="config/grok"
     dir_dst="${HOME}/.grok"
 
-    file_src="${dir_src}/config.toml"
-    file_dst="${dir_dst}/config.toml"
+    config_file_src="${dir_src}/config.toml"
+    config_file_dst="${dir_dst}/config.toml"
 
-    mv_bak "${file_dst}"
-    cp -v "${file_src}" "${file_dst}"
+    mv_bak "${config_file_dst}"
+    cp -v "${config_file_src}" "${config_file_dst}"
+
+    cp -vr "${dir_src}/skills" "${dir_dst}"
 
     return 0
 }
