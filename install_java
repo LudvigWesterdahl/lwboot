@@ -21,6 +21,12 @@ inst_help() {
     htext
     htext "Find the javadoc files"
     htext "pacman -Ql openjdk21-doc | grep index.html"
+    htext
+    htext "Java 21 documentation"
+    htext "java21doc"
+    htext
+    htext "Java 17 specification"
+    htext "java17spec"
     hseealso
     htext "${installer_link}"
     htext

@@ -136,8 +136,16 @@ inst_install() {
         sudo sed -i "s|#en_DK|en_DK|" /etc/locale.gen
         sudo locale-gen
     fi
-    # See /etc/vconsole.conf
-    localectl --no-convert set-x11-keymap us,se pc105 "" "grp:alt_shift_toggle,compose:ralt"
+    # See /etc/vconsole.conf and ~/.config/kxkbrc
+    # US: compose:ralt (RAlt is Multi_key). SE: RAlt is AltGr (level3).
+    # se nodeadkeys: AltGr+¨ is ~, not dead_tilde. Ghostty cannot bind dead keys.
+    localectl --no-convert set-x11-keymap us,se pc105 ",nodeadkeys" "grp:alt_shift_toggle,compose:ralt"
+    kwriteconfig6 --file kxkbrc --group Layout --key Use true
+    kwriteconfig6 --file kxkbrc --group Layout --key LayoutList "us,se"
+    kwriteconfig6 --file kxkbrc --group Layout --key VariantList ",nodeadkeys"
+    kwriteconfig6 --file kxkbrc --group Layout --key Options "grp:alt_shift_toggle,compose:ralt"
+    kwriteconfig6 --file kxkbrc --group Layout --key Model "pc105"
+    kwriteconfig6 --file kxkbrc --group Layout --key ResetOldOptions true
 
     # systemsettings kcm_regionandlang
     loc_c="C.UTF-8"

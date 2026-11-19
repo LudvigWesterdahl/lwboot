@@ -1,0 +1,63 @@
+#!/bin/sh
+
+installer_name="python"
+installer_description="Installs python, documentation and uv."
+installer_link="https://wiki.archlinux.org/title/Python"
+
+
+pacman_pkg1="core/python"
+pacman_pkg2="extra/python-docs"
+pacman_pkg3="extra/uv"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "python"
+    hexamples
+    htext "Python documentation"
+    htext "pythondoc"
+    htext
+    htext "Uv version"
+    htext "uv --version"
+    hseealso
+    htext "${installer_link}"
+    htext
+    htext "Python"
+    htext "https://archlinux.org/packages/core/x86_64/python/"
+    htext
+    htext "Python docs"
+    htext "https://archlinux.org/packages/extra/any/python-docs/"
+    htext
+    htext "Uv"
+    htext "https://archlinux.org/packages/extra/x86_64/uv/"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+inst_install() {
+    pacman_install "${pacman_pkg1}"
+    pacman_install "${pacman_pkg2}"
+    pacman_install "${pacman_pkg3}"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 0
+}
+
+inst_uninstall() {
+    pacman_uninstall "${pacman_pkg1}"
+    pacman_uninstall "${pacman_pkg2}"
+    pacman_uninstall "${pacman_pkg3}"
+}
