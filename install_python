@@ -8,6 +8,8 @@ installer_link="https://wiki.archlinux.org/title/Python"
 pacman_pkg1="core/python"
 pacman_pkg2="extra/python-docs"
 pacman_pkg3="extra/uv"
+pacman_pkg4="extra/ty"
+pacman_pkg5="extra/uv"
 
 inst_help() {
     htitle "${installer_name}"
@@ -32,6 +34,12 @@ inst_help() {
     htext
     htext "Uv"
     htext "https://archlinux.org/packages/extra/x86_64/uv/"
+    htext
+    htext "Ty"
+    htext "https://archlinux.org/packages/extra/x86_64/ty/"
+    htext
+    htext "Ruff"
+    htext "https://archlinux.org/packages/extra/x86_64/ruff/"
 }
 
 inst_is_installed() {
@@ -46,6 +54,8 @@ inst_install() {
     pacman_install "${pacman_pkg1}"
     pacman_install "${pacman_pkg2}"
     pacman_install "${pacman_pkg3}"
+    pacman_install "${pacman_pkg4}"
+    pacman_install "${pacman_pkg5}"
 }
 
 inst_can_install_manual() {
@@ -60,4 +70,6 @@ inst_uninstall() {
     pacman_uninstall "${pacman_pkg1}"
     pacman_uninstall "${pacman_pkg2}"
     pacman_uninstall "${pacman_pkg3}"
+    pacman_uninstall "${pacman_pkg4}"
+    pacman_uninstall "${pacman_pkg5}"
 }
