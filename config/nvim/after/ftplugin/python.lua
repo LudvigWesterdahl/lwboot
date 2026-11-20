@@ -76,3 +76,13 @@ vim.lsp.start({
     root_dir = root_dir,
     capabilities = vim.lsp.protocol.make_client_capabilities(),
 })
+
+-- vim.lsp.start({
+--     name = "ruff",
+--     cmd = { "ruff", "server" },
+--     root_dir = root_dir,
+--     on_attach = function(client)
+--         client.server_capabilities.hoverProvider = false
+--     end,
+--     capabilities = vim.lsp.protocol.make_client_capabilities(),
+-- })
