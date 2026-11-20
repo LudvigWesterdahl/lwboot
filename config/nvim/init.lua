@@ -489,6 +489,7 @@ local parsers = {
     "bash",
     "c",
     "java",
+    "python",
 }
 local parsers_set = {}
 for _, lang in ipairs(parsers) do
@@ -1402,6 +1403,7 @@ require("lazy").setup({
                     sh = { "shfmt_sh" },
                     bash = { "shfmt_bash" },
                     d2 = { "d2_fmt" },
+                    python = { "ruff_format" },
                 },
                 formatters = {
                     intellij = {

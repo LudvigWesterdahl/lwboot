@@ -9,7 +9,8 @@ pacman_pkg1="core/python"
 pacman_pkg2="extra/python-docs"
 pacman_pkg3="extra/uv"
 pacman_pkg4="extra/ty"
-pacman_pkg5="extra/uv"
+pacman_pkg5="extra/ruff"
+pacman_pkg6="extra/python-debugpy"
 
 inst_help() {
     htitle "${installer_name}"
@@ -40,6 +41,9 @@ inst_help() {
     htext
     htext "Ruff"
     htext "https://archlinux.org/packages/extra/x86_64/ruff/"
+    htext
+    htext "Debugpy"
+    htext "https://archlinux.org/packages/extra/x86_64/python-debugpy/"
 }
 
 inst_is_installed() {
@@ -56,6 +60,7 @@ inst_install() {
     pacman_install "${pacman_pkg3}"
     pacman_install "${pacman_pkg4}"
     pacman_install "${pacman_pkg5}"
+    pacman_install "${pacman_pkg6}"
 }
 
 inst_can_install_manual() {
@@ -72,4 +77,5 @@ inst_uninstall() {
     pacman_uninstall "${pacman_pkg3}"
     pacman_uninstall "${pacman_pkg4}"
     pacman_uninstall "${pacman_pkg5}"
+    pacman_uninstall "${pacman_pkg6}"
 }

@@ -255,16 +255,6 @@ M.setup = function()
     any("@lwjava_import_asterisk", { fg = yellow2, bold = true })
     any("@lwjava_import_keyword", { link = "@lw_keyword" })
 
-    -- Language: bash
-    any("@lwbash_variable", { fg = magenta1 })
-    any("@lwbash_cmd", { fg = c.cursor })
-    any("@lwbash_word", { link = "@lwbash_cmd" })
-    any("@lwbash_pipe", { link = "@lwbash_cmd" })
-    any("@lwbash_exp", { fg = magenta1 })
-    any("@lwbash_cmd_sub", { link = "@lwbash_exp" })
-    any("@lwbash_ret_success", { fg = green1, bold = false })
-    any("@lwbash_ret_failure", { fg = c.red, bold = false })
-
     -- LSP: java
     any("@lsp.type.keyword.java", { link = "@lw_keyword" })
     any("@lsp.mod.importDeclaration.java", { link = "@lwjava_import_ref" })
@@ -287,6 +277,29 @@ M.setup = function()
     any("LSP_CODE", { link = "LINK_TO" })
     any("LSP_CODE", { link = "LINK_TO" })
     any("LSP_CODE", { link = "LINK_TO" })
+
+    -- Language: python
+    any("@lwpython_import_ref", { fg = c.cursor })
+    any("@lwpython_field_ref", { fg = magenta1, bold = false })
+    any("@lwpython_decorator", { fg = yellow2, italic = false })
+    any("@lwpython_import_asterisk", { fg = yellow2, bold = true })
+
+    -- LSP: python
+    -- any("@lsp.type.decorator.python", { link = "@lwpython_decorator" })
+    any("@lsp.type.number.python", { link = "@lw_literal" })
+    any("LSP_CODE", { link = "LINK_TO" })
+    any("LSP_CODE", { link = "LINK_TO" })
+
+    -- Language: bash
+    any("@lwbash_variable", { fg = magenta1 })
+    any("@lwbash_cmd", { fg = c.cursor })
+    any("@lwbash_word", { link = "@lwbash_cmd" })
+    any("@lwbash_pipe", { link = "@lwbash_cmd" })
+    any("@lwbash_exp", { fg = magenta1 })
+    any("@lwbash_cmd_sub", { link = "@lwbash_exp" })
+    any("@lwbash_ret_success", { fg = green1, bold = false })
+    any("@lwbash_ret_failure", { fg = c.red, bold = false })
+
 
     -- Language: c
     -- TODO

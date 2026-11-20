@@ -128,6 +128,30 @@ handle_tree_sitter_java() {
     return 0
 }
 
+handle_tree_sitter_python() {
+    repo="https://github.com/tree-sitter/tree-sitter-python"
+    dest_dir="${HOME}/Documents/tree-sitter-python"
+    so_file="${dest_dir}/libtree-sitter-python.so"
+
+    if [ -f "${so_file}" ]; then
+        echo "handle_tree_sitter_python: skipping file ${so_file} exists"
+        return 0
+    fi
+
+    git_clone_pull "${repo}" "${dest_dir}"
+
+    make -C "${dest_dir}" 1>/dev/null
+
+    if [ ! -f "${so_file}" ]; then
+        echo "make failed missing ${so_file}"
+        return 0
+    fi
+
+    cp_parser "${so_file}" python
+
+    return 0
+}
+
 inst_help() {
     htitle "${installer_name}"
     hdesc
@@ -204,6 +228,10 @@ inst_install() {
     mkdir "${nvim_dst}/queries/bash" 2>/dev/null
     cp -v "${nvim_src}/queries/bash/highlights.scm" "${nvim_dst}/queries/bash/highlights.scm"
 
+    # queries python
+    mkdir "${nvim_dst}/queries/python" 2>/dev/null
+    cp -v "${nvim_src}/queries/python/highlights.scm" "${nvim_dst}/queries/python/highlights.scm"
+
     # ftplugin(s)
     cp -v "${nvim_src}/after/ftplugin/"* "${nvim_dst}/after/ftplugin"
 
@@ -224,6 +252,7 @@ inst_install() {
 
     handle_tree_sitter_java
     handle_tree_sitter_bash
+    handle_tree_sitter_python
 
     handle_java_debug
 
