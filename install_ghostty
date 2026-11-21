@@ -58,6 +58,14 @@ inst_install() {
     mv_bak "${file_config}"
     cp -v config/ghostty.config "${file_config}"
 
+    # NOTE: fixes issue with vulkan renderer - 20261121
+    dropin_dir="${HOME}/.config/systemd/user/app-com.mitchellh.ghostty.service.d"
+    mkdir -p "${dropin_dir}"
+    dropin_file="${dropin_dir}/gsk.conf"
+    mv_bak "${dropin_file}"
+    cp -v config/ghostty-gsk.conf "${dropin_file}"
+    reload_user_services
+
     return 0
 }
 
