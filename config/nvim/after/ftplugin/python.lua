@@ -15,6 +15,15 @@ if vim.b.did_ftplugin_python then
 end
 vim.b.did_ftplugin_python = true
 
+local root_markers = { "pyproject.toml", "ty.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" }
+local root_dir = vim.fs.root(0, root_markers)
+if not root_dir then
+    print("not in a python project")
+    return
+end
+
+print("python root_dir = " .. root_dir)
+
 local dap = require("dap")
 if not dap.adapters.python then
     dap.adapters.python = function(cb, config)
@@ -61,14 +70,6 @@ if not dap.adapters.python then
     }
 end
 
-local root_markers = { "pyproject.toml", "ty.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" }
-local root_dir = vim.fs.root(0, root_markers)
-if not root_dir then
-    print("not in a python project")
-    return
-end
-
-print("python root_dir = " .. root_dir)
 
 vim.lsp.start({
     name = "ty",
@@ -77,12 +78,32 @@ vim.lsp.start({
     capabilities = vim.lsp.protocol.make_client_capabilities(),
 })
 
--- vim.lsp.start({
---     name = "ruff",
---     cmd = { "ruff", "server" },
---     root_dir = root_dir,
---     on_attach = function(client)
---         client.server_capabilities.hoverProvider = false
---     end,
---     capabilities = vim.lsp.protocol.make_client_capabilities(),
--- })
+vim.lsp.start({
+    name = "ruff",
+    cmd = { "ruff", "server" },
+    root_dir = root_dir,
+    init_options = {
+        settings = {
+            lint = {
+                ignore = {
+                    "F821", -- undefined-name (ty: unresolved-reference)
+                    "F823", -- undefined-local (ty: unresolved-reference)
+                    "F841", -- unused-variable (ty: unused-binding hint)
+                },
+                extendSelect = {
+                    "F403", -- undefined-local-with-import-star
+                },
+            },
+        },
+    },
+    on_attach = function(client)
+        client.server_capabilities.hoverProvider = false
+    end,
+    capabilities = vim.lsp.protocol.make_client_capabilities(),
+})
+
+local opts = { buffer = true, silent = true }
+local dappy = require("dap-python")
+dappy.test_runner = "pytest"
+vim.keymap.set("n", "<leader>tc", function() dappy.test_class() end, opts)
+vim.keymap.set("n", "<leader>tm", function() dappy.test_method() end, opts)

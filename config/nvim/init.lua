@@ -1299,6 +1299,13 @@ require("lazy").setup({
         },
     },
     {
+        "mfussenegger/nvim-dap-python",
+        ft = "python", -- lazy-load on java filetype
+        dependencies = {
+            "mfussenegger/nvim-dap", -- optional, only if you want debugging
+        },
+    },
+    {
         "rcarriga/nvim-dap-ui",
         dependencies = {
             "mfussenegger/nvim-dap",
@@ -1455,6 +1462,21 @@ require("lazy").setup({
                         args = { "fmt", "$FILENAME" },
                         stdin = false,
                         tmpfile_format = ".conform.$RANDOM.$FILENAME",
+                    },
+                    -- I1001 = unsorted imports
+                    -- F401 = unused imports
+                    ruff_organize_imports = {
+                        args = {
+                            "check",
+                            "--fix",
+                            "--force-exclude",
+                            "--select=I001,F401",
+                            "--exit-zero",
+                            "--no-cache",
+                            "--stdin-filename",
+                            "$FILENAME",
+                            "-",
+                        },
                     },
                 },
             })

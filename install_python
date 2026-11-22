@@ -11,6 +11,9 @@ pacman_pkg3="extra/uv"
 pacman_pkg4="extra/ty"
 pacman_pkg5="extra/ruff"
 pacman_pkg6="extra/python-debugpy"
+pacman_pkg7="extra/python-pytest"
+pacman_pkg8="extra/python-coverage"
+pacman_pkg9="extra/python-pytest-cov"
 
 inst_help() {
     htitle "${installer_name}"
@@ -44,6 +47,15 @@ inst_help() {
     htext
     htext "Debugpy"
     htext "https://archlinux.org/packages/extra/x86_64/python-debugpy/"
+    htext
+    htext "Python pytest"
+    htext "https://archlinux.org/packages/extra/any/python-pytest/"
+    htext
+    htext "Python coverage"
+    htext "https://archlinux.org/packages/extra/x86_64/python-coverage/"
+    htext
+    htext "Python pytest cov"
+    htext "https://archlinux.org/packages/extra/any/python-pytest-cov/"
 }
 
 inst_is_installed() {
@@ -61,6 +73,9 @@ inst_install() {
     pacman_install "${pacman_pkg4}"
     pacman_install "${pacman_pkg5}"
     pacman_install "${pacman_pkg6}"
+    pacman_install "${pacman_pkg7}"
+    pacman_install "${pacman_pkg8}"
+    pacman_install "${pacman_pkg9}"
 }
 
 inst_can_install_manual() {
@@ -78,4 +93,7 @@ inst_uninstall() {
     pacman_uninstall "${pacman_pkg4}"
     pacman_uninstall "${pacman_pkg5}"
     pacman_uninstall "${pacman_pkg6}"
+    pacman_uninstall "${pacman_pkg7}"
+    pacman_uninstall "${pacman_pkg8}"
+    pacman_uninstall "${pacman_pkg9}"
 }
