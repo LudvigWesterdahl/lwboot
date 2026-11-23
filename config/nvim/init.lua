@@ -1591,6 +1591,7 @@ require("lazy").setup({
                     ["svg"] = { icon = "\u{f05c0}", name = "_OE_svg" },
                     ["lua"] = { icon = "\u{e620}", name = "_OE_lua" },
                     ["scm"] = { icon = "\u{f0627}", name = "_OE_scm" },
+                    ["py"] = { icon = "\u{f0320}", name = "_OE_py" },
                     ["TEMPLATE"] = { icon = "\u{ebc6}", name = "_OE_TEMPLATE" },
                 },
             })

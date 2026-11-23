@@ -27,6 +27,18 @@ inst_help() {
     htext
     htext "Uv version"
     htext "uv --version"
+    htext
+    htext "Format files with ruff"
+    htext "ruff format --line-length 79 [FILE... | DIR...]"
+    htext
+    htext "Check if files would be formatted with ruff"
+    htext "ruff format --diff"
+    htext
+    htext "Check with ruff"
+    htext "ruff check"
+    htext
+    htext "Check with ty"
+    htext "ty check"
     hseealso
     htext "${installer_link}"
     htext

@@ -191,6 +191,7 @@ M.setup = function()
     any("DevIcon_OE_svg", { fg = devIconRedFg })
     any("DevIcon_OE_lua", { fg = devIconBlueFg })
     any("DevIcon_OE_scm", { fg = devIconWhiteFg })
+    any("DevIcon_OE_py", { fg = devIconBlueFg })
     any("DevIcon_OE_TEMPLATE", { fg = devIconWhiteFg })
 
     -- Plugin: nvim-tree
