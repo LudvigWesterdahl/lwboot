@@ -210,6 +210,7 @@ run_install install_gucharmap
 run_install install_d2
 run_install install_grokbuild
 run_install install_python
+run_install install_scripts
 
 # Keep as last
 run_install install_linuxgroups

@@ -1,0 +1,64 @@
+#!/bin/sh
+
+installer_name="scripts"
+installer_description="Installs scripts into ~/.local/bin"
+installer_link="-"
+
+readonly dir_dest="${HOME}/.local/bin"
+
+inst_help() {
+    htitle "${installer_name}"
+    hdesc
+    htext "${installer_description}"
+    husage
+    htext "-"
+    hexamples
+    htext "-"
+    hseealso
+    htext "${installer_link}"
+}
+
+inst_is_installed() {
+    return 1
+}
+
+inst_can_install() {
+    return 0
+}
+
+handle_script() {
+    arg_file="${1}"
+
+    file_src_path="config/scripts/${arg_file}"
+    file_dst_path="${dir_dest}/${arg_file}"
+
+    if [ ! -f "${file_src_path}" ]; then
+        bold_red "${file_src_path} does not exist!"
+        return 1
+    fi
+
+    mv_bak "${file_dst_path}"
+    cp -v "${file_src_path}" "${file_dst_path}"
+    chmod +x "${file_dst_path}"
+
+    return 0
+}
+
+inst_install() {
+    mkdir "${dir_dest}" 2>/dev/null
+
+    handle_script "hiludvig"
+}
+
+inst_can_install_manual() {
+    return 1
+}
+
+inst_install_manual() {
+    return 1
+}
+
+inst_uninstall() {
+    # no-op
+    return 0
+}
